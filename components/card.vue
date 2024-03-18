@@ -7,13 +7,7 @@
         <div class="p-3">
             <div class="flex justify-between items-center mb-2">
                 <h4 class="text-lg font-bold">Het Vleeshuis</h4>
-                <p class="flex gap-1">
-                    <icon class="w-6 h-6 text-green-600" name="fa:star" />
-                    <icon class="w-6 h-6 text-green-600" name="fa:star" />
-                    <icon class="w-6 h-6 text-green-600" name="fa:star" />
-                    <icon class="w-6 h-6 text-slate-300" name="fa:star" />
-                    <icon class="w-6 h-6 text-slate-300" name="fa:star" />
-                </p>
+                <Rating :number="rating" />
             </div>
             <div class="flex max-w-[65%] flex-wrap gap-2 mb-2">
                 <p class="bg-slate-200 text-xs p-2 rounded-md">Vlaardingen</p>
@@ -31,6 +25,24 @@
 </template>
 
 <script setup lang="ts">
+
+const { rating } = defineModels<{
+    // restaurant: string;
+    // id: string;
+    // datum: string;
+    // aantal: number;
+    // plaats: string;
+    // keuken: string;
+    // prijs: string;
+    rating: number;
+
+}>();
+
+// const number = ref(0);
+// const random = Math.floor(Math.random() * 5) + 1;
+
+// number.value = random;
+
 
 
 

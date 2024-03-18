@@ -8,20 +8,26 @@
     "host": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "latest": "npx nuxi-nightly dev --host"
   },
   "dependencies": {
+    "@vee-validate/yup": "^4.12.6",
     "nuxt-vue3-google-signin": "^0.0.11",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@formkit/auto-animate": "^0.8.1",
     "@nuxt/image": "^1.4.0",
     "@nuxtjs/supabase": "^1.1.7",
     "@nuxtjs/tailwindcss": "^6.11.4",
+    "@vee-validate/nuxt": "^4.12.6",
+    "@vite-pwa/nuxt": "^0.6.0",
     "@vue-macros/nuxt": "^1.9.21",
     "@vueuse/nuxt": "^10.9.0",
-    "nuxt": "^3.10.3",
+    "nuxt": "npm:nuxt-nightly@latest",
     "nuxt-icon": "^0.6.9"
   }
 }

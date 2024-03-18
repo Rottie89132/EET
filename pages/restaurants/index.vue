@@ -3,9 +3,10 @@
         <Navigation></Navigation>
         <div class=" pb-6">
             <div class="mt-2">
-                <div class=" sticky w-full z-10 top-[5rem] px-6 bg-white">
+                <div :class="!installed ? 'top-[4rem] sticky -mt-14' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'"
+                    class=" w-full z-10 px-6 bg-white">
                     <div class=" mb-4">
-                        <h3 class="xl:text-3xl text-xl font-bold mt-2">Restaurants</h3>
+                        <h3 class="xl:text-3xl text-xl font-bold pt-5">Restaurants</h3>
                         <p class="xl:text-sm text-xs z-0 opacity-80 mb-2">
                             Hier zijn de restaurants die wij bieden voor jou!
                         </p>
@@ -45,9 +46,10 @@
                     </div>
                     <hr class="pb-2" />
                 </div>
-                <div class="grid h-fit pt-2 gap-4 px-6 xl:grid-cols-3 sm:grid-cols-2 grid-rows-1">
+                <div :class="!installed ? 'pb-6' : ' pb-[5.4rem] mt-[12rem] md:mt-[10.5rem]'"
+                    class="grid h-fit pt-2 gap-4 px-6 xl:grid-cols-3 sm:grid-cols-2 grid-rows-1">
                     <div v-for="i in 9">
-                        <Card></Card>
+                        <Card :rating="4"></Card>
                     </div>
                 </div>
             </div>
@@ -56,6 +58,9 @@
 </template>
 
 <script setup lang="ts">
+
+const { $pwa }: any = useNuxtApp()
+const installed = ref(false);
 
 useSeoMeta({
     title: "EET | Restaurants",
@@ -81,6 +86,10 @@ useHead({
             href: '/image/Logo.svg'
         }
     ]
+});
+
+onMounted(() => {
+    if ($pwa?.isPWAInstalled) installed.value = true;
 });
 
 const stad = ref()

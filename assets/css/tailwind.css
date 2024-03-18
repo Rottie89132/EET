@@ -6,7 +6,18 @@
     @apply hidden;
 }
 
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    -webkit-text-fill-color: #000000 !important;
+    box-shadow: 0 0 0 30px #ffffff inset !important;
+    background-clip: content-box !important;
+    @apply ring-1 ring-black outline-none appearance-none;
 }
