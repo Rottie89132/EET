@@ -104,14 +104,16 @@ stad.value = useRoute().query.stad
 type.value = useRoute().query.type
 NavPagina.value = pagina.value
 
+navstad.value = stad.value
+
 if (!pagina.value) navigateTo(`/restaurants?pagina=1`)
 
 
 const navigate = () => {
 
-    if (type.value && navstad.value) navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value}&type=${type.value}`)
-    else if (navstad.value) navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value}`)
-    else if (type.value) navigateTo(`/restaurants?pagina=${pagina.value}&type=${type.value}`)
+    if (type.value && navstad.value) navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value || stad.value}&keuken=${type.value}`)
+    else if (navstad.value) navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value || stad.value}`)
+    else if (type.value) navigateTo(`/restaurants?pagina=${pagina.value}&keuken=${type.value}`)
     else navigateTo(`/restaurants?pagina=${pagina.value}`)
 
 }

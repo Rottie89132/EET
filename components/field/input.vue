@@ -2,9 +2,9 @@
     <field :name="name" v-slot="{ field, meta }">
         <label class="text-base font-bold text-neutral-900" :for="type">{{ label }}</label>
         <input :placeholder="value"
-            :class="meta.touched && !meta.valid ? ' mt-2 mb-5 text-[#B92538] border-2 border-[#B92538] ' : ' mt-2 mb-5'"
-            class="w-full p-2 border border-gray-300 rounded-md outline-none appearance-none" :ref="type" :type="type"
-            v-bind="field" :aria-label="type" :autocomplete="`current-${probs.type}`" />
+            :class="meta.touched && !meta.valid ? ' mt-2 mb-5 border-[#B92538] focus:border-[#B92538] ' : ' border-gray-300 mt-2 mb-5'"
+            class="w-full p-2 border rounded-md outline-none appearance-none" :ref="type" :type="type" v-bind="field"
+            :aria-label="type" :autocomplete="`current-${probs.type}`" />
         <ErrorMessage class="mb-1 -mt-3 text-xs text-[#B92538] block" :name="name"></ErrorMessage>
     </field>
 </template>

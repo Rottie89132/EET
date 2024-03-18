@@ -5,7 +5,9 @@
 		<div :class="!installed ? '' : 'mt-14'" class="flex items-center overflow-hidden px-6">
 			<div class="rounded-xl flex bg-[#4e995b] mt-6 mb-12 xl:p-10 sm:p-8 p-6">
 				<div>
-					<h1 class="xl:text-5xl sm:text-lg text-balance text-sm font-bold text-white xl:mb-4 mb-2">Reserveren
+					<h1
+						class="xl:text-5xl sm:text-lg text-balance text-sm font-bold text-white xl:mb-4 mb-2">
+						Reserveren
 						was nog nooit zo makkelijk, voor jou én voor restaurants!</h1>
 					<h2 class="xl:text-2xl sm:text-base text-xs opacity-80 xl:mb-6 mb-3 text-balance text-white">
 						Navigeer moeiteloos door een uitgebreide selectie van restaurants, allemaal binnen handbereik op

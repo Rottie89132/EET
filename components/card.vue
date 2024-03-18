@@ -1,8 +1,8 @@
 <template>
     <div class="shadow-md bg-slate-50 rounded-xl">
         <div class="rounded-md">
-            <NuxtImg draggable="false" class="w-full h-full object-cover rounded-t-lg" src="/image/banner.png"
-                alt="Restaurant 2" />
+            <NuxtImg draggable="false" class="w-full h-full object-cover rounded-t-lg"
+                src="/image/banner.png" alt="Restaurant 2" />
         </div>
         <div class="p-3">
             <div class="flex justify-between items-center mb-2">

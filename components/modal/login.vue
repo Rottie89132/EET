@@ -19,7 +19,7 @@
                                     <FieldInput type="password" label="Wachtwoord" name="wachtwoord"
                                         v-model="password" />
 
-                                    <div class="mb-4 mt-2">
+                                    <div class="mb-4 mt-4">
                                         <button
                                             class="w-full p-2 bg-[#4e995b] text-white rounded-md hover:bg-[#43874e] focus:outline-none"
                                             type="submit">Inloggen</button>
@@ -83,7 +83,7 @@ const handleRequest = async (values: any, actions: any) => {
             email: error.value.data.message,
             wachtwoord: error.value.data.message,
         });
-        setTimeout(() => actions.resetForm(), 10000);
+        setTimeout(() => actions.resetForm(), 5000);
     }
 };
 
