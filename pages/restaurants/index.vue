@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class=" h-screen">
         <Navigation></Navigation>
-        <div class=" pb-6">
-            <div class="mt-2">
+        <div class="fixed w-screen h-full overflow-auto top-0  ">
+            <div class="mt-24">
                 <div :class="!installed ? 'top-[4rem] sticky -mt-14' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'"
                     class=" w-full z-10 px-6 bg-white">
                     <div class=" mb-4">
@@ -18,7 +18,7 @@
                                         placeholder="zoeken op stad">
                                 </form>
                             </div>
-                            <div class=" flex gap-2">
+                            <div v-if="totalPagina > 1" class=" flex gap-2">
                                 <button v-if="pagina > 1" @click="vorigePagina"
                                     class="p-2 bg-[#F7F7F7] flex items-center justify-center rounded-md">
                                     <Icon name="ic:sharp-keyboard-arrow-left" size="1.2em"></Icon>
@@ -46,10 +46,16 @@
                     </div>
                     <hr class="pb-2" />
                 </div>
-                <div :class="!installed ? 'pb-6' : ' pb-[5.4rem] mt-[12rem] md:mt-[10.5rem]'"
-                    class="grid h-fit pt-2 gap-4 px-6 xl:grid-cols-3 sm:grid-cols-2 grid-rows-1">
-                    <div v-for="i in 9">
-                        <Card :rating="4"></Card>
+                <div :class="!installed ? 'pb-6 mt-6' : ' mt-[6.2rem] sm:mt-[4.4rem] overflow-auto w-full h-[72vh] sm:h-[78vh] md:h-[78vh] fixed'">
+                    <div class=" grid h-fit pt-2 gap-4 px-6 sm:grid-cols-2 md:grid-cols-3 :grid-cols-3 grid-rows-1">
+                        <div :class="!installed ? '' : 'last:mb-[4.4rem] last:sm:mb-10  last:md:mb-[8em] '"
+                            v-for="(restaurant) in items">
+                            <Card :loading="loading" :naam="restaurant.naam" :plaats="restaurant.plaats"
+                                :afbeelding="restaurant.thumbnail.data.publicUrl" :keuken="restaurant.keuken"
+                                :id="`${restaurant.id}`" :prijs="restaurant.prijs" :rating="restaurant.beoordeling"
+                                :beschrijving="restaurant.beschrijving">
+                            </Card>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -61,6 +67,14 @@
 
 const { $pwa }: any = useNuxtApp()
 const installed = ref(false);
+const loading = ref(true);
+const stad = ref()
+const pagina: number | any = ref(1)
+const totalPagina = ref(0)
+const NavPagina: number | any = ref()
+const navstad: string | any = ref("")
+const keuken: string | any = ref("")
+const items = ref()
 
 useSeoMeta({
     title: "EET | Restaurants",
@@ -92,28 +106,45 @@ onMounted(() => {
     if ($pwa?.isPWAInstalled) installed.value = true;
 });
 
-const stad = ref()
-const pagina: number | any = ref(1)
-const totalPagina = ref(9)
-const NavPagina: number | any = ref()
-const navstad: string | any = ref("")
-const type: string | any = ref("")
-
 pagina.value = useRoute().query.pagina
 stad.value = useRoute().query.stad
-type.value = useRoute().query.type
+keuken.value = useRoute().query.type
 NavPagina.value = pagina.value
 
 navstad.value = stad.value
 
 if (!pagina.value) navigateTo(`/restaurants?pagina=1`)
 
+const { data, pending }: any = await useFetch("/api/restaurants", {
+    params: {
+        pagina: pagina.value,
+        stad: navstad.value,
+        keuken: keuken.value
+    }
+});
 
-const navigate = () => {
+items.value = data.value?.restaurants
+totalPagina.value = data.value?.totalPages
+loading.value = pending
 
-    if (type.value && navstad.value) navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value || stad.value}&keuken=${type.value}`)
+const navigate = async () => {
+
+    loading.value = true
+    const { data, pending }: any = await useFetch("/api/restaurants", {
+        params: {
+            pagina: pagina.value,
+            stad: navstad.value,
+            keuken: keuken.value
+        }
+    });
+
+    items.value = data.value?.restaurants
+    totalPagina.value = data.value?.totalPages
+    loading.value = pending
+
+    if (keuken.value && navstad.value) navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value || stad.value}&keuken=${keuken.value}`)
     else if (navstad.value) navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value || stad.value}`)
-    else if (type.value) navigateTo(`/restaurants?pagina=${pagina.value}&keuken=${type.value}`)
+    else if (keuken.value) navigateTo(`/restaurants?pagina=${pagina.value}&keuken=${keuken.value}`)
     else navigateTo(`/restaurants?pagina=${pagina.value}`)
 
 }
@@ -153,8 +184,8 @@ const navigeerPagina = () => {
 }
 
 const handleSearch = () => {
-    if (navstad.value === "") return navigateTo(`/restaurants?pagina=${pagina.value}`);
-    else navigateTo(`/restaurants?pagina=${pagina.value}&stad=${navstad.value}`);
+    pagina.value = 1
+    navigate()
 };
 
 

@@ -44,7 +44,6 @@ export default defineEventHandler(async (event) => {
             statusMessage: "OK",
             user: user.user_metadata
         }
-
     }
 
     return {

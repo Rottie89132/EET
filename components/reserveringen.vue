@@ -5,7 +5,7 @@
                 <h4 class="text-lg font-bold">{{ restaurant }}</h4>
                 <Rating :number="rating" />
             </div>
-            <div class="flex max-w-[60%] md:max-w-[55%] flex-wrap gap-2 mb-2">
+            <div class="flex max-w-[75%] md:max-w-[60%] flex-wrap gap-2 mb-2">
                 <NuxtLink :to="`/restaurants/${id}`" class="bg-[#4e995b] p-2 px-4 text-white text-xs rounded-lg">Bekijk
                     restaurant
                 </NuxtLink>

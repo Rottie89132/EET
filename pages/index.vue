@@ -1,11 +1,11 @@
 <template>
-	<div>
+	<div >
 		<VitePwaManifest />
 		<div class="fixed left-0 w-full h-full landscape">
 			<div class="flex items-center justify-center h-full w-full">
 				<div class="flex flex-col items-center gap-4">
 					<h1 class="text-4xl font-bold ">
-						Laaden...
+						Laden...
 					</h1>
 					<p class="">
 						Even geduld terwijl we de app laden.

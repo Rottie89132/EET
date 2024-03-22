@@ -1,12 +1,11 @@
 <template>
-	<div>
+	<div class=" h-screen">
 		<VitePwaManifest />
 		<Navigation></Navigation>
-		<div :class="!installed ? '' : 'mt-14'" class="flex items-center overflow-hidden px-6">
+		<div :class="!installed ? ' mt-20 -mb-12' : 'mt-14'" class="flex items-center overflow-hidden px-6">
 			<div class="rounded-xl flex bg-[#4e995b] mt-6 mb-12 xl:p-10 sm:p-8 p-6">
 				<div>
-					<h1
-						class="xl:text-5xl sm:text-lg text-balance text-sm font-bold text-white xl:mb-4 mb-2">
+					<h1 class="xl:text-5xl sm:text-lg text-balance text-sm font-bold text-white xl:mb-4 mb-2">
 						Reserveren
 						was nog nooit zo makkelijk, voor jou én voor restaurants!</h1>
 					<h2 class="xl:text-2xl sm:text-base text-xs opacity-80 xl:mb-6 mb-3 text-balance text-white">
@@ -33,15 +32,20 @@
 			<div :class="!installed ? 'top-[4.2rem] pt-2' : 'top-[4.7rem] md:top-12'"
 				class="sticky z-10 px-6 mb-2 bg-white">
 				<h3 class="xl:text-3xl mt-3 text-xl font-bold">Populaire restaurants</h3>
-				<p class="xl:text-sm text-xs z-0 opacity-80 mb-2">De best beoordeelde restaurants uit gekozen door onze
+				<p class="xl:text-sm text-xs z-0 opacity-80 mb-2">De best beoordeelde restaurants uit gekozen <br> door
+					onze
 					gebruikers</p>
 				<hr class="pb-2" />
 			</div>
 
-			<div :class="!installed ? 'pb-6' : ' pb-[6.9rem]'"
-				class="grid h-fit pt-2 gap-4 px-6 xl:grid-cols-3 sm:grid-cols-2 grid-rows-1">
-				<div v-for="i in 6">
-					<Card :rating="4"></Card>
+			<div v-auto-animate :class="!installed ? 'pb-6' : ' pb-[7.5rem] sm:mt-[0.8rem] md:-mt-[0.8rem]'"
+				class="grid h-fit pt-2 gap-4 px-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 grid-rows-1">
+				<div v-for="restaurant in items">
+					<Card :loading="loading" :naam="restaurant.naam" :plaats="restaurant.plaats"
+						:afbeelding="restaurant.thumbnail.data.publicUrl" :keuken="restaurant.keuken"
+						:id="`${restaurant.id}`" :prijs="restaurant.prijs" :rating="restaurant.beoordeling"
+						:beschrijving="restaurant.beschrijving">
+					</Card>
 				</div>
 			</div>
 		</div>
@@ -53,6 +57,8 @@
 const { $pwa }: any = useNuxtApp()
 const stad = ref("");
 const installed = ref(false);
+const items = ref();
+const loading = ref(true);
 
 useSeoMeta({
 	title: "EET | Home",
@@ -88,4 +94,9 @@ const handleSearch = () => {
 	if (stad.value === "") return navigateTo(`/restaurants?pagina=1`);
 	else navigateTo(`/restaurants?pagina=1&stad=${stad.value}`);
 };
+
+const { data, pending }: any = await useFetch("/api/restaurants")
+items.value = data.value?.restaurants;
+loading.value = pending;
+
 </script>
