@@ -50,11 +50,13 @@
                     <div class=" grid h-fit pt-2 gap-4 px-6 sm:grid-cols-2 md:grid-cols-3 :grid-cols-3 grid-rows-1">
                         <div :class="!installed ? '' : 'last:mb-[4.4rem] last:sm:mb-10  last:md:mb-[8em] '"
                             v-for="(restaurant) in items">
+                            <router-link :to="'/restaurants/' + restaurant.id">
                             <Card :loading="loading" :naam="restaurant.naam" :plaats="restaurant.plaats"
                                 :afbeelding="restaurant.thumbnail.data.publicUrl" :keuken="restaurant.keuken"
                                 :id="`${restaurant.id}`" :prijs="restaurant.prijs" :rating="restaurant.beoordeling"
                                 :beschrijving="restaurant.beschrijving">
                             </Card>
+                        </router-link>
                         </div>
                     </div>
                 </div>
