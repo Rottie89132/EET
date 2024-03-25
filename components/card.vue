@@ -11,9 +11,9 @@
                 <Rating :number="rating" />
             </div>
             <div class="flex max-w-[80%] flex-wrap gap-2 mb-2">
-                <p class="bg-slate-200 text-xs p-2 rounded-md">{{ plaats }}</p>
-                <p class="bg-slate-200 text-xs p-2 rounded-md">{{ keuken }}</p>
-                <p class="bg-slate-200 text-xs p-2 rounded-md">{{ prijs }}</p>
+                <p class="bg-gray-200 text-xs p-2 rounded-md">{{ plaats }}</p>
+                <p class="bg-gray-200 text-xs p-2 rounded-md">{{ keuken }}</p>
+                <p class="bg-gray-200 text-xs p-2 rounded-md">{{ prijs }}</p>
             </div>
             <p class="text-xs opacity-80 text-balance sm:mb-2 mb-2 line-clamp-3 sm:line-clamp-1 ">
                 {{ beschrijving }}
@@ -38,8 +38,6 @@
                 <p class="bg-slate-200 text-xs p-4 px-6 rounded-md"></p>
                 <p class="bg-slate-200 text-xs p-4 px-5 rounded-md"></p>
             </div>
-
-
         </div>
     </div>
 </template>

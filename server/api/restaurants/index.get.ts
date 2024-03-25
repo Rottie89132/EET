@@ -1,4 +1,4 @@
-import { serverSupabaseClient } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 
 const queryCount = 6
 const procesData = (data: any, client: any) => {
@@ -30,7 +30,8 @@ export default eventHandler((event) => {
     return new Promise((resolve, reject) => {
         setTimeout(async () => {
             const client = await serverSupabaseClient(event)
-            const { pagina, stad, keuken }: any = getQuery(event)
+            const userclient: any = await serverSupabaseUser(event)
+            const { pagina, stad, keuken, searchOwner }: any = getQuery(event)
 
             if (pagina) {
                 if (stad) {
@@ -55,6 +56,25 @@ export default eventHandler((event) => {
                 return ReturnResult(resolve, reject, data, pagina, totalPages)
             }
 
+
+
+            if (searchOwner) {
+
+                const { data } = await client
+                    .from('restaurants_table')
+                    .select('*')
+                    .eq('owner_id', userclient.id)
+                    .order('beoordeling', { ascending: false })
+
+                procesData(data, client)
+                return resolve({
+                    statusCode: 200,
+                    statusMessage: "OK",
+                    message: "Restaurant",
+                    restaurants: data
+                })
+            }
+
             const { data } = await client
                 .from('restaurants_table')
                 .select('*')
@@ -68,6 +88,6 @@ export default eventHandler((event) => {
                 message: "Top 6 restaurants",
                 restaurants: data
             })
-        }, 1000);
+        }, 100);
     })
 })
