@@ -5,7 +5,7 @@
 				<div tabindex="0" ref="modal">
 					<Transition :name="ismoble ? 'modalDelay' : 'modalSlide'">
 						<div :ref="ismoble ? 'modalDelay' : 'modalSlide'" v-if="activeDelay">
-							<div class="p-8 md:h-screen h-[60vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
+							<div v-if="type != 'register'" class="p-8 md:h-screen h-[60vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
 								<div class="flex items-center justify-between mb-2">
 									<h1 class="text-3xl font-bold">Inloggen</h1>
 									<button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -34,6 +34,34 @@
 									<GoogleSignInButton @success="handleLoginSuccess"></GoogleSignInButton>
 								</div>
 							</div>
+							<div v-else class="p-8 md:h-screen h-[65vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
+								<div class="flex items-center justify-between mb-2">
+									<h1 class="text-3xl font-bold">Registreren</h1>
+
+									<button @click="closeModal" class="text-gray-500 hover:text-gray-700">
+										<Icon name="pajamas:close-xs" size="2em"></Icon>
+									</button>
+								</div>
+								<p class="mb-4">Vul hieronder je gegevens in om te registreren.</p>
+								<Form @submit="handleRegisterSuccess" :validation-schema="schema" v-slot="{ meta }">
+									<FieldInput type="email" label="Email" name="email" v-model="email" />
+									<FieldInput type="password" label="Wachtwoord" name="wachtwoord" v-model="password" />
+									<FieldInput type="password" label="Confirmatie" name="confirmatie" v-model="confirmatie" />
+									<span @click="forgotPassword" class="opacity-80 cursor-pointer">Wachtwoord vergeten</span>
+									<p class=" text-sm text-gray-500">{{ bericht }}</p>
+
+									<div class="mb-4 mt-4 flex gap-2">
+										<button class="w-full p-2 bg-[#4e995b] text-white rounded-md hover:bg-[#43874e] focus:outline-none" type="submit">
+											<span v-if="displayLoading" class="">
+												<icon class="animate-spin" name="pajamas:repeat" size="1.3rem"> </icon>
+											</span>
+											<span v-else> Registreren </span>
+										</button>
+										<div @click="returnToLogin" class="w-full text-center p-2 bg-gray-100 cursor-pointer rounded-md hover:bg-gray-200 focus:outline-none">Inloggen</div>
+									</div>
+									
+								</Form>
+							</div>
 						</div>
 					</Transition>
 				</div>
@@ -55,12 +83,30 @@
 	const ismoble = ref(false);
 	const email = ref("");
 	const password = ref("");
+	const confirmatie = ref("");
 	const displayLoading = ref(false);
 	const type = ref("");
+	const bericht = ref("");
+	let schema: any;
 
-	const schema = yup.object().shape({
+	schema = yup.object().shape({
 		email: yup.string().email("email moet geldig zijn").required("email is verplicht"),
 		wachtwoord: yup.string().min(8, "wachtwoord moet minimaal 8 lang zijn").max(32, "wachtwoord mag maximaal 32 lang zijn").required("wachtwoord is verplicht"),
+	});
+
+	watch(type, (newValue: any) => {
+		if (newValue === "register") {
+			schema = yup.object().shape({
+				email: yup.string().email("email moet geldig zijn").required("email is verplicht"),
+				wachtwoord: yup.string().min(8, "wachtwoord moet minimaal 8 lang zijn").max(32, "wachtwoord mag maximaal 32 lang zijn").required("wachtwoord is verplicht"),
+				confirmatie: yup.string().oneOf([yup.ref("wachtwoord")], "wachtwoorden moeten overeenkomen").required("confirmatie is verplicht"),
+			});
+		} else {
+			schema = yup.object().shape({
+				email: yup.string().email("email moet geldig zijn").required("email is verplicht"),
+				wachtwoord: yup.string().min(8, "wachtwoord moet minimaal 8 lang zijn").max(32, "wachtwoord mag maximaal 32 lang zijn").required("wachtwoord is verplicht"),
+			});
+		}
 	});
 
 	configure({
@@ -117,8 +163,43 @@
 		}
 	};
 
+	const handleRegisterSuccess = async (response: any) => {
+		const { data, error }: any = await useFetch("/api/register", {
+			method: "post",
+			body: {
+				email: email.value,
+				password: password.value,
+				confirmatie: confirmatie.value,
+			},
+		});
+
+		if (!error.value) {
+			setTimeout(() => {
+				bericht.value = "Controleer je email voor een bevestigingslink."
+
+				setTimeout(() => {
+					bericht.value = "";
+					closeModal();
+				}, 5000);
+
+
+			}, 500);
+		}
+
+		
+	};
+
 	const handleRegister = () => {
 		type.value = "register";
+		activeDelay.value = false;
+
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 1000);
+	};
+
+	const returnToLogin = () => {
+		type.value = "";
 		activeDelay.value = false;
 
 		setTimeout(() => {

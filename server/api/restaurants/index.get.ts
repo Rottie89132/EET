@@ -35,7 +35,6 @@ export default eventHandler((event) => {
 
             if (pagina) {
                 if (stad) {
-
                     const { data, count }: any = await client
                         .from('restaurants_table')
                         .select('*', { count: 'exact' }).eq('plaats', stad)
