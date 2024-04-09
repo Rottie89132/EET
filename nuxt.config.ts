@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     "@formkit/auto-animate",
     "@vee-validate/nuxt",
+    'nuxt-swiper',
   ],
   nitro: {
     experimental: {

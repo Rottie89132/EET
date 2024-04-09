@@ -34,7 +34,7 @@
 									<GoogleSignInButton @success="handleLoginSuccess"></GoogleSignInButton>
 								</div>
 							</div>
-							<div v-else class="p-8 md:h-screen h-[65vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
+							<div v-else class="p-8 md:h-screen h-[68vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
 								<div class="flex items-center justify-between mb-2">
 									<h1 class="text-3xl font-bold">Registreren</h1>
 

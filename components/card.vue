@@ -19,7 +19,7 @@
                 {{ beschrijving }}
             </p>
             <NuxtLink :to="`/restaurants/${id}`"
-                class="text-xs rounded-md text-opacity-90 bg-green-600 p-2 px-4 text-white font-medium text-balance">
+                class="text-xs rounded-md text-opacity-90 bg-[#4e995b] p-2 px-4 text-white font-medium text-balance">
                 Bekijk restaurant</NuxtLink>
         </div>
     </div>

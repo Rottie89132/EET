@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --swiper-theme-color: #4e995b;
+}
+
 ::-webkit-scrollbar {
     @apply hidden;
 }
@@ -23,5 +27,34 @@ input:-webkit-autofill:focus {
 
 body {
     -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;@apply bg-white text-black;
+    -webkit-touch-callout: none;
+    @apply bg-white text-black;
+}
+
+.swiper-button-prev::after {
+    background-image: url("/ArrowLeft.svg") !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+}
+
+.swiper-button-next::after {
+    background-image: url("/ArrowRight.svg") !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    @apply text-black bg-white p-5 rounded-xl scale-75 flex items-center justify-center -mt-40;
+    content: "" !important;
+}
+
+
+.swiper-pagination-bullet {
+    @apply bg-white opacity-100 w-3 h-3 !important;
+    transform: translateX(7em)
+}	
+
+.swiper-pagination-bullet-active {
+    @apply bg-[#4e995b] w-4 h-4 opacity-100 !important;
 }
