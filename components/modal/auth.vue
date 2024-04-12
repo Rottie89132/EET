@@ -5,7 +5,7 @@
 				<div tabindex="0" ref="modal">
 					<Transition :name="ismoble ? 'modalDelay' : 'modalSlide'">
 						<div :ref="ismoble ? 'modalDelay' : 'modalSlide'" v-if="activeDelay">
-							<div v-if="type != 'register'" class="p-8 md:h-screen h-[60vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
+							<div v-if="type != 'register'" class="p-8 md:h-screen h-[64vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
 								<div class="flex items-center justify-between mb-2">
 									<h1 class="text-3xl font-bold">Inloggen</h1>
 									<button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -34,7 +34,7 @@
 									<GoogleSignInButton @success="handleLoginSuccess"></GoogleSignInButton>
 								</div>
 							</div>
-							<div v-else class="p-8 md:h-screen h-[68vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
+							<div v-else class="p-8 md:h-screen h-[70vh] rounded-2xl md:rounded-none bg-white w-screen md:max-w-[28vw]">
 								<div class="flex items-center justify-between mb-2">
 									<h1 class="text-3xl font-bold">Registreren</h1>
 
@@ -116,10 +116,11 @@
 		validateOnModelUpdate: true,
 	});
 
-	const { active, activeDelay, User } = defineModels<{
+	const { active, activeDelay, User, OkStatus } = defineModels<{
 		active: Boolean;
 		activeDelay: Boolean;
 		User: any;
+		OkStatus: Boolean;
 	}>();
 
 	const handleRequest = async (values: any, actions: any) => {
@@ -133,14 +134,17 @@
 
 		if (!error.value) {
 			User.value = data.value?.user.user_metadata;
+			OkStatus.value = true;	
 			closeModal();
 			actions.resetForm();
-			navigateTo("/account");
+			//navigateTo("/account");
 		} else {
 			actions.setErrors({
 				email: error.value.data.message,
 				wachtwoord: error.value.data.message,
 			});
+
+			OkStatus.value = false;
 
 			setTimeout(() => {
 				actions.resetForm();
@@ -158,7 +162,7 @@
 			setTimeout(() => {
 				closeModal();
 				User.value = data.value?.user.user_metadata;
-				navigateTo("/account");
+				//navigateTo("/account");
 			}, 500);
 		}
 	};

@@ -12,6 +12,8 @@
     "latest": "npx nuxi-nightly dev --host"
   },
   "dependencies": {
+    "@artem9989/vue-three-round-slider": "^1.2.6",
+    "@supabase/gotrue-js": "^2.62.2",
     "@vee-validate/yup": "^4.12.6",
     "nuxt-swiper": "^1.2.2",
     "nuxt-vue3-google-signin": "^0.0.11",
@@ -22,7 +24,7 @@
   "devDependencies": {
     "@formkit/auto-animate": "^0.8.1",
     "@nuxt/image": "^1.4.0",
-    "@nuxtjs/supabase": "^1.1.7",
+    "@nuxtjs/supabase": "^1.2.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@vee-validate/nuxt": "^4.12.6",
     "@vite-pwa/nuxt": "^0.6.0",

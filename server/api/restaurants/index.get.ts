@@ -2,8 +2,17 @@ import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 
 const queryCount = 6
 const procesData = (data: any, client: any) => {
+    
     data?.forEach((restaurant: any) => {
+
+        if(restaurant.images){
+            restaurant.images = restaurant.images.map((image: any) => {
+                return client.storage.from(restaurant.bucket).getPublicUrl(image.Path)
+            })
+        }
+        
         restaurant.thumbnail = client.storage.from(restaurant.bucket).getPublicUrl(restaurant.thumbnail)
+
         restaurant.bucket = undefined
         restaurant.owner_id = undefined
         restaurant.prijs = restaurant.prijs == "Laag" ? "€" : restaurant.prijs == "Gemiddeld" ? "€€" : "€€€"
@@ -50,15 +59,19 @@ export default eventHandler((event) => {
                     .select('*', { count: 'exact' })
                     .range((pagina - 1) * queryCount, pagina * queryCount - 1);
 
+                const filteredData = data.filter((restaurant: any) => {
+                    return restaurant.images && restaurant.images.length > 0 &&
+                        restaurant.locatie && Object.keys(restaurant.locatie).length > 0 &&
+                        restaurant.telefoon &&
+                        restaurant.Openingstijden && Object.keys(restaurant.Openingstijden).length > 0;
+                });
+
                 const totalPages = Math.ceil(count / queryCount);
-                procesData(data, client)
-                return ReturnResult(resolve, reject, data, pagina, totalPages)
+                procesData(filteredData, client)
+                return ReturnResult(resolve, reject, filteredData, pagina, totalPages)
             }
 
-
-
             if (searchOwner) {
-
                 const { data } = await client
                     .from('restaurants_table')
                     .select('*')
@@ -74,18 +87,25 @@ export default eventHandler((event) => {
                 })
             }
 
-            const { data } = await client
+            const { data }:any = await client
                 .from('restaurants_table')
                 .select('*')
                 .limit(6)
                 .order('beoordeling', { ascending: false })
 
-            procesData(data, client)
+            const filteredData = data.filter((restaurant: any) => {
+                return restaurant.images && restaurant.images.length > 0 &&
+                    restaurant.locatie && Object.keys(restaurant.locatie).length > 0 &&
+                    restaurant.telefoon &&
+                    restaurant.Openingstijden && Object.keys(restaurant.Openingstijden).length > 0;
+            });
+
+            procesData(filteredData, client)
             return resolve({
                 statusCode: 200,
                 statusMessage: "OK",
                 message: "Top 6 restaurants",
-                restaurants: data
+                restaurants: filteredData
             })
         }, 100);
     })

@@ -84,7 +84,8 @@
 			<NuxtImg draggable="false" class="w-12 h-12 rounded-full border-2 border-gray-50" :src="User.avatar_url ? User.avatar_url : '/image/placeholder.jpg'" alt="Profile picture" />
 		</NuxtLink>
 	</div>
-	<ModalAuth v-model:User="User" v-model:active="active" v-model:activeDelay="activeDelay" />
+	
+	<ModalAuth v-model:OkStatus="OkStatus" v-model:User="User" v-model:active="active" v-model:activeDelay="activeDelay" />
 </template>
 
 <script setup lang="ts">
@@ -95,8 +96,14 @@
 	const activeDelay = ref(false);
 	const installed = ref(false);
 	const navVisible = ref(false);
-	const animate = ref();
+	
 
+	const { OkStatus } = defineModels<{
+		OkStatus: boolean;
+	}>();
+
+	
+	
 	if ($pwa?.isPWAInstalled) installed.value = true;
 
 	const popup = () => {
@@ -126,7 +133,8 @@
 	};
 
 	const { data, error }: Record<string, any> = await useFetch("/api/users");
-
+	
+	OkStatus.value = error.value ? false : true;
 	if (!error.value) User.value = data.value?.user;
 	//if (error.value) popup();
 </script>

@@ -13,23 +13,26 @@
 			}"
             :navigation="true"
 		>
-			<swiper-slide>
-				<NuxtImg alt="Burger" draggable="false" class="w-full h-auto" width="500" height="300" style="aspect-ratio: 500 / 300; object-fit: cover" :src="publicUrl" />
-			</swiper-slide>
-			<swiper-slide>
-				<NuxtImg alt="Burger" draggable="false" class="w-full h-auto" width="500" height="300" style="aspect-ratio: 500 / 300; object-fit: cover" :src="publicUrl" />
-			</swiper-slide>
-			<swiper-slide>
-				<NuxtImg alt="Burger" draggable="false" class="w-full h-auto" width="500" height="300" style="aspect-ratio: 500 / 300; object-fit: cover" :src="publicUrl" />
-			</swiper-slide>
+		
+			<swiper-slide v-for="(image, index) in images" :key="index">
+                <NuxtImg alt="Burger" draggable="false" class="w-full h-auto" width="500" height="300" style="aspect-ratio: 500 / 300; object-fit: cover" :src="image.data.publicUrl ?? ''" />
+            </swiper-slide>
 		</Swiper>
 	</div>
 </template>
 
 <script setup lang="ts">
 	defineProps({
-		publicUrl: String,
+		images: Object,
 	});
+
+	
+
+	
+
+	
+
+
 
 	const ismoble = ref(false);
 
@@ -45,6 +48,12 @@
 			Width.value = window.innerWidth;
 		});
 
+	});
+
+	onUnmounted(() => {
+		window.removeEventListener("resize", () => {
+			
+		});
 	});
 
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="h-screen">
-		<Navigation></Navigation>
+		<Navigation v-model:OkStatus="OkStatus"></Navigation>>
 		<div class="fixed w-screen h-full overflow-auto top-0">
 			<div class="mt-24">
 				<div :class="!installed ? 'top-[4rem] sticky -mt-14' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'" class="w-full z-10 px-6 bg-white">
@@ -59,6 +59,7 @@
 	const navstad: string | any = ref("");
 	const keuken: string | any = ref("");
 	const items = ref();
+	const OkStatus = ref(false);
 
 	onMounted(() => {
 		if ($pwa?.isPWAInstalled) installed.value = true;

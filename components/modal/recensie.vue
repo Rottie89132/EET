@@ -5,7 +5,7 @@
 				<div tabindex="0" ref="modal">
 					<Transition name="modalDelay">
 						<div ref="modalDelay" v-if="activeDelay">
-							<div class="p-8 rounded-2xl bg-white w-screen md:w-[50vw] h-[60vh]">
+							<div class="p-8 rounded-2xl bg-white w-screen md:w-[35vw]  ">
 								<div class="flex items-center justify-between mb-2">
 									<h1 class="text-3xl font-bold">{{ title }}</h1>
 									<button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -30,6 +30,8 @@
 	}>();
 
 	const modal = ref(null);
+	const installed = ref(false);
+	const { $pwa }: any = useNuxtApp();
 
 	const closeModal = () => {
 		activeDelay.value = false;
@@ -40,6 +42,10 @@
 
 	onClickOutside(modal, () => {
 		closeModal();
+	});
+
+	onMounted(() => {
+		if ($pwa?.isPWAIscripted) installed.value = true;
 	});
 </script>
 
