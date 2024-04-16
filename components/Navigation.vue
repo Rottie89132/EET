@@ -2,6 +2,7 @@
 	<nav v-if="!$pwa?.isPWAInstalled" class="z-20 px-6 bg-white w-full fixed top-0 p-4">
 		<div class="hidden md:inline">
 			<div class="flex justify-between items-center">
+
 				<NuxtLink to="/home" class="flex gap-4">
 					<NuxtImg draggable="false" class="w-7" src="/image/Logo.svg" alt="Logo" />
 					<p class="text-2xl">EET</p>
@@ -85,7 +86,7 @@
 		</NuxtLink>
 	</div>
 	
-	<ModalAuth v-model:OkStatus="OkStatus" v-model:User="User" v-model:active="active" v-model:activeDelay="activeDelay" />
+	<ModalAuth v-model:User="User" v-model:active="active" v-model:activeDelay="activeDelay" />
 </template>
 
 <script setup lang="ts">
@@ -101,6 +102,11 @@
 	const { OkStatus } = defineModels<{
 		OkStatus: boolean;
 	}>();
+
+	watch(User, (value) => {
+		if(value) OkStatus.value = true;
+		else OkStatus.value = false;
+	});
 
 	
 	
@@ -136,7 +142,8 @@
 	
 	OkStatus.value = error.value ? false : true;
 	if (!error.value) User.value = data.value?.user;
-	//if (error.value) popup();
+	const currentRoute = useRoute().fullPath
+	
 </script>
 
 <style scoped>

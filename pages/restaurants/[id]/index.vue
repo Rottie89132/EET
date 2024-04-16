@@ -29,7 +29,7 @@
 								{{ restaurantDetails?.naam }}
 							</h2>
 							<div class="flex gap-1 items-center mt-2">
-								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails.beoordeling }}/5</p>
+								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails.beoordeling.toFixed(1) }}/5</p>
 								<icon class="w-6 h-6 text-[#4e995b]" name="f7:bubble-right" />
 								<p class="text-gray-600 text-base mb-1">{{ beoordelingen?.length }}</p>
 							</div>
@@ -49,7 +49,7 @@
 						<p class="flex items-center gap-2 leading-4 md:-mt-10 mt-1">
 							{{ restaurantDetails?.beschrijving || " Geen beschrijving beschikbaar" }}
 						</p>
-						<hr class="my-2 mt-3" />
+						<hr class="my-2 md:mt-6 mt-3" />
 					</div>
 					<div class="md:max-w-[60vw]">
 						<div class="md:flex items-center justify-between">
@@ -63,7 +63,7 @@
 							</div>
 							<div class="mt-2">
 								<h2 class="text-lg font-semibold md:text-right">Telefoon</h2>
-								<p class="text-gray-600 text-sm md:text-base underline leading-4 md:text-right">
+								<p class="text-blue-600 text-sm md:text-base underline leading-4 md:text-right">
 									<a :href="`tel:${restaurantDetails?.telefoon}`">{{ restaurantDetails?.telefoon || "Onbekend" }}</a>
 								</p>
 							</div>
@@ -93,7 +93,7 @@
 										<svg class="w-full h-full" viewBox="0 0 100 100">
 											<circle class="text-gray-200 stroke-current" stroke-width="5" cx="50" cy="50" r="40" fill="transparent"></circle>
 											<circle class="text-[#4e995b] progress-ring__circle stroke-current" stroke-width="5" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" :stroke-dashoffset="strokeDashOffset" :stroke-dasharray="strokeDashArray"></circle>
-											<text x="50" y="50" font-family="Verdana" font-size="16" text-anchor="middle" alignment-baseline="middle">{{ restaurantDetails.beoordeling }}/5</text>
+											<text x="50" y="50" font-family="Verdana" font-size="16" text-anchor="middle" alignment-baseline="middle">{{ restaurantDetails.beoordeling.toFixed(1) }}/5</text>
 										</svg>
 									</div>
 									<div class="">
@@ -127,14 +127,19 @@
 						</div>
 						<hr class="my-2 mt-3" />
 					</div>
-
 					<div class="mt-1 z-10 grid grid-cols-1 gap-2 rounded-lg">
 						<div v-if="beoordelingen" v-for="beoordeling in beoordelingen" :class="!installed ? 'last:mb-5' : ' last:mb-24'" class="rounded-lg md:h-[10vh] px-3">
 							<div class="flex items-center justify-between gap-2">
 								<div class="flex items-center gap-2">
 									<NuxtImg draggable="false" :src="beoordeling.user.avatar_url" alt="Profile" class="rounded-full w-7 h-7" />
 									<div>
-										<h2 class="font-semibold flex items-center gap-1">{{ beoordeling.user.full_name }} <span class="text-xs opacity-45">• 1 recensie</span></h2>
+										<h2 class="font-semibold flex items-center gap-1">
+											{{ beoordeling.user.full_name }}
+											<span class="text-xs opacity-45"
+												>•
+												{{ beoordeling.user.aantal > 1 ? `${beoordeling.user.aantal} recensies` : `${beoordeling.user.aantal} recensie` }}
+											</span>
+										</h2>
 										<p class="text-gray-600 leading-4 -mt-1 text-sm">
 											{{ beoordeling.created_at }}
 										</p>
@@ -149,7 +154,7 @@
 							</p>
 							<hr class="" />
 						</div>
-						<div v-else :class=" !installed? '' : 'mb-20' "></div>
+						<div v-else :class="!installed ? '' : 'mb-20'"></div>
 					</div>
 				</section>
 			</div>
@@ -158,7 +163,8 @@
 	<ModalRecensie :title="title" v-model:active="active" v-model:activeDelay="activeDelay">
 		<div v-if="title != 'Reserveren'">
 			<p class="-mt-3 text-gray-600">
-				Plaats hier een recensie over <span class="font-bold">{{ restaurantDetails?.naam }}</span
+				Plaats hier een recensie over
+				<span class="font-bold">{{ restaurantDetails?.naam }}</span
 				>.
 			</p>
 			<hr class="my-2 mb-2" />
@@ -168,18 +174,62 @@
 				</FormStep>
 				<FormStep>
 					<div class="pt-4 flex h-68 md:h-72 items-center w-full justify-center">
-						<slider name="beoordeling"></slider>
-						<ErrorMessage name="beoordeling" />
+						<FieldSlider name="beoordeling" />
 					</div>
 				</FormStep>
 			</FormWizard>
 		</div>
 		<div v-else>
 			<p class="-mt-3 text-gray-600">
-				Reserveer een tafel bij <span class="font-bold">{{ restaurantDetails?.naam }}</span
+				Reserveer een tafel bij
+				<span class="font-bold">{{ restaurantDetails?.naam }}</span
 				>.
 			</p>
-			<hr class="my-2" />
+			<hr class="my-2 mb-2" />
+			<FormWizard @submit="onSubmit" :validation-schema="reserveringSchema">
+				<div class="flex items-center justify-start gap-2 text-white text-sm">
+					<p v-if="date" class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-[#4e995b]">
+						<icon name="material-symbols:calendar-month-outline-rounded" size="1.1em" />
+						{{ date?.split("-").reverse().join("-") }}
+					</p>
+					<p v-if="time" class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-[#4e995b]">
+						<icon name="material-symbols:nest-clock-farsight-analog-rounded" size="1.1em" />
+						{{ time }}
+					</p>
+					<p v-if="personen" class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-[#4e995b]">
+						<Icon name="material-symbols:emoji-people" size="1.1em" />
+						x {{ personen }}
+					</p>
+				</div>
+				<hr v-if="date" class="my-2 mb-4" />
+
+				<FormStep>
+					<FieldDatepicker name="datum" v-model:selected="selected" v-model:date="date" />
+				</FormStep>
+				<FormStep>
+					<FieldTimepicker name="tijd" :date :restaurantDetails v-model:time="time" />
+				</FormStep>
+				<FormStep>
+					<FieldPeoplepicker name="aantalPersonen" v-model:personen="personen" />
+				</FormStep>
+				<FormStep>
+					<div :class="email != null ? 'sr-only' : ''">
+						<FieldInput type="email" label="Email" name="email" v-model="email" />
+					</div>
+					<div :class="naam != null ? 'sr-only' : ''">
+						<FieldInput type="text" label="Naam" name="naam" v-model="naam" />
+					</div>
+					<FieldInput type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78" v-model="telefoon" />
+				</FormStep>
+				<FormStep>
+					<p class="text-gray-600 -mt-2 mb-2">
+						Voordat je de reservering definitief maakt, controleer dan of de gegevens kloppen.
+					</p>
+					<FieldInput :disabled="true" type="email" label="Email" name="email" v-model="email" />
+					<FieldInput :disabled="true" type="text" label="Naam" name="naam" v-model="naam" />
+					<FieldInput :disabled="true" type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78" v-model="telefoon" />
+				</FormStep>
+			</FormWizard>
 		</div>
 	</ModalRecensie>
 </template>
@@ -188,41 +238,7 @@
 	import { configure } from "vee-validate";
 	import * as yup from "yup";
 
-	const validationSchema = [
-		yup.object({
-			recensie: yup
-				.string()
-				.required("Recensie is verplicht")
-				.label("Recensie")
-				.min(50, "Recensie moet minimaal 50 tekens bevatten")
-				.max(2500, "Recensie mag maximaal 2500 tekens bevatten")
-				.test("word-count", "Recensie moet meer dan 10 woorden bevatten", (value) => {
-					if (!value) return false;
-					const wordCount = value.trim().split(/\s+/).length;
-					return wordCount > 10;
-				}),
-		}),
-		yup.object({
-			beoordeling: yup.number().required("beoordeling is verplicht").label("beoordeling"),
-		}),
-	];
-
-	function onSubmit(formData: any) {
-		activeDelay.value = false;
-		setTimeout(() => {
-			active.value = false;
-		}, 100);
-
-		console.log(JSON.stringify(formData, null, 2));
-	}
-
-	configure({
-		validateOnBlur: true,
-		validateOnChange: true,
-		validateOnInput: true,
-		validateOnModelUpdate: true,
-	});
-
+	const phoneRegExp = /^[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}$/;
 	const id = useRoute().params.id;
 	const { $pwa }: any = useNuxtApp();
 	const installed = ref(false);
@@ -235,6 +251,14 @@
 	const beoordelingen: any = ref([]);
 	const user = ref();
 	const OkStatus = ref(false);
+
+	const email: any = ref();
+	const naam: any = ref();
+	const telefoon: any = ref();
+	const date: any = ref();
+	const selected: any = ref();
+	const time: any = ref("");
+	const personen: any = ref(0);
 
 	useSeoMeta({
 		title: "EET | Restaurants",
@@ -268,6 +292,123 @@
 		return dagen[huidigeDagIndex];
 	});
 
+	const isFutureDate = (value: any) => {
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		return value >= today;
+	};
+
+	const wordCount = (value: any) => {
+		if (!value) return false;
+		const wordCount = value.trim().split(/\s+/).length;
+		return wordCount > 10;
+	};
+
+	const isFutureTime = (value: any) => {
+		const now = new Date();
+		const SelectedDate = new Date(date.value).toISOString().split("T")[0];
+		const currentDate = now.toISOString().split("T")[0];
+
+		if (SelectedDate !== currentDate) return true;
+		const inputTime = new Date(`1970-01-01T${value}:00`);
+		return now.getHours() < inputTime.getHours() || (now.getHours() === inputTime.getHours() && now.getMinutes() <= inputTime.getMinutes());
+	};
+
+	const isWithinOpeningHours = (value: any) => {
+		const inputDate = new Date(date.value);
+		const inputTime = new Date(`1970-01-01T${value}:00`);
+		const inputDay = inputDate.toLocaleString("nl-NL", { weekday: "long" }).charAt(0).toUpperCase() + inputDate.toLocaleString("nl-NL", { weekday: "long" }).slice(1);
+		const inputDayOpeningHours = restaurantDetails.value.Openingstijden.find((open: any) => open.dag === inputDay);
+
+		if (!inputDayOpeningHours) return false;
+		const [openingTime, closingTime] = inputDayOpeningHours.tijd.split(" - ").map((time: any) => new Date(`1970-01-01T${time}:00`));
+		return inputTime >= openingTime && inputTime <= closingTime;
+	};
+
+	const validationSchema = [
+		yup.object({
+			recensie: yup.string().required("Recensie is verplicht").label("Recensie").min(25, "Recensie moet minimaal 25 tekens bevatten").max(2500, "Recensie mag maximaal 2500 tekens bevatten").test("word-count", "Recensie moet meer dan 10 woorden bevatten", wordCount),
+		}),
+		yup.object({
+			beoordeling: yup.number().required("beoordeling is verplicht").label("beoordeling"),
+		}),
+	];
+
+	const reserveringSchema = [
+		yup.object({
+			datum: yup.date().test("isFutureDate", "Datum mag niet kleiner zijn dan vandaag", isFutureDate).required("Datum is verplicht"),
+		}),
+		yup.object({
+			tijd: yup.string().test("isFutureTime", "Tijd mag niet kleiner zijn dan de huidige tijd", isFutureTime).test("isWithinOpeningHours", "Tijd moet binnen de openingstijden van het restaurant liggen", isWithinOpeningHours).required("Tijd is verplicht"),
+		}),
+		yup.object({
+			aantalPersonen: yup.number().required("Aantal personen is verplicht").min(1, "Aantal personen moet minimaal 1 zijn").max(8, "Aantal personen mag maximaal 10 zijn"),
+		}),
+		yup.object({
+			email: yup.string().email("email moet geldig zijn").required("E-mail is verplicht"),
+			naam: yup.string().required("Naam is verplicht"),
+			telefoon: yup.string().matches(phoneRegExp, "Telefoonnummer moet geldig zijn").required("Telefoonnummer is verplicht"),
+		}),
+	];
+
+	const onSubmit = async (values: any, actions: any) => {
+		if (title.value != "Reserveren") {
+			const { data, error } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/recenties`, {
+				method: "POST",
+				body: values,
+			});
+
+			if (error.value) {
+				actions.setErrors({
+					recensie: error.value.data.message,
+					beoordeling: error.value.data.message,
+				});
+			} else {
+				actions.resetForm();
+				activeDelay.value = false;
+				setTimeout(() => {
+					active.value = false;
+				}, 100);
+			}
+		} else {
+			const { data, error } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/reserverigen`, {
+				method: "POST",
+				body: values,
+			});
+
+			if (error.value) {
+				actions.setErrors({
+					datum: error.value.data.message,
+					tijd: error.value.data.message,
+					aantalPersonen: error.value.data.message,
+					email: error.value.data.message,
+					telefoon: error.value.data.message,
+				});
+			} else {
+				actions.resetForm();
+				telefoon.value = "";
+				email.value = "";
+				naam.value = "";
+				personen.value = 0;
+				selected.value = null;
+				date.value = null;
+				time.value = "";
+				activeDelay.value = false;
+
+				setTimeout(() => {
+					active.value = false;
+				}, 100);
+			}
+		}
+	};
+
+	configure({
+		validateOnBlur: true,
+		validateOnChange: true,
+		validateOnInput: true,
+		validateOnModelUpdate: true,
+	});
+
 	const isRestaurantOpen = () => {
 		const currentTime = new Date();
 		const openingTime = new Date();
@@ -294,12 +435,16 @@
 
 	const { data: userData, error: userError }: Record<string, any> = await useFetch("/api/users");
 	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/recenties`);
-	beoordelingen.value = beoordelingenData.value.recenties;
 
+	beoordelingen.value = beoordelingenData.value.recenties;
 	OkStatus.value = userError.value ? false : true;
 	user.value = userData.value || userError.value.data;
-
 	percentage.value = (restaurantDetails.value.beoordeling / 5) * 100;
+
+	if (!userError.value) {
+		email.value = userData.value.user.email;
+		naam.value = userData.value.user.name;
+	}
 
 	const strokeDashOffset = computed(() => {
 		const circumference = 2 * Math.PI * 40;
@@ -337,6 +482,22 @@
 	onMounted(async () => {
 		if ($pwa?.isPWAInstalled) installed.value = true;
 	});
+
+	watch(
+		() => OkStatus.value,
+		async () => {
+			if (OkStatus.value) {
+				const { data: userData, error: userError }: Record<string, any> = await useFetch("/api/users");
+				user.value = userData.value || userError.value.data;
+
+				if (!userError.value) {
+					console.log(userData.value);
+					email.value = userData.value.user.email;
+					naam.value = userData.value.user.name;
+				}
+			}
+		}
+	);
 </script>
 
 <style scoped>

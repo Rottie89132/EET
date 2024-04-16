@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   modules: [
     "@nuxtjs/supabase",
     "@nuxtjs/tailwindcss",
@@ -13,11 +13,18 @@ export default defineNuxtConfig({
     "@formkit/auto-animate",
     "@vee-validate/nuxt",
     'nuxt-swiper',
+    '@vue-email/nuxt'
   ],
   nitro: {
     experimental: {
       websocket: true,
-    }
+    },
+    imports: {
+      dirs: ["./server/utils"]
+    },
+  },
+  vueEmail: {
+    playground: true
   },
   veeValidate: {
     autoImports: true,
@@ -85,7 +92,12 @@ export default defineNuxtConfig({
         autoRefreshToken: true
       },
     }
-
+  },
+  runtimeConfig: {
+    Sender: process.env.SmtpSender,
+    Server: process.env.SmtpServer,
+    User: process.env.SmtpUser,
+    Password: process.env.SmtpPass,
   },
   googleSignIn: {
     clientId: '319260519514-50k25g8eb58p6aqn41vuq0eb5pt286do.apps.googleusercontent.com',
@@ -103,5 +115,4 @@ export default defineNuxtConfig({
       viewport: 'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
     }
   },
-  
 })

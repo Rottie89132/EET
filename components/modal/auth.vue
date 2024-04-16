@@ -47,7 +47,7 @@
 									<FieldInput type="email" label="Email" name="email" v-model="email" />
 									<FieldInput type="password" label="Wachtwoord" name="wachtwoord" v-model="password" />
 									<FieldInput type="password" label="Confirmatie" name="confirmatie" v-model="confirmatie" />
-									<span @click="forgotPassword" class="opacity-80 cursor-pointer">Wachtwoord vergeten</span>
+									
 									<p class=" text-sm text-gray-500">{{ bericht }}</p>
 
 									<div class="mb-4 mt-4 flex gap-2">
@@ -116,11 +116,10 @@
 		validateOnModelUpdate: true,
 	});
 
-	const { active, activeDelay, User, OkStatus } = defineModels<{
+	const { active, activeDelay, User } = defineModels<{
 		active: Boolean;
 		activeDelay: Boolean;
 		User: any;
-		OkStatus: Boolean;
 	}>();
 
 	const handleRequest = async (values: any, actions: any) => {
@@ -131,10 +130,10 @@
 		});
 
 		displayLoading.value = pending.value;
+		console.log(!error.value);
 
 		if (!error.value) {
 			User.value = data.value?.user.user_metadata;
-			OkStatus.value = true;	
 			closeModal();
 			actions.resetForm();
 			//navigateTo("/account");
@@ -143,8 +142,6 @@
 				email: error.value.data.message,
 				wachtwoord: error.value.data.message,
 			});
-
-			OkStatus.value = false;
 
 			setTimeout(() => {
 				actions.resetForm();

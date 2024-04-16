@@ -117,7 +117,7 @@
 																</span>
 																<span class="bg-[#4e995b] p-1 flex items-center justify-center gap-1 px-3 text-xs text-[#b4e4bc] rounded-lg">
 																	<icon name="ic:sharp-star" size="1.2em"></icon>
-																	{{ item.beoordeling }}
+																	{{ item.beoordeling.toFixed(1) }}
 																</span>
 															</div>
 															<div v-else class="flex items-center gap-2 text-right pb-2 overflow-auto">
