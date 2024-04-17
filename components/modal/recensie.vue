@@ -1,84 +1,45 @@
 <template>
-	<ClientOnly>
-		<Transition name="modal">
-			<div v-if="active" class="fixed top-0 z-50 flex items-end justify-center w-screen h-screen bg-black md:items-center bg-opacity-60 backdrop-blur-sm">
-				<div tabindex="0" ref="modal">
-					<Transition name="modalDelay">
-						<div ref="modalDelay" v-if="activeDelay">
-							<div class="p-8 rounded-2xl bg-white w-screen md:w-[35vw]  ">
-								<div class="flex items-center justify-between mb-2">
-									<h1 class="text-3xl font-bold">{{ title }}</h1>
-									<button @click="closeModal" class="text-gray-500 hover:text-gray-700">
-										<Icon name="pajamas:close-xs" size="2em"></Icon>
-									</button>
-								</div>
-								<slot></slot>
-							</div>
-						</div>
-					</Transition>
+	<div>
+		<FormWizard :validation-schema="validationSchema" @submit="onSubmit">
+			<FormStep>
+				<FieldArea type="text" label="" name="recensie" value="Laat hier je beoordeling achter zodat wij onze service kunnen verbeteren" />
+			</FormStep>
+			<FormStep>
+				<div class="pt-4 flex h-68 md:h-72 items-center w-full justify-center">
+					<FieldSlider name="beoordeling" />
 				</div>
-			</div>
-		</Transition>
-	</ClientOnly>
+			</FormStep>
+		</FormWizard>
+	</div>
 </template>
 
 <script setup lang="ts">
-	const { title, active, activeDelay } = defineModels<{
-		active: Boolean;
-		activeDelay: Boolean;
-		title: String;
+	import { configure } from "vee-validate";
+	import * as yup from "yup";
+
+	const { onSubmit } = defineModels<{
+		onSubmit: any;
 	}>();
 
-	const modal = ref(null);
-	const installed = ref(false);
-	const { $pwa }: any = useNuxtApp();
-
-	const closeModal = () => {
-		activeDelay.value = false;
-		setTimeout(() => {
-			active.value = false;
-		}, 100);
+	const wordCount = (value: any) => {
+		if (!value) return false;
+		const wordCount = value.trim().split(/\s+/).length;
+		return wordCount > 10;
 	};
 
-	onClickOutside(modal, () => {
-		closeModal();
-	});
+	const validationSchema = [
+		yup.object({
+			recensie: yup.string().required("Recensie is verplicht").label("Recensie").min(25, "Recensie moet minimaal 25 tekens bevatten").max(2500, "Recensie mag maximaal 2500 tekens bevatten").test("word-count", "Recensie moet meer dan 10 woorden bevatten", wordCount),
+		}),
+		yup.object({
+			beoordeling: yup.number().required("beoordeling is verplicht").label("beoordeling"),
+		}),
+	];
 
-	onMounted(() => {
-		if ($pwa?.isPWAIscripted) installed.value = true;
+	configure({
+		validateOnBlur: true,
+		validateOnChange: true,
+		validateOnInput: true,
+		validateOnModelUpdate: true,
 	});
 </script>
-
-<style scoped>
-	.modal-enter-active,
-	.modal-leave-active {
-		transition: all 0.8s ease;
-	}
-
-	.modal-enter-from,
-	.modal-leave-to {
-		opacity: 0;
-	}
-
-	.modalDelay-enter-active,
-	.modalDelay-leave-active {
-		transition: all 1s ease;
-	}
-
-	.modalDelay-enter-from,
-	.modalDelay-leave-to {
-		opacity: 0;
-		transform: translateY(12em);
-	}
-
-	.modalSlide-enter-active,
-	.modalSlide-leave-active {
-		transition: all 1s ease;
-	}
-
-	.modalSlide-enter-from,
-	.modalSlide-leave-to {
-		opacity: 0;
-		transform: translatex(12em);
-	}
-</style>

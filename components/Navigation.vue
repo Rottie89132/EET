@@ -1,5 +1,5 @@
 <template>
-	<nav v-if="!$pwa?.isPWAInstalled" class="z-20 px-6 bg-white w-full fixed top-0 p-4">
+	<nav v-if="!$pwa?.isPWAInstalled" class="z-30 px-6 bg-white w-full fixed top-0 p-4">
 		<div class="hidden md:inline">
 			<div class="flex justify-between items-center">
 
@@ -42,7 +42,7 @@
 					<icon class="w-8 h-8" name="ic:sharp-menu" size="1.5rem" @click="toglenav" />
 				</div>
 			</div>
-			<div class="z-10">
+			<div class="z-20">
 				<Transition name="animate">
 					<div v-if="navVisible" class="fixed top-[4rem] left-0 w-screen bg-white px-6 py-2">
 						<div class="flex items-center gap-2">
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 	</nav>
-	<footer v-else class="z-20 fixed w-full bottom-0 bg-white">
+	<footer v-else class="z-30 fixed w-full bottom-0 bg-white">
 		<hr class="-pb-1 -mb-2 mt-4" />
 		<div class="flex justify-evenly items-center p-6 px-8">
 			<NuxtLink to="/home" class="opacity-50 flex flex-col justify-center items-center">

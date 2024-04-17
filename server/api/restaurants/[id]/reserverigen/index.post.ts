@@ -4,6 +4,7 @@ import { useCompiler } from '#vue-email'
 export default eventHandler(async (event) => {
 
     const client = serverSupabaseServiceRole(event)
+    const user: any = await serverSupabaseUser(event)
     const id = getRouterParams(event).id
 
     const request = await readBody(event)
@@ -12,9 +13,9 @@ export default eventHandler(async (event) => {
         statusMessage: "Bad Request",
         message: "Missing required fields",
     }
-    
+
     const SessionId = crypto.randomUUID()
-    await useStorage("VerifyRequired").setItem(SessionId, { ...request })
+    await useStorage("VerifyRequired").setItem(SessionId, { ...request, id, user_id: user?.id })
 
     setTimeout(async () => {
         await useStorage("VerifyRequired").removeItem(SessionId)

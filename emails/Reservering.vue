@@ -13,10 +13,9 @@
 	<ETailwind>
 		<EHtml>
 			<EHead />
-			<EPreview>Beste {{ name }}, bedankt voor het reserveren bij {{ restaurant }}. Klik op de onderstaande knop om je reservering te bevestigen. </EPreview>
+			<EPreview>Beste {{ name }}, bedankt voor het reserveren bij EET. Klik op de onderstaande knop om je reservering te bevestigen. </EPreview>
 			<EBody class="">
 				<div class="w-full max-w-md  rounded py-6 pr-6">
-					<e-heading as="h1" class="text-3xl font-bold tracking-tighter mb-4">Bevestig uw reservering!</e-heading>
 					<p class="text-gray-500 text-sm mb-4">Beste {{ name }}, bedankt voor het reserveren bij EET. Klik op de onderstaande knop om je reservering te bevestigen.</p>
 					<EHr />
 					<div class="-mt-2">
