@@ -29,7 +29,7 @@
 								{{ restaurantDetails?.naam }}
 							</h2>
 							<div class="flex gap-1 items-center mt-2">
-								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails.beoordeling.toFixed(1) }}/5</p>
+								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails?.beoordeling.toFixed(1) }}/5</p>
 								<icon class="w-6 h-6 text-[#4e995b]" name="f7:bubble-right" />
 								<p class="text-gray-600 text-base mb-1">{{ beoordelingen?.length }}</p>
 							</div>
@@ -37,12 +37,14 @@
 
 						<div class="flex gap-2 items-center justify-between md:justify-end my-2">
 							<button @click="openbookingmodal" class="flex text-sm md:hidden text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
+							<NuxtLink :to="`/restaurants/${id}/dashboard/`" class="flex text-sm md:hidden text-white items-center justify-center p-1 px-4 bg-[#4c67c8] rounded-lg">Live</NuxtLink>
 							<div class="flex gap-2 items-center">
 								<div class="flex text-sm items-center justify-center text-black bg-gray-100 p-1 px-4 rounded-lg">Menu</div>
 								<div :class="!isRestaurantOpen() ? ' bg-red-200 text-red-600' : ' text-black bg-gray-100'" class="flex items-center justify-center p-1 px-4 text-sm rounded-lg">
 									{{ isRestaurantOpen() ? "Geopend" : "Gesloten" }}
 								</div>
 								<button @click="openbookingmodal" class="text-sm hidden md:flex text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
+								<NuxtLink :to="`/restaurants/${id}/dashboard/`" class=" text-sm hidden md:flex text-white items-center justify-center p-1 px-4 bg-[#4c67c8] rounded-lg">Live</NuxtLink>
 							</div>
 						</div>
 
@@ -171,7 +173,7 @@
 		}, 100);
 	};
 
-	const handleReservering = async (values: any, actions: any) => {
+	const handleRecentie = async (values: any, actions: any) => {
 		const { data, error } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/recenties`, {
 			method: "POST",
 			body: values,
@@ -188,7 +190,7 @@
 		}
 	};
 
-	const handleRecentie = async (values: any, actions: any) => {
+	const handleReservering = async (values: any, actions: any) => {
 		const { error } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/reserverigen`, {
 			method: "POST",
 			body: values,
@@ -230,10 +232,15 @@
 
 	const { data, error }: Record<string, any> = await useFetch(`/api/restaurants/${id}`);
 	if (!error.value) restaurantDetails.value = data.value.restaurant;
-	if (error.value) navigateTo("/home");
+	if (error.value) throw createError({
+            statusCode: 404,
+			message: "Restaurant niet gevonden",
+			statusMessage: "Restaurant niet gevonden",
+            fatal: true,
+        })
 
 	const { data: userData, error: userError }: Record<string, any> = await useFetch("/api/users");
-	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/recenties`);
+	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value?.id}/recenties`);
 
 	beoordelingen.value = beoordelingenData.value.recenties;
 	OkStatus.value = userError.value ? false : true;

@@ -130,13 +130,11 @@
 		});
 
 		displayLoading.value = pending.value;
-		console.log(!error.value);
-
+		
 		if (!error.value) {
 			User.value = data.value?.user.user_metadata;
 			closeModal();
 			actions.resetForm();
-			//navigateTo("/account");
 		} else {
 			actions.setErrors({
 				email: error.value.data.message,
@@ -159,7 +157,6 @@
 			setTimeout(() => {
 				closeModal();
 				User.value = data.value?.user.user_metadata;
-				//navigateTo("/account");
 			}, 500);
 		}
 	};
@@ -177,13 +174,10 @@
 		if (!error.value) {
 			setTimeout(() => {
 				bericht.value = "Controleer je email voor een bevestigingslink."
-
 				setTimeout(() => {
 					bericht.value = "";
 					closeModal();
 				}, 5000);
-
-
 			}, 500);
 		}
 

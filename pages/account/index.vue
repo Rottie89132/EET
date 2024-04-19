@@ -37,57 +37,6 @@
 						</div>
 						<div class="flex gap-2 mt-3"></div>
 					</div>
-					<!-- <div class="bg-slate-50 p-4 rounded-xl mt-2 outline outline-2 outline-gray-100 xl:hidden">
-						<div class="flex items-center w-full justify-between">
-							<div class="w-full">
-								<details :open="openDetail === 'reservations'" class="font-semibold flex items-center justify-between gap-1 text-lg">
-									<summary @click.prevent="toggleDetail('reservations')">
-										<span>Reserveringen</span>
-										<span class="text-xs opacity-80">(0)</span>
-									</summary>
-									<p class="text-sm -my-1 font-normal">
-										<span v-if="items.length > 10" class="text-xs opacity-80"> Lijst met acties die je kunt uitvoeren op reserveringen </span>
-										<span v-else class="text-xs opacity-80"> Je hebt geen reserveringen onder dit account </span>
-									</p>
-									<div class="grid gap-2 mt-3 font-normal">
-										<div v-if="items.length > 10" class="flex gap-2">
-											<NuxtLink to="/reserveringen?tab=history" class="bg-gray-300 text-xs p-2 px-3 rounded-md">Geschiedenis</NuxtLink>
-											<NuxtLink to="/reserveringen?tab=upcoming" class="bg-gray-200 text-xs p-2 px-3 rounded-md">Aankomende</NuxtLink>
-										</div>
-
-										<div v-else class="">
-											<button class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-700 rounded-lg">Maak een reservering</button>
-										</div>
-									</div>
-								</details>
-							</div>
-						</div>
-					</div> -->
-					<!-- <div class="bg-slate-50 p-4 rounded-xl mt-2 outline outline-2 outline-gray-100 hidden xl:inline">
-						<div class="flex items-center w-full justify-between">
-							<div class="w-full">
-								<div class="font-semibold items-center justify-between gap-1 text-lg">
-									<h1>
-										<span>Reserveringen</span>
-										<span class="text-xs opacity-80">(0)</span>
-									</h1>
-									<p class="text-sm -my-1 font-normal">
-										<span v-if="items.length > 10" class="text-xs opacity-80"> Lijst met acties die je kunt uitvoeren op reserveringen </span>
-										<span v-else class="text-xs opacity-80"> Je hebt geen reserveringen onder dit account </span>
-									</p>
-									<div class="grid gap-2 mt-3 font-normal">
-										<div v-if="items.length > 10" class="flex gap-2">
-											<NuxtLink to="/reserveringen?tab=history" class="bg-gray-300 text-xs p-2 px-3 rounded-md">Geschiedenis</NuxtLink>
-											<NuxtLink to="/reserveringen?tab=upcoming" class="bg-gray-200 text-xs p-2 px-3 rounded-md">Aankomende</NuxtLink>
-										</div>
-										<div v-else class="">
-											<button class="bg-gray-300 text-gray-700 text-xs p-2 px-3 rounded-md">Maak een reservering</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> -->
 				</div>
 				<div class="grid px-6 grid-cols-1 xl:grid-cols-1 gap-2 pb-6 overflow-auto">
 					<div class="bg-slate-50 p-4 rounded-xl mt-2 outline outline-2 outline-gray-100">
@@ -102,6 +51,7 @@
 										<span v-if="items.length > 0" class="text-xs opacity-80"> Lijst met alle restaurants onder dit account </span>
 										<span v-else class="text-xs opacity-80"> Je hebt geen restaurants onder dit account </span>
 									</p>
+									<button class="bg-gray-300 p-[0.35rem] px-3 text-xs mt-2 text-gray-700 rounded-lg">Voeg een restaurant toe</button>
 									<div class="grid gap-2 mt-3 font-normal">
 										<div v-if="items.length > 0" v-for="(item, index) in items" class="flex items-center gap-2 bg-slate-50 rounded-lg">
 											<div class="w-full">
@@ -131,13 +81,10 @@
 													</div>
 												</div>
 												<div class="flex gap-2 mt-1">
-													<button class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-800 rounded-lg">Beheren</button>
+													<NuxtLink :to="`/restaurants/${item.id}/dashboard/`" class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-800 rounded-lg">Beheren</NuxtLink>
 													<button class="bg-gray-200 p-[0.35rem] px-3 text-xs text-gray-700 rounded-lg">Bewerken</button>
 												</div>
 											</div>
-										</div>
-										<div v-else>
-											<button class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-700 rounded-lg">Voeg een restaurant toe</button>
 										</div>
 									</div>
 								</details>
@@ -148,6 +95,9 @@
 			</div>
 		</div>
 	</div>
+	<Modal :title v-model:active="active" v-model:activeDelay="activeDelay">
+		
+	</Modal>
 </template>
 
 <script setup lang="ts">
@@ -157,6 +107,9 @@
 	const items: any = ref([]);
 	const openDetail = ref();
 	const OkStatus = ref(false);
+	const active = ref(true);
+	const activeDelay = ref(true);
+	const title = ref("Account");
 
 	useSeoMeta({
 		title: "EET | Overzicht",
@@ -203,5 +156,3 @@
 </script>
 
 <style scoped></style>
-
-

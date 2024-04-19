@@ -14,9 +14,7 @@ const procesdata = async (data: any, client: any) => {
                 keuken: rest.keuken,
                 locatie: rest.locatie,
                 tel: rest.telefoon,
-                duur: rest.duur,
                 thumbnail: client.storage.from(rest.bucket).getPublicUrl(rest.thumbnail),
-                
             }))
         };
     }));

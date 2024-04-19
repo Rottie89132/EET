@@ -15,7 +15,6 @@
 						<div class="flex justify-center items-center py-1" :class="activeTab === 'history' ? 'bg-[#4e995b] text-[#c8e7cd] rounded-lg' : 'bg-gray-100'" @click="setActiveTab('history')">
 							<span class="text-sm">Geschiedenis</span>
 						</div>
-						
 					</div>
 					<hr class="pb-2 mt-3" />
 				</div>
@@ -26,8 +25,7 @@
 								<h2 class="text-xl font-bold">{{ restaurant.naam }}</h2>
 								<p class="text-sm opacity-85 mb-2 -mt-1">Bedankt voor de reservering.</p>
 								<NuxtImg :src="restaurant.thumbnail.data.publicUrl" alt="Restaurant Image" class="rounded-md mt-2" />
-								<hr class="mb-3" />
-								<div class="flex items-center justify-start gap-2 mt-1 mb-3 text-white text-sm">
+								<div class="flex items-center justify-start gap-2 mt-3 mb-3 text-white text-sm">
 									<p class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-[#4e995b]">
 										<icon name="material-symbols:calendar-month-outline-rounded" size="1.1em" />
 										{{ reservering.datum.split("-").reverse().join("-") }}
@@ -74,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+
 	const { $pwa }: any = useNuxtApp();
 	const router = useRouter();
 	const installed = ref(false);
@@ -83,6 +82,7 @@
 	const loading = ref(false);
 
 	activeTab.value = router.currentRoute.value.query.tab || "upcoming";
+
 	const { data }: any = await useFetch(`/api/reserverigen?status=${activeTab.value}`);
 	reserveringen.value = data.value.reserveringen;
 
@@ -122,7 +122,7 @@
 
 	const refresh = () => {
 		loading.value = true;
-		setTimeout( async() => {
+		setTimeout(async () => {
 			const { data }: any = await useFetch(`/api/reserverigen?status=${activeTab.value}`);
 			reserveringen.value = data.value.reserveringen;
 			router.push({ query: { ...router.currentRoute.value.query, tab: activeTab.value } });

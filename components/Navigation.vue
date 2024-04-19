@@ -142,7 +142,6 @@
 	
 	OkStatus.value = error.value ? false : true;
 	if (!error.value) User.value = data.value?.user;
-	const currentRoute = useRoute().fullPath
 	
 </script>
 

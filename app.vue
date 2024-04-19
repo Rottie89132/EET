@@ -6,6 +6,7 @@
             </div>
         </div>
     </div>
+    <VitePwaManifest />
     <NuxtPage />
 </template>
 

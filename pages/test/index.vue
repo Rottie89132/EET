@@ -1,5 +1,5 @@
 <template>
-
+    
     <form @submit.prevent="createRestaurant" class="max-w-md mx-auto">
         <div class="mb-4">
             <label for="naam" class="block mb-2">Naam:</label>
@@ -44,6 +44,7 @@
 
 
 <script setup>
+
 const naam = ref('');
 const plaats = ref('');
 const prijs = ref('');
