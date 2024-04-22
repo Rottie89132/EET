@@ -1,7 +1,7 @@
 <template>
     <div class=" select-none">
         <Field tabindex="1" :name="name" class=" sr-only " type="date" v-model="date" disabled />
-        <div class="flex justify-between items-center mb-2">
+        <div class="flex bg-gray-100 rounded-lg justify-between items-center mb-2">
             <span @click="previousMonth">
                 <Icon class="rotate-90" name="material-symbols:keyboard-arrow-down-rounded" size="2rem"></Icon>
             </span>
@@ -18,7 +18,7 @@
                 {{ day }}
             </div>
             <button v-for="day in daysInMonth" :key="day" :disabled="isPastDay(day)" tabindex="0" @keydown.enter="isPastDay(day) ? '' : selectDay(day)" @click="isPastDay(day) ? '' : selectDay(day)" 
-            class=" p-2 m-1 items-center transition-all delay-100 ease-in flex justify-center border rounded-md" :class="isPastDay(day) ? 'bg-gray-100 border-gray-100 text-gray-400 line-through cursor-not-allowed' : selected?.day === day && selected?.month === selectedDate.getMonth() + 1 && selected?.year === selectedDate.getFullYear() ? 'bg-[#4e995b] hover:bg-[#42834d] border-[#4e995b] text-white' : ' hover:bg-gray-200 border-gray-300 '">	
+            class=" p-2 m-1 items-center transition-all delay-100 ease-in flex justify-center border rounded-md" :class="isPastDay(day) ? 'bg-gray-100 border-gray-100 text-gray-400 line-through cursor-not-allowed' : selected?.day === day && selected?.month === selectedDate.getMonth() + 1 && selected?.year === selectedDate.getFullYear() ? 'bg-[#4e995b] hover:bg-[#42834d] border-[#4e995b] text-white' : isSpecialDate(day)? ' bg-gray-200 border-gray-200 hover:bg-gray-300' : ' hover:bg-gray-200 border-gray-300 '">	
             {{ day }}
             </button>
             <div v-for="day in nextMonthDays" :key="'next-' + day" class="p-2 m-1 items-center transition-all delay-100 ease-in flex justify-center border rounded-md text-gray-400 cursor-not-allowed line-through">
@@ -30,6 +30,10 @@
 </template>
 
 <script setup lang="ts">
+    import type { RealtimeChannel } from "@supabase/supabase-js";
+    let realtimeChannel: RealtimeChannel;
+
+    const client = useSupabaseClient();
 	const currentDate = ref(new Date());
 	const selectedDate = ref(new Date());
 
@@ -39,6 +43,7 @@
         date: any;
 	}>();
 
+    const { data: pinBoardData, refresh: pinBoardRefresh }: any = await useFetch(`/api/restaurants/${useRoute().params.id}/reserverigen?live=true`);
     const daysOfWeek = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 
     const daysInMonth = computed(() => {
@@ -110,6 +115,27 @@
             year: selectedDate.value.getFullYear(),
         }
     };
+
+    const isSpecialDate = (day: number) => {
+		const selectedMonth = selectedDate.value.getMonth() + 1;
+		const selectedYear = selectedDate.value.getFullYear();
+		const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+		return pinBoardData.value.reserveringen.some((item: any) => item.datum === dateStr);
+	};
+
+    onMounted(() => {
+		realtimeChannel = client.channel("public:reserveringen").on("postgres_changes", { event: "*", schema: "public", table: "reserveringen_table" }, (payload) => {
+            pinBoardRefresh()
+		});
+		realtimeChannel.subscribe();
+	});
+
+	onUnmounted(() => {
+		client.removeChannel(realtimeChannel);
+	});
+
+
+
 
 </script>
 

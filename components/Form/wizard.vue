@@ -22,7 +22,6 @@
 
 <script setup lang="ts">
 	import { useForm } from "vee-validate";
-	import { ref, computed, provide } from "vue";
 
 	const props = defineProps({
 		validationSchema: {
@@ -60,8 +59,6 @@
 			currentStepIdx.value++;
 			return;
 		}
-
-		
 
 		emit("submit", values, actions);
 	});

@@ -107,8 +107,8 @@
 	const items: any = ref([]);
 	const openDetail = ref();
 	const OkStatus = ref(false);
-	const active = ref(true);
-	const activeDelay = ref(true);
+	const active = ref(false);
+	const activeDelay = ref(false);
 	const title = ref("Account");
 
 	useSeoMeta({

@@ -38,7 +38,7 @@
 										<Icon name="material-symbols:emoji-people" size="1.1em" />
 										x {{ reservering.personen }}
 									</p>
-									<button class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-gray-200 text-black">
+									<button @click="activeTab == 'upcoming' ? openOptions(reservering.restaurant[0]) : ''" class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-gray-200 text-black">
 										<icon name="material-symbols:more-horiz" size="1.4em" />
 									</button>
 								</div>
@@ -69,10 +69,30 @@
 			</div>
 		</div>
 	</div>
+	<Modal :title v-model:active="active" v-model:activeDelay="activeDelay">
+		<div v-if="changeAction == ''">
+			<p class="-mt-2 text-gray-600 leading-5">Hier ziet u de opties voor deze reservering.</p>
+			<hr class="my-3" />
+			<div class="mt-4 flex items-center gap-4">
+				<button @click="toonDelete" class="bg-[#de4747] text-white p-1 px-4 rounded-lg">Annuleren</button>
+				<button class="bg-gray-200 p-1 px-4 rounded-lg">Wijzigen</button>
+			</div>
+		</div>
+		<div v-else-if="changeAction == 'Annuleren'">
+			<p class="-mt-2 text-gray-600 leading-5">
+				Weet u zeker dat u deze reservering wilt annuleren?
+			</p>
+			<div class="mt-4 flex items-center gap-4">
+				<button class="bg-[#de4747] text-white p-1 px-4 rounded-lg">Doorgaan</button>
+				<button @click="back" class="bg-gray-200 p-1 px-4 rounded-lg">
+					Toch maar niet
+				</button>
+			</div>
+		</div>
+	</Modal>
 </template>
 
 <script setup lang="ts">
-
 	const { $pwa }: any = useNuxtApp();
 	const router = useRouter();
 	const installed = ref(false);
@@ -80,10 +100,14 @@
 	const OkStatus = ref(false);
 	const reserveringen: any = ref([]);
 	const loading = ref(false);
+	const active = ref(false);
+	const activeDelay = ref(false);
+	const title = ref("");
+	const changeAction = ref("");
 
 	activeTab.value = router.currentRoute.value.query.tab || "upcoming";
 
-	const { data }: any = await useFetch(`/api/reserverigen?status=${activeTab.value}`);
+	const { data, refresh: refreshData }: any = await useFetch(`/api/reserverigen?status=${activeTab.value}`);
 	reserveringen.value = data.value.reserveringen;
 
 	onMounted(() => {
@@ -120,11 +144,35 @@
 		],
 	});
 
+	const openOptions = (data: any) => {
+		title.value = data.naam;
+
+		active.value = true;
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 100);
+	};
+
+	const toonDelete = () => {
+		activeDelay.value = false;
+		changeAction.value = "Annuleren";
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 500);
+	};
+
+	const back = () => {
+		activeDelay.value = false;
+		changeAction.value = "";
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 500);
+	};
+
 	const refresh = () => {
 		loading.value = true;
 		setTimeout(async () => {
-			const { data }: any = await useFetch(`/api/reserverigen?status=${activeTab.value}`);
-			reserveringen.value = data.value.reserveringen;
+			await refreshData();
 			router.push({ query: { ...router.currentRoute.value.query, tab: activeTab.value } });
 			loading.value = false;
 		}, 600);

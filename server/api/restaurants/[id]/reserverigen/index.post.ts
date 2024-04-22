@@ -44,7 +44,7 @@ export default eventHandler(async (event) => {
         return {
             statusCode: 200,
             statusMessage: "OK",
-            message: "Reservering created",
+            message: "Email sent!",
         }
     } 
 
@@ -54,9 +54,4 @@ export default eventHandler(async (event) => {
         message: "An error occured",
     }
     
-    
-    
-    
-    
-
 })

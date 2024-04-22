@@ -71,14 +71,5 @@
 		transform: translateY(12em);
 	}
 
-	.modalSlide-enter-active,
-	.modalSlide-leave-active {
-		transition: all 1s ease;
-	}
-
-	.modalSlide-enter-from,
-	.modalSlide-leave-to {
-		opacity: 0;
-		transform: translatex(12em);
-	}
+	
 </style>

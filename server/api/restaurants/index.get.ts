@@ -57,7 +57,8 @@ export default eventHandler((event) => {
                 const { data, count }: any = await client
                     .from('restaurants_table')
                     .select('*', { count: 'exact' })
-                    .range((pagina - 1) * queryCount, pagina * queryCount - 1);
+                    .range((pagina - 1) * queryCount, pagina * queryCount - 1)
+                    .order('beoordeling', { ascending: false })
 
                 const filteredData = data.filter((restaurant: any) => {
                     return restaurant.images && restaurant.images.length > 0 &&
