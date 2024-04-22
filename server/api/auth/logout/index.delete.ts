@@ -8,8 +8,8 @@ export default defineEventHandler((event) => {
 
         if (error) return reject({
             statusCode: 400,
-            statusMessage: "Bad Request",
-            message: "The request could not be understood by the server due to malformed syntax."
+            statusMessage: "Foutieve aanvraag",
+            message: "De server kon het verzoek niet begrijpen vanwege een foutieve syntaxis."
         });
 
         deleteCookie(event, "sb-access-token")
@@ -18,9 +18,7 @@ export default defineEventHandler((event) => {
         return resolve({
             statusCode: 200,
             statusMessage: "OK",
-            message: "You have been successfully logged out."
+            message: "Je bent succesvol uitgelogd."
         });
-
-
     });
 });

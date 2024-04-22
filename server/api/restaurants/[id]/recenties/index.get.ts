@@ -20,29 +20,29 @@ const procesdata = async (data: any, client: any) => {
     return processedData;
 };
 
+export default eventHandler((event) => {
+    return new Promise(async (resolve, reject) => {
+        const client = serverSupabaseServiceRole(event)
+        const id = getRouterParams(event).id
 
-export default eventHandler(async (event) => {
-    const client = serverSupabaseServiceRole(event)
-    const id = getRouterParams(event).id
+        const { data }: any = await client.from('recensies_table').select('*').eq("restaurant_id", id).order('created_at', { ascending: false })
 
-    const { data }: any = await client.from('recensies_table').select('*').eq("restaurant_id", id).order('created_at', { ascending: false })
+        const procesed = await procesdata(data, client)
 
-    const procesed = await procesdata(data, client)
+        if (procesed.length === 0) return reject({
+            statusCode: 404,
+            statusMessage: "Not Found",
+            message: "No recenties found",
+        });
 
-    if (procesed.length === 0) return {
-        statusCode: 404,
-        statusMessage: "Not Found",
-        message: "No recenties found",
-    };
+        return resolve({
+            statusCode: 200,
+            statusMessage: "OK",
+            message: "Recenties found",
+            recenties: procesed
+        });
 
-    return {
-        statusCode: 200,
-        statusMessage: "OK",
-        message: "Recenties found",
-        recenties: procesed
-    };
-
-
+    })
 })
 
 

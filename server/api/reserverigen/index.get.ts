@@ -20,36 +20,35 @@ const procesdata = async (data: any, client: any) => {
     }));
 }
 
+export default eventHandler(async (event) => {
+    return new Promise(async (resolve, reject) => {
+        const client = serverSupabaseServiceRole(event)
+        const user: any = await serverSupabaseUser(event)
+        const status = getQuery(event).status
 
-export default eventHandler( async(event) => {
+        if (!user) return reject({
+            statusCode: 401,
+            statusMessage: "Unauthorized",
+            message: "Gebruiker niet gevonden",
+        })
 
-    const client = serverSupabaseServiceRole(event)
-    const user: any = await serverSupabaseUser(event)
-    const status = getQuery(event).status
 
-    if (!user) return {
-        statusCode: 401,
-        statusMessage: "Unauthorized",
-        message: "User not found",
-    }
+        let returnData: any = []
+        const { data, error }: any = await client.from("reserveringen_table").select("*").eq("user_id", user.id).order("datum", { ascending: true })
 
-    
-    let returnData: any = []
-    const { data, error }: any = await client.from("reserveringen_table").select("*").eq("user_id", user.id).order("datum", { ascending: true })
+        if (status == "history") returnData = data.filter((reservering: any) => new Date(reservering.datum + 'T' + reservering.tijd) < new Date())
+        else returnData = data.filter((reservering: any) => new Date(reservering.datum + 'T' + reservering.tijd) > new Date())
 
-    if (status == "history") returnData = data.filter((reservering: any) => new Date(reservering.datum + 'T' + reservering.tijd) < new Date())
-    else returnData = data.filter((reservering: any) => new Date(reservering.datum + 'T' + reservering.tijd) > new Date())
+        if (!error) return resolve({
+            statusCode: 200,
+            statusMessage: "OK",
+            reserveringen: await procesdata(returnData, client),
+        })
 
-    if(!error) return {
-        statusCode: 200,
-        statusMessage: "OK",
-        reserveringen: await procesdata(returnData, client),
-    }
-
-    return {
-        statusCode: 500,
-        statusMessage: "Internal Server Error",
-        message: "An error occured",
-    }
-
+        return reject({
+            statusCode: 500,
+            statusMessage: "Interne serverfout",
+            message: "Er is een fout opgetreden",
+        })
+    })
 })

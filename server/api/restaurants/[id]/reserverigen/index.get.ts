@@ -17,10 +17,10 @@ export default eventHandler((event) => {
         const id = getRouterParams(event).id
         
         if (!user) {
-            const { data, error }: any = await client.from('reserveringen_table').select('tijd, datum').eq("restaurant_id", id).order('created_at', { ascending: false })
+            const { data, error }: any = await client.from('reserveringen_table').select('tijd, datum, personen').eq("restaurant_id", id).order('created_at', { ascending: false })
             if (error) return {
                 statusCode: 404,
-                statusMessage: "Not Found",
+                statusMessage: "Niet gevonden",
                 message: "Geen reserveringen gevonden",
             };
 
@@ -33,10 +33,10 @@ export default eventHandler((event) => {
         }
 
         if(live) {
-            const { data, error }: any = await client.from('reserveringen_table').select('tijd, datum').eq("restaurant_id", id).order('created_at', { ascending: false })
+            const { data, error }: any = await client.from('reserveringen_table').select('tijd, datum, personen').eq("restaurant_id", id).order('created_at', { ascending: false })
             if (error) return {
                 statusCode: 404,
-                statusMessage: "Not Found",
+                statusMessage: "Niet gevonden",
                 message: "Geen reserveringen gevonden",
             };
 
@@ -52,7 +52,7 @@ export default eventHandler((event) => {
             const { data, error }: any = await client.from('reserveringen_table').select('*').eq("restaurant_id", id).eq("datum", datum).order('created_at', { ascending: false })
             if (error) return {
                 statusCode: 404,
-                statusMessage: "Not Found",
+                statusMessage: "Niet gevonden",
                 message: "Geen reserveringen gevonden",
             };
 
@@ -69,14 +69,14 @@ export default eventHandler((event) => {
         const { data: restaurant, error: restaurantErorr }: any = await client.from('restaurants_table').select('*').eq("owner_id", user.id)
         if (restaurantErorr || restaurant.length == 0) return reject({
             statusCode: 401,
-            statusMessage: "Unauthorized",
-            message: "Geen toegan tot deze data",
+            statusMessage: "Ongeautoriseerd",
+            message: "Geen toegang tot deze gegevens",
         })
 
         const { data, error }: any = await client.from('reserveringen_table').select('*').eq("restaurant_id", id).order('created_at', { ascending: false })
         if (error) return {
             statusCode: 404,
-            statusMessage: "Not Found",
+            statusMessage: "Niet gevonden",
             message: "Geen reserveringen gevonden",
         };
 

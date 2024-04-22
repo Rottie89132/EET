@@ -9,6 +9,9 @@
 					<FieldSlider name="beoordeling" />
 				</div>
 			</FormStep>
+			<p v-if="isSuccess" class="text-green-800 text-sm leading-4 mb-5">
+				Recensie is gelukt! Bedankt voor je feedback.
+			</p>
 		</FormWizard>
 	</div>
 </template>
@@ -17,8 +20,9 @@
 	import { configure } from "vee-validate";
 	import * as yup from "yup";
 
-	const { onSubmit } = defineModels<{
+	const { onSubmit, isSuccess } = defineModels<{
 		onSubmit: any;
+		isSuccess: boolean;
 	}>();
 
 	const wordCount = (value: any) => {

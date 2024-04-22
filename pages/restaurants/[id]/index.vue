@@ -105,7 +105,7 @@
 				>.
 			</p>
 			<hr class="my-2 mb-2" />
-			<ModalRecensie :onSubmit="handleRecentie" />
+			<ModalRecensie :isSuccess.value :onSubmit="handleRecentie" />
 		</div>
 		<div v-else>
 			<p class="-mt-3 text-gray-600">
@@ -114,7 +114,7 @@
 				>.
 			</p>
 			<hr class="my-2 mb-2" />
-			<ModalReservering :restaurantDetails :onSubmit="handleReservering" :OkStatus :user />
+			<ModalReservering :emailSend.value :restaurantDetails :onSubmit="handleReservering" :OkStatus :user />
 		</div>
 	</Modal>
 </template>
@@ -130,7 +130,10 @@
 	const activeDelay = ref(false);
 	const beoordelingen: any = ref([]);
 	const user = ref();
+
 	const OkStatus = ref(false);
+	const emailSend = ref(false);
+	const isSuccess = ref(false);
 
 	useSeoMeta({
 		title: "EET | Restaurants",
@@ -183,8 +186,12 @@
 				beoordeling: error.value.data.message,
 			});
 		} else {
-			actions.resetForm();
-			closeModal();
+			isSuccess.value = true;
+			setTimeout(() => {
+				actions.resetForm();
+				closeModal();
+				isSuccess.value = false;
+			}, 5000);
 		}
 	};
 
@@ -203,8 +210,12 @@
 				telefoon: error.value.data.message,
 			});
 		} else {
-			actions.resetForm();
-			closeModal();
+			emailSend.value = true;
+			setTimeout(() => {
+				actions.resetForm();
+				closeModal();
+				emailSend.value = false;
+			}, 5000);
 		}
 	};
 

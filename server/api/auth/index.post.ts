@@ -7,7 +7,7 @@ export default defineEventHandler((event) => {
             if (!request) {
                 return {
                     statusCode: 400,
-                    statusMessage: "Bad Request",
+                    statusMessage: "Fout verzoek",
                     message: "Het verzoek kon niet worden begrepen door de server vanwege een onjuiste syntaxis."
                 };
             }
@@ -16,7 +16,7 @@ export default defineEventHandler((event) => {
             if (!email || !wachtwoord) {
                 return {
                     statusCode: 400,
-                    statusMessage: "Bad Request",
+                    statusMessage: "Fout verzoek",
                     message: "Het verzoek kon niet worden begrepen door de server vanwege een onjuiste syntaxis."
                 };
             }
@@ -29,7 +29,7 @@ export default defineEventHandler((event) => {
 
             if (error) return reject({
                 statusCode: 404,
-                statusMessage: "Not Found",
+                statusMessage: "Niet gevonden",
                 message: "Het e-mailadres of wachtwoord is onjuist."
             });
 

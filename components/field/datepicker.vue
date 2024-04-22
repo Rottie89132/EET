@@ -30,22 +30,18 @@
 </template>
 
 <script setup lang="ts">
-    import type { RealtimeChannel } from "@supabase/supabase-js";
-    let realtimeChannel: RealtimeChannel;
-
-    const client = useSupabaseClient();
+    
 	const currentDate = ref(new Date());
 	const selectedDate = ref(new Date());
 
-	const { name, selected, date } = defineModels<{
+	const { name, selected, date, pinBoardData } = defineModels<{
 		name: string;
 		selected: any
         date: any;
+        pinBoardData: any;
 	}>();
 
-    const { data: pinBoardData, refresh: pinBoardRefresh }: any = await useFetch(`/api/restaurants/${useRoute().params.id}/reserverigen?live=true`);
     const daysOfWeek = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
-
     const daysInMonth = computed(() => {
         const date = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth() + 1, 0);
         return date.getDate();
@@ -122,20 +118,6 @@
 		const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 		return pinBoardData.value.reserveringen.some((item: any) => item.datum === dateStr);
 	};
-
-    onMounted(() => {
-		realtimeChannel = client.channel("public:reserveringen").on("postgres_changes", { event: "*", schema: "public", table: "reserveringen_table" }, (payload) => {
-            pinBoardRefresh()
-		});
-		realtimeChannel.subscribe();
-	});
-
-	onUnmounted(() => {
-		client.removeChannel(realtimeChannel);
-	});
-
-
-
 
 </script>
 

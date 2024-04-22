@@ -22,7 +22,7 @@ export default eventHandler(async (event) => {
             return resolve({
                 statusCode: 200,
                 statusMessage: "OK",
-                message: "Restaurant found",
+                message: "Restaurant gevonden",
                 restaurant: data
             })
 
@@ -30,8 +30,8 @@ export default eventHandler(async (event) => {
 
         return reject({
             statusCode: 404,
-            statusMessage: "Not found",
-            message: "Restaurant not found"
+            statusMessage: "Niet gevonden",
+            message: "Restaurant niet gevonden"
         })
     })
 })

@@ -1,25 +1,14 @@
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 
 const queryCount = 6
-const procesData = (data: any, client: any) => {
-    
-    data?.forEach((restaurant: any) => {
+const procesData = (data: any, client: any) => data?.forEach((restaurant: any) => {
+    if (restaurant.images) restaurant.images = restaurant.images.map((image: any) => client.storage.from(restaurant.bucket).getPublicUrl(image.Path))
+    restaurant.thumbnail = client.storage.from(restaurant.bucket).getPublicUrl(restaurant.thumbnail)
+    restaurant.bucket = undefined
+    restaurant.owner_id = undefined
+    restaurant.prijs = restaurant.prijs == "Laag" ? "€" : restaurant.prijs == "Gemiddeld" ? "€€" : "€€€"
+})
 
-        if(restaurant.images){
-            restaurant.images = restaurant.images.map((image: any) => {
-                return client.storage.from(restaurant.bucket).getPublicUrl(image.Path)
-            })
-        }
-        
-        restaurant.thumbnail = client.storage.from(restaurant.bucket).getPublicUrl(restaurant.thumbnail)
-
-        restaurant.bucket = undefined
-        restaurant.owner_id = undefined
-        restaurant.prijs = restaurant.prijs == "Laag" ? "€" : restaurant.prijs == "Gemiddeld" ? "€€" : "€€€"
-    })
-
-    return data
-}
 const ReturnResult = (resolve: any, reject: any, data: any, pagina: any, totalPages: any) => {
 
     if (data.length > 0) return resolve({
@@ -30,8 +19,8 @@ const ReturnResult = (resolve: any, reject: any, data: any, pagina: any, totalPa
 
     return reject({
         statusCode: 404,
-        statusMessage: "Not found",
-        message: "No restaurants found"
+        statusMessage: "Niet gevonden",
+        message: "Geen restaurants gevonden"
     })
 }
 
@@ -88,7 +77,7 @@ export default eventHandler((event) => {
                 })
             }
 
-            const { data }:any = await client
+            const { data }: any = await client
                 .from('restaurants_table')
                 .select('*')
                 .limit(6)

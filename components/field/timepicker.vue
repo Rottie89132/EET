@@ -9,28 +9,23 @@
 </template>
 
 <script setup lang="ts">
-	import type { RealtimeChannel } from "@supabase/supabase-js";
-	let realtimeChannel: RealtimeChannel;
-
+	
 	interface RestaurantDetails {
         Openingstijden: { dag: string, tijd: string }[];
         duur: number;
         aantaltafels: number;
     }
 
-    
-
 	const reservations = ref<Date[]>([]);
-	const client = useSupabaseClient();
 	
-	const { date, restaurantDetails, name, time } = defineModels<{
+	const { date, restaurantDetails, name, time, pinBoardData } = defineModels<{
 		date: any;
 		restaurantDetails: RestaurantDetails;
 		name: string;
 		time: string;
+        pinBoardData: any;
 	}>();
-    const { data: pinBoardData, refresh: pinBoardRefresh } = await useFetch(`/api/restaurants/${useRoute().params.id}/reserverigen?live=true`);
-
+    
 	watch(pinBoardData, (newPinBoardData: any) => {
         reservations.value = newPinBoardData.reserveringen.map((res: any) => {
             const [year, month, day] = res.datum.split("-").map(Number);
@@ -85,14 +80,5 @@
 
         return conflictingReservations.length >= restaurantDetails.value.aantaltafels;
     };
-
-	onMounted(() => {
-        realtimeChannel = client.channel("public:reserveringen").on("postgres_changes", { event: "*", schema: "public", table: "reserveringen_table" }, () => pinBoardRefresh());
-        realtimeChannel.subscribe();
-    });
-
-    onUnmounted(() => {
-        client.removeChannel(realtimeChannel);
-    });
 
 </script>

@@ -24,8 +24,8 @@ export default defineEventHandler((event) => {
 
         if (error) return reject({
             statusCode: 400,
-            statusMessage: "Bad Request",
-            message: "The request could not be understood by the server due to malformed syntax."
+            statusMessage: "Foutieve aanvraag",
+            message: "Het verzoek kon door de server niet begrepen worden vanwege een onjuiste syntaxis."
         });
 
         return resolve({
@@ -35,4 +35,3 @@ export default defineEventHandler((event) => {
         });
     });
 });
-
