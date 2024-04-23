@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   ],
   image: {
     provider: 'netlify',
-    domains: ['eswamccbhwecjjddnhbn.supabase.co']
+    domains: ['eswamccbhwecjjddnhbn.supabase.co', 'lh3.googleusercontent.com']
   },
   nitro: {
     experimental: {
