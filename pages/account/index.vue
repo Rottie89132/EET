@@ -124,6 +124,10 @@
 		twitterCard: "summary",
 	});
 
+  definePageMeta({
+		middleware: "auth",
+	});
+
 	useHead({
 		htmlAttrs: {
 			lang: "nl",
