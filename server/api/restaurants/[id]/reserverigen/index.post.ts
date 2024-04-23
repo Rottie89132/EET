@@ -25,13 +25,13 @@ export default eventHandler(async (event) => {
 
         const now = new Date();
         const requestTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), ...request.tijd.split(':').map(Number));
-        const twoHoursLater = new Date(requestTime.getTime() + 2 * 60 * 60 * 1000);
-        const twoHoursEarlier = new Date(requestTime.getTime() - 2 * 60 * 60 * 1000);
+        const hoursLater = new Date(requestTime.getTime() + data.duur * 60 * 60 * 1000);
+        const hoursEarlier = new Date(requestTime.getTime() - data.duur * 60 * 60 * 1000);
 
         const conflictingReservations = reserveringen.filter((reservering: { tijd: any }) => {
             const reservationTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), ...reservering.tijd.split(':').map(Number));
             const normalizedReservationTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), reservationTime.getHours(), reservationTime.getMinutes(), reservationTime.getSeconds());
-            return (normalizedReservationTime >= twoHoursEarlier && normalizedReservationTime < requestTime) || (normalizedReservationTime >= requestTime && normalizedReservationTime < twoHoursLater);
+            return (normalizedReservationTime >= hoursEarlier && normalizedReservationTime < requestTime) || (normalizedReservationTime >= requestTime && normalizedReservationTime < hoursLater);
         })
 
         if (conflictingReservations.length >= 8) return reject({

@@ -1,22 +1,5 @@
 <template>
-	<!-- <div >
-		<div class="fixed left-0 w-full h-full landscape">
-			<div class="flex items-center justify-center h-full w-full">
-				<div class="flex flex-col items-center gap-4">
-					<h1 class="text-4xl font-bold ">
-						Laden...
-					</h1>
-					<p class="">
-						Even geduld terwijl we de app laden.
-
-					</p>
-					<div class="w-full overflow-hidden bg-gray-300 rounded-md">
-						<div class="h-4 animate-progress bg-[#4e995b]"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
+	<div></div>
 </template>
 
 <script setup lang="ts">

@@ -2,7 +2,7 @@
 	<div class="select-none">
 		<Field :name="name" tabindex="1" class="sr-only" type="time" v-model="time" />
 		<div class="grid grid-cols-4 gap-2 mt-2 mb-4">
-			<button v-for="hour in hours" :key="hour" :disabled="isPast(hour)" tabindex="0" @keydown.enter="isPast(hour) ? '' : selectedHour(hour)" @click="isPast(hour) ? '' : selectedHour(hour)" :class="isPast(hour) ? 'bg-gray-100 border-gray-100 text-gray-400 line-through cursor-not-allowed' : time === hour ? 'bg-[#4e995b] hover:bg-[#42834d] border-[#4e995b] text-white' : 'hover:bg-gray-200 border-gray-300'" class="flex items-center justify-center p-2 border transition-all delay-100 ease-in rounded-md">{{ hour }}</button>
+			<button v-for="hour in hours" :key="hour" :disabled="notAvailable(hour)" tabindex="0" @keydown.enter="notAvailable(hour) ? '' : selectedHour(hour)" @click="notAvailable(hour) ? '' : selectedHour(hour)" :class="notAvailable(hour) ? 'bg-gray-100 border-gray-100 text-gray-400 line-through cursor-not-allowed' : time === hour ? 'bg-[#4e995b] hover:bg-[#42834d] border-[#4e995b] text-white' : 'hover:bg-gray-200 border-gray-300'" class="flex items-center justify-center p-2 border transition-all delay-100 ease-in rounded-md">{{ hour }}</button>
 		</div>
 		<ErrorMessage class="mb-2 -mt-2 text-xs text-[#B92538] block" :name="name" />
 	</div>
@@ -65,7 +65,7 @@
 		time.value = hour;
 	};
 
-	const isPast = (hour: string) => {
+	const notAvailable = (hour: string) => {
         const now = new Date();
         const SelectedDate = new Date(date.value).toISOString().split("T")[0];
         const [year, month, day] = SelectedDate.split("-").map(Number);
@@ -74,9 +74,9 @@
 
         if (now > selectedDate) return true;
 
-        const twoHoursLater = new Date(selectedDate.getTime() + restaurantDetails.value.duur * 60 * 60 * 1000);
-        const twoHoursEarlier = new Date(selectedDate.getTime() - restaurantDetails.value.duur * 60 * 60 * 1000);
-        const conflictingReservations = reservations.value.filter((res) => (res >= twoHoursEarlier && res < selectedDate) || (res >= selectedDate && res < twoHoursLater));
+        const hoursLater = new Date(selectedDate.getTime() + restaurantDetails.value.duur * 60 * 60 * 1000);
+        const hoursEarlier = new Date(selectedDate.getTime() - restaurantDetails.value.duur * 60 * 60 * 1000);
+        const conflictingReservations = reservations.value.filter((res) => (res >= hoursEarlier && res < selectedDate) || (res >= selectedDate && res < hoursLater));
 
         return conflictingReservations.length >= restaurantDetails.value.aantaltafels;
     };

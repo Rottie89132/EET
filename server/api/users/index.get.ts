@@ -42,7 +42,7 @@ export default defineEventHandler((event) => {
         return resolve({
             statusCode: 200,
             statusMessage: "OK",
-            user: user.user_metadata
+            user: user?.user_metadata
         })
     });
 });

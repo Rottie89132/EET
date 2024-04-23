@@ -11,7 +11,7 @@
 		<div :class="installed ? 'fixed w-screen h-full overflow-auto top-0' : ''">
 			<div :class="!installed ? ' mt-[10.5rem]' : ' mt-[9rem]'" class="px-6">
 				<section>
-					<div :class="!installed ? ' top-[9rem] md:top-[11rem] md:mb-8  ' : ' top-[8.99em] '" class="z-10 bg-white sticky pb-[0.10rem] pt-2">
+					<div :class="!installed ? ' top-[9rem] md:top-[10.8rem] md:mb-8  ' : ' top-[8.99em] '" class="z-10 bg-white sticky pb-[0.10rem] pt-2">
 						<div class="md:max-w-[30vw]">
 							<div :class="!installed ? '' : '-mt-[0.65rem]'" class="flex gap-2 py-1 bg-white items-center justify-between mb-2">
 								<div class="flex bg-green-800 text-white rounded-lg w-full justify-between items-center">
