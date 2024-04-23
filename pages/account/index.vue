@@ -16,13 +16,13 @@
 						<div class="flex items-center justify-between">
 							<div>
 								<h2 class="font-semibold flex items-center gap-1 text-lg">
-									{{ User.name || User.email.split("@")[0] }}
-									<span v-if="User.email_verified" class="text-sm">
+									{{ User?.name || User?.email.split("@")[0] }}
+									<span v-if="User?.email_verified" class="text-sm">
 										<icon name="ic:sharp-verified" size="1.5em" class="text-white text-opacity-80"></icon>
 									</span>
 								</h2>
 								<p class="text-sm -mt-1 opacity-80">
-									{{ User.email }}
+									{{ User?.email }}
 								</p>
 							</div>
 						</div>
@@ -32,7 +32,7 @@
 						</p>
 						<div class="flex gap-2">
 							<button class="bg-slate-50 p-2 px-3 text-xs text-black rounded-lg">Instellingen</button>
-							<p v-if="items.length > 0" class="bg-[#377642] text-[#cfe7d3] text-xs p-2 rounded-md">Restaurant houder</p>
+							<p v-if="items?.length > 0" class="bg-[#377642] text-[#cfe7d3] text-xs p-2 rounded-md">Restaurant houder</p>
 							<p class="bg-[#377642] text-[#cfe7d3] text-xs p-2 rounded-md">Gebruiker</p>
 						</div>
 						<div class="flex gap-2 mt-3"></div>
@@ -45,29 +45,29 @@
 								<details :open="openDetail === 'restaurants'" class="font-semibold flex items-center justify-between gap-1 text-lg">
 									<summary @click.prevent="toggleDetail('restaurants')">
 										<span>Restaurants</span>
-										<span class="text-xs opacity-80">({{ items.length }})</span>
+										<span class="text-xs opacity-80">({{ items?.length }})</span>
 									</summary>
 									<p class="text-sm -my-1 font-normal">
-										<span v-if="items.length > 0" class="text-xs opacity-80"> Lijst met alle restaurants onder dit account </span>
+										<span v-if="items?.length > 0" class="text-xs opacity-80"> Lijst met alle restaurants onder dit account </span>
 										<span v-else class="text-xs opacity-80"> Je hebt geen restaurants onder dit account </span>
 									</p>
 									<button class="bg-gray-300 p-[0.35rem] px-3 text-xs mt-2 text-gray-700 rounded-lg">Voeg een restaurant toe</button>
 									<div class="grid gap-2 mt-3 font-normal">
-										<div v-if="items.length > 0" v-for="(item, index) in items" class="flex items-center gap-2 bg-slate-50 rounded-lg">
+										<div v-if="items?.length > 0" v-for="(item, index) in items" class="flex items-center gap-2 bg-slate-50 rounded-lg">
 											<div class="w-full">
 												<hr class="my-2 mt-1" />
 												<div class="flex justify-between gap-2">
 													<div class="w-full">
 														<div class="flex items-center justify-between gap-2 w-full">
-															<h3 class="font-semibold text-md truncate">{{ item.naam }}</h3>
-															<div v-if="item.images && item.locatie && item.telefoon && item.telefoon && item.Openingstijden" class="flex items-center gap-2 text-right pb-2 overflow-auto">
+															<h3 class="font-semibold text-md truncate">{{ item?.naam }}</h3>
+															<div v-if="item?.images && item?.locatie && item?.telefoon && item?.telefoon && item?.Openingstijden" class="flex items-center gap-2 text-right pb-2 overflow-auto">
 																<span class="bg-gray-200 text-gray-500 p-1 flex items-center justify-center gap-1 px-3 text-xs rounded-lg">
 																	<icon name="ic:round-local-post-office" size="1.2em"></icon>
-																	{{ item.aantal_recenties || 4 }}
+																	{{ item?.aantal_recenties || 4 }}
 																</span>
 																<span class="bg-[#4e995b] p-1 flex items-center justify-center gap-1 px-3 text-xs text-[#b4e4bc] rounded-lg">
 																	<icon name="ic:sharp-star" size="1.2em"></icon>
-																	{{ item.beoordeling.toFixed(1) }}
+																	{{ item?.beoordeling.toFixed(1) }}
 																</span>
 															</div>
 															<div v-else class="flex items-center gap-2 text-right pb-2 overflow-auto">
@@ -77,11 +77,11 @@
 																</span>
 															</div>
 														</div>
-														<p class="text-xs opacity-80 text-balance max-w-[85%] line-clamp-2">{{ item.beschrijving }}</p>
+														<p class="text-xs opacity-80 text-balance max-w-[85%] line-clamp-2">{{ item?.beschrijving }}</p>
 													</div>
 												</div>
 												<div class="flex gap-2 mt-1">
-													<NuxtLink :to="`/restaurants/${item.id}/dashboard/`" class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-800 rounded-lg">Beheren</NuxtLink>
+													<NuxtLink :to="`/restaurants/${item?.id}/dashboard/`" class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-800 rounded-lg">Beheren</NuxtLink>
 													<button class="bg-gray-200 p-[0.35rem] px-3 text-xs text-gray-700 rounded-lg">Bewerken</button>
 												</div>
 											</div>
