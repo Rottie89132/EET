@@ -65,7 +65,7 @@ export default eventHandler((event) => {
                 const { data } = await client
                     .from('restaurants_table')
                     .select('*')
-                    .eq('owner_id', userclient.id)
+                    .eq('owner_id', userclient?.id)
                     .order('beoordeling', { ascending: false })
 
                 procesData(data, client)
