@@ -1,4 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server'
+const { RedirectUrl } = useRuntimeConfig()
 
 export default eventHandler((event) => {
     return new Promise(async (resolve, reject) => {
@@ -20,7 +21,7 @@ export default eventHandler((event) => {
 
         const { data, error } = await client.auth.signUp({
             email, password, options: {
-                emailRedirectTo: "http://localhost:3000/confirm",
+                emailRedirectTo: `${RedirectUrl}/confirm`,
             }
         })
 

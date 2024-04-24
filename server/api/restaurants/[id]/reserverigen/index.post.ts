@@ -1,5 +1,6 @@
 import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
 import { useCompiler } from '#vue-email'
+const { RedirectUrl } = useRuntimeConfig()
 
 export default eventHandler(async (event) => {
     return new Promise(async (resolve, reject) => {
@@ -50,7 +51,7 @@ export default eventHandler(async (event) => {
 
             const template = await useCompiler('Reservering.vue', {
                 props: {
-                    url: `http://localhost:3000/restaurants/${id}/reserveringen/verify/${SessionId}`,
+                    url: `${RedirectUrl}/restaurants/${id}/reserveringen/verify/${SessionId}`,
                     restaurant: data.naam,
                     name: request.naam,
                     datum: request.datum,

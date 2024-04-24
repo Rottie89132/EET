@@ -102,9 +102,10 @@ export default defineNuxtConfig({
     Server: process.env.SmtpServer,
     User: process.env.SmtpUser,
     Password: process.env.SmtpPass,
+    RedirectUrl: process.env.siteUrl,
   },
   googleSignIn: {
-    clientId: '319260519514-50k25g8eb58p6aqn41vuq0eb5pt286do.apps.googleusercontent.com',
+    clientId: process.env.googleClientId,
   },
   app: {
     head: {
