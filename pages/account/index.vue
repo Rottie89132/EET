@@ -31,7 +31,7 @@
 							<span class="text-sm opacity-70">Eigenschappen:</span>
 						</p>
 						<div class="flex gap-2">
-							<button class="bg-slate-50 p-2 px-3 text-xs text-black rounded-lg">Instellingen</button>
+							<button class="bg-slate-50 p-2 px-3 text-xs text-black rounded-lg" @click="openInstellingen">Instellingen</button>
 							<p v-if="items?.length > 0" class="bg-[#377642] text-[#cfe7d3] text-xs p-2 rounded-md">Restaurant houder</p>
 							<p class="bg-[#377642] text-[#cfe7d3] text-xs p-2 rounded-md">Gebruiker</p>
 						</div>
@@ -96,7 +96,29 @@
 		</div>
 	</div>
 	<Modal :title v-model:active="active" v-model:activeDelay="activeDelay">
-		
+    <div>
+      <p class="-mt-3 text-gray-600">
+        Wijzig hier uw instellingen
+      </p>
+      <hr class="my-2 mb-2" />
+      <form @submit.prevent="saveSettings">
+        <div>
+          <label for="name" class="block font-medium text-gray-700">Naam</label>
+          <input v-model="newName" type="text" id="name" name="name" class="mt-1 p-2 block w-full border rounded-md">
+        </div>
+
+        <div class="mt-4">
+          <label for="photo" class="block font-medium text-gray-700">Foto</label>
+          <input type="file" id="photo" name="photo" accept="image/*" class="mt-1 p-2 block w-full border rounded-md">
+        </div>
+
+		<button @click="deleteAccount">Delete Account</button>
+
+        <div class="mt-6">
+          <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">Opslaan</button>
+        </div>
+      </form>
+    </div>
 	</Modal>
 </template>
 
@@ -110,6 +132,9 @@
 	const active = ref(false);
 	const activeDelay = ref(false);
 	const title = ref("Account");
+	const newName = ref('');
+  	const newPhoto = ref(null);
+	
 
 	useSeoMeta({
 		title: "EET | Overzicht",
@@ -149,6 +174,58 @@
 	onMounted(() => {
 		if ($pwa.isPWAInstalled) installed.value = true;
 	});
+
+	const openInstellingen = () => {
+    title.value = "Instelling";
+    active.value = true;
+    setTimeout(() => {
+      activeDelay.value = true;
+    }, 100);
+  };
+
+	const saveSettings = async () => {
+	try {
+		const response = await fetch('/api/updateUser', {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ name: newName.value }),
+		});
+
+		const responseData = await response.json(); 
+		console.log('Response from server:', responseData); 
+
+		if (response.ok) {
+		console.log('Settings updated successfully!');
+		} else {
+		console.error('Failed to update settings:', response.statusText);
+		}
+	} catch (error) {
+		console.error('An error occurred while updating settings:', error);
+	}
+	};
+
+	const deleteAccount = async () => {
+	try {
+		const response = await fetch('/api/deleteAccount', {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ userId: User.value.id }), 
+		});
+
+		if (response.ok) {
+		console.log('Account deleted successfully!');
+		} else {
+		console.error('Failed to delete account:', response.statusText);
+		}
+	} catch (error) {
+		console.error('An error occurred while deleting account:', error);
+	}
+	};
+
 
 	const toggleDetail = (detailName: string) => {
 		if (openDetail.value === detailName) {
