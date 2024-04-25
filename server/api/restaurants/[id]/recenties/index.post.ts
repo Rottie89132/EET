@@ -1,4 +1,4 @@
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseServiceRole, serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 
 export default eventHandler((event) => {
     return new Promise(async (resolve, reject) => {
@@ -10,7 +10,7 @@ export default eventHandler((event) => {
             message: "Je moet ingelogd zijn om een recensie te plaatsen"
         })
 
-        const client: any = serverSupabaseServiceRole(event)
+        const client: any = await serverSupabaseClient(event)
         const id = getRouterParams(event).id
 
         const request = await readBody(event)

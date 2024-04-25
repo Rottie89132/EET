@@ -1,4 +1,4 @@
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseServiceRole, serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 
 const procesdata = async (data: any, client: any) => {
     return await Promise.all(data.map(async (item: any) => {
@@ -10,7 +10,7 @@ const procesdata = async (data: any, client: any) => {
 
 export default eventHandler((event) => {
     return new Promise(async (resolve, reject) => {
-        const client = serverSupabaseServiceRole(event)
+        const client = await serverSupabaseClient(event)
         const user: any = await serverSupabaseUser(event)
 
         const { datum, live }: any = getQuery(event)

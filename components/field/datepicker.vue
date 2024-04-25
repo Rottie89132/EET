@@ -1,5 +1,6 @@
 <template>
     <div class=" select-none">
+        {{ date }}
         <Field tabindex="1" :name="name" class=" sr-only " type="date" v-model="date" disabled />
         <div class="flex bg-gray-100 rounded-lg justify-between items-center mb-2">
             <span @click="previousMonth">
@@ -40,6 +41,15 @@
         date: any;
         pinBoardData: any;
 	}>();
+
+    if(date.value) {
+        selectedDate.value = new Date(date.value);
+        selected.value = {
+            day: selectedDate.value.getDate(),
+            month: selectedDate.value.getMonth() + 1,
+            year: selectedDate.value.getFullYear(),
+        }
+    }
 
     const daysOfWeek = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
     const daysInMonth = computed(() => {
@@ -118,6 +128,7 @@
 		const dateStr = `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 		return pinBoardData.value.reserveringen.some((item: any) => item.datum === dateStr);
 	};
+
 
 </script>
 

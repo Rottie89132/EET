@@ -19,7 +19,7 @@
 					<hr class="pb-2 mt-3" />
 				</div>
 				<div :class="!installed ? 'pb-6' : ' pb-[5.4rem] mt-[11rem] md:mt-[10.5rem]'" class="h-fit pt-2 gap-4 px-6">
-					<div class="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
+					<div v-if="!loading" class="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
 						<div v-if="reserveringen.length > 0" v-for="reservering in reserveringen" :key="reservering.tijd" class="w-full p-4 bg-slate-50 rounded-xl shadow-md">
 							<div v-for="restaurant in reservering.restaurant" :key="restaurant.id">
 								<h2 class="text-xl font-bold">{{ restaurant.naam }}</h2>
@@ -38,7 +38,7 @@
 										<Icon name="material-symbols:emoji-people" size="1.1em" />
 										x {{ reservering.personen }}
 									</p>
-									<button @click="activeTab == 'upcoming' ? openOptions(reservering.restaurant[0]) : ''" class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-gray-200 text-black">
+									<button @click="activeTab == 'upcoming' ? openOptions(reservering) : ''" class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-gray-200 text-black">
 										<icon name="material-symbols:more-horiz" size="1.4em" />
 									</button>
 								</div>
@@ -70,25 +70,7 @@
 		</div>
 	</div>
 	<Modal :title v-model:active="active" v-model:activeDelay="activeDelay">
-		<div v-if="changeAction == ''">
-			<p class="-mt-2 text-gray-600 leading-5">Hier ziet u de opties voor deze reservering.</p>
-			<hr class="my-3" />
-			<div class="mt-4 flex items-center gap-4">
-				<button @click="toonDelete" class="bg-[#de4747] text-white p-1 px-4 rounded-lg">Annuleren</button>
-				<button class="bg-gray-200 p-1 px-4 rounded-lg">Wijzigen</button>
-			</div>
-		</div>
-		<div v-else-if="changeAction == 'Annuleren'">
-			<p class="-mt-2 text-gray-600 leading-5">
-				Weet u zeker dat u deze reservering wilt annuleren?
-			</p>
-			<div class="mt-4 flex items-center gap-4">
-				<button class="bg-[#de4747] text-white p-1 px-4 rounded-lg">Doorgaan</button>
-				<button @click="back" class="bg-gray-200 p-1 px-4 rounded-lg">
-					Toch maar niet
-				</button>
-			</div>
-		</div>
+		<ModalUpdateReservering :updateList :switchModal :closeModal :updateModal :activeTab :deleteId :ResturantId :action />
 	</Modal>
 </template>
 
@@ -99,14 +81,17 @@
 	const activeTab = ref();
 	const OkStatus = ref(false);
 	const reserveringen: any = ref([]);
+
 	const loading = ref(false);
 	const active = ref(false);
 	const activeDelay = ref(false);
+
 	const title = ref("");
-	const changeAction = ref("");
+	const action = ref("");
+	const deleteId = ref("");
+	const ResturantId = ref("");
 
 	activeTab.value = router.currentRoute.value.query.tab || "upcoming";
-
 	const { data, refresh: refreshData }: any = await useFetch(`/api/reserverigen?status=${activeTab.value}`);
 	reserveringen.value = data.value.reserveringen;
 
@@ -144,35 +129,52 @@
 		],
 	});
 
-	const openOptions = (data: any) => {
-		title.value = data.naam;
+	const switchModal = () => {
+		activeDelay.value = false;
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 500);
+	};
 
+	const updateModal = (eventName: string) => {
+		action.value = eventName;
+	};
+
+	const closeModal = () => {
+		activeDelay.value = false;
+		setTimeout(() => {
+			active.value = false;
+		}, 100);
+	};
+
+	const openModal = () => {
 		active.value = true;
 		setTimeout(() => {
 			activeDelay.value = true;
 		}, 100);
 	};
 
-	const toonDelete = () => {
-		activeDelay.value = false;
-		changeAction.value = "Annuleren";
+	const updateList = (data: any) => {
+		loading.value = true;
 		setTimeout(() => {
-			activeDelay.value = true;
-		}, 500);
+			reserveringen.value = data;
+			loading.value = false;
+		}, 1000);
 	};
 
-	const back = () => {
-		activeDelay.value = false;
-		changeAction.value = "";
-		setTimeout(() => {
-			activeDelay.value = true;
-		}, 500);
+	const openOptions = async (data: any) => {
+		title.value = data.restaurant[0].naam;
+		ResturantId.value = data.restaurant[0].id;
+		deleteId.value = data.id;
+
+		openModal();
 	};
 
 	const refresh = () => {
 		loading.value = true;
 		setTimeout(async () => {
-			await refreshData();
+			const data: any = await $fetch(`/api/reserverigen?status=${activeTab.value}`);
+			reserveringen.value = data.reserveringen;
 			router.push({ query: { ...router.currentRoute.value.query, tab: activeTab.value } });
 			loading.value = false;
 		}, 600);
@@ -180,8 +182,12 @@
 
 	const setActiveTab = async (tab: string) => {
 		activeTab.value = tab;
-		const { data }: any = await useFetch(`/api/reserverigen?status=${activeTab.value}`);
-		reserveringen.value = data.value.reserveringen;
+		const data: any = await $fetch(`/api/reserverigen?status=${activeTab.value}`);
+		reserveringen.value = data.reserveringen;
 		router.push({ query: { ...router.currentRoute.value.query, tab } });
 	};
+
+	watch(active, (Value) => {
+		if (!Value) action.value = "";
+	});
 </script>

@@ -1,4 +1,4 @@
-import { serverSupabaseServiceRole } from '#supabase/server'
+import { serverSupabaseServiceRole, serverSupabaseClient } from '#supabase/server'
 
 const procesdata = async (data: any, client: any) => {
     const processedData = await Promise.all(data.map(async (item: any) => {
@@ -9,7 +9,7 @@ const procesdata = async (data: any, client: any) => {
             ...item,
             restaurant_id: undefined,
             user: {
-                full_name: user.data.user?.user_metadata.full_name ?? user.data.user?.email.split('@')[0],
+                full_name: user.data.user?.user_metadata.name ?? user.data.user?.email.split('@')[0],
                 avatar_url: user.data.user?.user_metadata.avatar_url ?? "/image/placeholder.jpg",
                 aantal: aantal.filter((a: any) => a.user_id === item.user_id).length
             },
@@ -22,7 +22,7 @@ const procesdata = async (data: any, client: any) => {
 
 export default eventHandler((event) => {
     return new Promise(async (resolve, reject) => {
-        const client = serverSupabaseServiceRole(event)
+        const client = await serverSupabaseClient(event)
         const id = getRouterParams(event).id
 
         const { data }: any = await client.from('recensies_table').select('*').eq("restaurant_id", id).order('created_at', { ascending: false })

@@ -1,9 +1,10 @@
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseServiceRole, serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 
 const procesdata = async (data: any, client: any) => {
     return await Promise.all(data.map(async (item: any) => {
         const restaurant = await client.from("restaurants_table").select("*").eq("id", item.restaurant_id)	
         return {
+            id: item.id,
             tijd: item.tijd,
             datum: item.datum,
             personen: item.personen,
@@ -22,7 +23,7 @@ const procesdata = async (data: any, client: any) => {
 
 export default eventHandler(async (event) => {
     return new Promise(async (resolve, reject) => {
-        const client = serverSupabaseServiceRole(event)
+        const client = await serverSupabaseClient(event)
         const user: any = await serverSupabaseUser(event)
         const status = getQuery(event).status
 
@@ -31,7 +32,6 @@ export default eventHandler(async (event) => {
             statusMessage: "Unauthorized",
             message: "Gebruiker niet gevonden",
         })
-
 
         let returnData: any = []
         const { data, error }: any = await client.from("reserveringen_table").select("*").eq("user_id", user.id).order("datum", { ascending: true })

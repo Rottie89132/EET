@@ -114,7 +114,7 @@
 				>.
 			</p>
 			<hr class="my-2 mb-2" />
-			<ModalReservering :emailSend.value :restaurantDetails :onSubmit="handleReservering" :OkStatus :user />
+			<ModalReservering :emailSend :ResturantId="useRoute().params.id" :restaurantDetails :onSubmit="handleReservering" :OkStatus :user />
 		</div>
 	</Modal>
 </template>
@@ -205,6 +205,7 @@
 			actions.setErrors({
 				datum: error.value.data.message,
 				tijd: error.value.data.message,
+				naam: error.value.data.message,
 				aantalPersonen: error.value.data.message,
 				email: error.value.data.message,
 				telefoon: error.value.data.message,

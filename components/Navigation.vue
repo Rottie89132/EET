@@ -10,7 +10,7 @@
 
 				<div v-if="User" class="flex gap-4 items-center">
 					<NuxtLink class="opacity-60" to="/restaurants?pagina=1"> Restaurants </NuxtLink>
-					<NuxtLink class="opacity-60" to="/Reserveringen"> Reserveringen </NuxtLink>
+					<NuxtLink class="opacity-60" to="/reserveringen"> Reserveringen </NuxtLink>
 					<NuxtLink to="/account">
 						<NuxtImg draggable="false" class="w-8 h-8 rounded-full" :src="User.avatar_url ? User.avatar_url : '/image/placeholder.jpg'" alt="Profile picture" />
 					</NuxtLink>
@@ -50,7 +50,7 @@
 								<icon class="" name="ic:sharp-restaurant" size="1em" />
 								<span class="text-xs"> Restaurants </span>
 							</NuxtLink>
-							<NuxtLink class="button-data p-2 px-4 flex gap-2 bg-gray-200 rounded-md" v-if="User" to="/Reserveringen">
+							<NuxtLink class="button-data p-2 px-4 flex gap-2 bg-gray-200 rounded-md" v-if="User" to="/reserveringen">
 								<icon class="" name="ic:sharp-event" size="1em" />
 								<span class="text-xs"> Reservering </span>
 							</NuxtLink>

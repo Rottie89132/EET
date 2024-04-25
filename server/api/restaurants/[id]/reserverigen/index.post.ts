@@ -1,10 +1,10 @@
-import { serverSupabaseServiceRole, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseServiceRole, serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 import { useCompiler } from '#vue-email'
 const { RedirectUrl } = useRuntimeConfig()
 
 export default eventHandler(async (event) => {
     return new Promise(async (resolve, reject) => {
-        const client = serverSupabaseServiceRole(event)
+        const client = await serverSupabaseClient(event)
         const user: any = await serverSupabaseUser(event)
         const id = getRouterParams(event).id
 
@@ -58,12 +58,24 @@ export default eventHandler(async (event) => {
                     tijd: request.tijd,
                     personen: request.aantalPersonen,
                 }
+            }).catch((error) => {
+                return reject({
+                    statusCode: 500,
+                    statusMessage: "Interne serverfout",
+                    message: "Er is iets misgegaan",
+                })
             })
 
             await useMail({
                 recepient: request.email,
                 subject: "Bevestig uw reservering!",
                 body: template,
+            }).catch((error) => {
+                return reject({
+                    statusCode: 500,
+                    statusMessage: "Interne serverfout",
+                    message: "Er is iets misgegaan",
+                })
             })
 
             return resolve({

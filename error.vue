@@ -9,10 +9,6 @@
                 </button>
 			</div>
 		</div>
-
-		<!-- {{ error }} -->
-		<!-- <h2>{{ error?.statusCode }}</h2>
-		<button @click="handleError">Clear errors</button> -->
 	</div>
 </template>
 
