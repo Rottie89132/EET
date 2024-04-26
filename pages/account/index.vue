@@ -51,7 +51,7 @@
 										<span v-if="items?.length > 0" class="text-xs opacity-80"> Lijst met alle restaurants onder dit account </span>
 										<span v-else class="text-xs opacity-80"> Je hebt geen restaurants onder dit account </span>
 									</p>
-									<button class="bg-gray-300 p-[0.35rem] px-3 text-xs mt-2 text-gray-700 rounded-lg">Voeg een restaurant toe</button>
+									<button class="bg-gray-300 p-[0.35rem] px-3 text-xs mt-2 text-gray-700 rounded-lg" @click="openRestaurant">Voeg een restaurant toe</button>
 									<div class="grid gap-2 mt-3 font-normal">
 										<div v-if="items?.length > 0" v-for="(item, index) in items" class="flex items-center gap-2 bg-slate-50 rounded-lg">
 											<div class="w-full">
@@ -112,14 +112,55 @@
           <input type="file" id="photo" name="photo" accept="image/*" class="mt-1 p-2 block w-full border rounded-md">
         </div>
 
-		<button @click="deleteAccount">Delete Account</button>
-
         <div class="mt-6">
-          <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">Opslaan</button>
+          <button type="submit" class="bg-[#4e995b] text-white py-2 px-4 rounded-md">Opslaan</button>
+          <div class="bg-red-400 grid-cols-2  text-white py-2 px-4 rounded-md" @click="deleteAccount">Delete Account</div>
         </div>
       </form>
     </div>
 	</Modal>
+
+  <Modal :title v-model:active="restaurantActive" v-model:activeDelay="restaurantDelay">
+    <form @submit.prevent="createRestaurant" class="max-w-md mx-auto">
+      <div class="mb-4">
+        <label for="naam" class="block mb-2">Naam:</label>
+        <input type="text" id="naam" v-model="naam" required class="w-full px-4 py-2 border rounded">
+      </div>
+
+      <div class="mb-4">
+        <label for="plaats" class="block mb-2">Plaats:</label>
+        <input type="text" id="plaats" v-model="plaats" required class="w-full px-4 py-2 border rounded">
+      </div>
+
+      <div class="mb-4">
+        <label for="prijs" class="block mb-2">Prijs:</label>
+        <select id="prijs" v-model="prijs" required class="w-full px-4 py-2 border rounded">
+          <option value="Laag">€</option>
+          <option value="Gemideld">€€</option>
+          <option value="Hoog">€€€</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="keuken" class="block mb-2">Keuken:</label>
+        <input type="text" id="keuken" v-model="keuken" required class="w-full px-4 py-2 border rounded">
+      </div>
+
+      <div class="mb-4">
+        <label for="beschrijving" class="block mb-2">Beschrijving:</label>
+        <textarea id="beschrijving" v-model="beschrijving" required
+                  class="w-full px-4 py-2 border rounded"></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label for="thumbnail" class="block mb-2">Thumbnail:</label>
+        <input type="file" id="thumbnail" @change="handleThumbnailChange" required class="">
+      </div>
+
+      <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded">Create</button>
+    </form>
+  </Modal>
+
 </template>
 
 <script setup lang="ts">
@@ -129,12 +170,24 @@
 	const items: any = ref([]);
 	const openDetail = ref();
 	const OkStatus = ref(false);
+
 	const active = ref(false);
 	const activeDelay = ref(false);
 	const title = ref("Account");
-	const newName = ref('');
-  	const newPhoto = ref(null);
-	
+
+  const restaurantActive = ref(false);
+  const restaurantDelay = ref(false);
+
+  const newName = ref('');
+  const newPhoto = ref(null);
+
+  const naam = ref('');
+  const plaats = ref('');
+  const prijs = ref('');
+  const keuken = ref('');
+  const beschrijving = ref('');
+  const thumbnail = ref('');
+
 
 	useSeoMeta({
 		title: "EET | Overzicht",
@@ -183,6 +236,18 @@
     }, 100);
   };
 
+  const openRestaurant = () => {
+    title.value = "Instelling";
+    restaurantActive.value = true;
+    setTimeout(() => {
+      restaurantDelay.value = true;
+    }, 100);
+  };
+
+  const createRestaurant = async () => {
+    console.log("restaurant created")
+  };
+
 	const saveSettings = async () => {
 	try {
 		const response = await fetch('/api/updateUser', {
@@ -206,25 +271,29 @@
 	}
 	};
 
-	const deleteAccount = async () => {
-	try {
-		const response = await fetch('/api/deleteAccount', {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ userId: User.value.id }), 
-		});
+  const deleteAccount = async () => {
 
-		if (response.ok) {
-		console.log('Account deleted successfully!');
-		} else {
-		console.error('Failed to delete account:', response.statusText);
-		}
-	} catch (error) {
-		console.error('An error occurred while deleting account:', error);
-	}
-	};
+    console.log(user.value)
+    try {
+      const response = await fetch('/api/account', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId: user.value.sub })
+      });
+
+      if (response.ok) {
+        console.log('User account deleted successfully!');
+      } else {
+        console.error('Failed to delete user account:', response.statusText);
+      }
+    } catch (error) {
+      console.error('An error occurred while deleting user account:', error);
+    }
+  };
+
+
 
 
 	const toggleDetail = (detailName: string) => {
