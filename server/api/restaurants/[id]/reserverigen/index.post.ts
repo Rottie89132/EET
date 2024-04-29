@@ -1,4 +1,4 @@
-import { serverSupabaseServiceRole, serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
+import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 import { useCompiler } from '#vue-email'
 const { RedirectUrl } = useRuntimeConfig()
 

@@ -1,8 +1,8 @@
 import { serverSupabaseServiceRole, serverSupabaseClient } from '#supabase/server'
 
-const procesdata = async (data: any, client: any) => {
+const procesdata = async (data: any, client: any, server: any) => {
     const processedData = await Promise.all(data.map(async (item: any) => {
-        const user = await client.auth.admin.getUserById(item.user_id);
+        const user = await server.auth.admin.getUserById(item.user_id);
         const { data: aantal } = await client.from('recensies_table').select("user_id")
 
         return {
@@ -23,11 +23,12 @@ const procesdata = async (data: any, client: any) => {
 export default eventHandler((event) => {
     return new Promise(async (resolve, reject) => {
         const client = await serverSupabaseClient(event)
+        const server = serverSupabaseServiceRole(event)
         const id = getRouterParams(event).id
 
         const { data }: any = await client.from('recensies_table').select('*').eq("restaurant_id", id).order('created_at', { ascending: false })
 
-        const procesed = await procesdata(data, client)
+        const procesed = await procesdata(data, client, server)
 
         if (procesed.length === 0) return reject({
             statusCode: 404,

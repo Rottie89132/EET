@@ -96,74 +96,77 @@
 		</div>
 	</div>
 	<Modal :title v-model:active="active" v-model:activeDelay="activeDelay">
-    <div>
-      <p class="-mt-3 text-gray-600">
-        Wijzig hier uw instellingen
-      </p>
-      <hr class="my-2 mb-2" />
-      <form @submit.prevent="saveSettings">
-        <div>
-          <label for="name" class="block font-medium text-gray-700">Naam</label>
-          <input v-model="newName" type="text" id="name" name="name" class="mt-1 p-2 block w-full border rounded-md">
-        </div>
+		<div v-if="title == 'Instelling'">
+			<p class="-mt-3 text-gray-600">Wijzig hier uw instellingen</p>
+			<hr class="my-2 mb-2" />
+			<form @submit.prevent="saveSettings">
+				<div>
+					<label for="name" class="block font-medium text-gray-700">Naam</label>
+					<input v-model="newName" type="text" id="name" name="name" class="mt-1 p-2 block w-full border rounded-md" />
+				</div>
 
-        <div class="mt-4">
-          <label for="photo" class="block font-medium text-gray-700">Foto</label>
-          <input type="file" id="photo" name="photo" accept="image/*" class="mt-1 p-2 block w-full border rounded-md">
-        </div>
+				<div class="mt-4">
+					<label for="photo" class="block font-medium text-gray-700">Foto</label>
+					<input type="file" id="photo" name="photo" accept="image/*" class="mt-1 p-2 block w-full border rounded-md" />
+				</div>
 
-        <div class="mt-6">
-          <button type="submit" class="bg-[#4e995b] text-white py-2 px-4 rounded-md">Opslaan</button>
-          <div class="bg-red-400 grid-cols-2  text-white py-2 px-4 rounded-md" @click="deleteAccount">Delete Account</div>
-        </div>
-      </form>
-    </div>
+				<div class="mt-6 flex gap-2 items-center">
+					<div class="bg-[#de4747] text-white p-1 px-4 rounded-lg" @click="deleteAccount">Verwijder account</div>
+					<button class="bg-gray-200 p-1 px-4 rounded-lg" type="submit">Opslaan</button>
+				</div>
+			</form>
+		</div>
+		<div v-else-if="title == 'Restaurant'">
+			<p class="-mt-3 text-gray-600">Voeg hier een restaurant toe</p>
+			<hr class="my-2 mb-2" />
+			<FormWizard @submit="createRestaurant" :validation-schema="Schema">
+				<FormStep>
+					<div class="mb-4">
+						<label for="naam" class="block mb-2">Naam:</label>
+						<input type="text" name="naam" id="naam" v-model="naam" class="w-full px-4 py-2 border rounded" />
+					</div>
+
+					<div class="mb-4">
+						<label for="plaats" class="block mb-2">Plaats:</label>
+						<input type="text" name="plaats" id="plaats" v-model="plaats" class="w-full px-4 py-2 border rounded" />
+					</div>
+
+					<div class="mb-4">
+						<label for="prijs" class="block mb-2">Prijs:</label>
+						<select id="prijs" name="prijs" v-model="prijs" class="w-full px-4 py-2 border rounded">
+							<option value="Laag">€</option>
+							<option value="Gemideld">€€</option>
+							<option value="Hoog">€€€</option>
+						</select>
+					</div>
+				</FormStep>
+				<FormStep>
+					<div class="mb-4">
+						<label for="keuken" class="block mb-2">Keuken:</label>
+						<input type="text" id="keuken" v-model="keuken" class="w-full px-4 py-2 border rounded" />
+					</div>
+
+					<div class="mb-4">
+						<label for="beschrijving" class="block mb-2">Beschrijving:</label>
+						<textarea id="beschrijving" v-model="beschrijving" class="w-full px-4 py-2 border rounded"></textarea>
+					</div>
+				</FormStep>
+				<FormStep>
+					<NuxtImg v-if="thumbnail" :src="thumbnail" alt="thumbnail" />
+					<div class="mb-4">
+						<label for="thumbnail" class="block mb-2">Thumbnail:</label>
+						<input type="file" id="thumbnail" @change="handleThumbnailChange" class="" />
+					</div>
+				</FormStep>
+			</FormWizard>
+		</div>
 	</Modal>
-
-  <Modal :title v-model:active="restaurantActive" v-model:activeDelay="restaurantDelay">
-    <form @submit.prevent="createRestaurant" class="max-w-md mx-auto">
-      <div class="mb-4">
-        <label for="naam" class="block mb-2">Naam:</label>
-        <input type="text" id="naam" v-model="naam" required class="w-full px-4 py-2 border rounded">
-      </div>
-
-      <div class="mb-4">
-        <label for="plaats" class="block mb-2">Plaats:</label>
-        <input type="text" id="plaats" v-model="plaats" required class="w-full px-4 py-2 border rounded">
-      </div>
-
-      <div class="mb-4">
-        <label for="prijs" class="block mb-2">Prijs:</label>
-        <select id="prijs" v-model="prijs" required class="w-full px-4 py-2 border rounded">
-          <option value="Laag">€</option>
-          <option value="Gemideld">€€</option>
-          <option value="Hoog">€€€</option>
-        </select>
-      </div>
-
-      <div class="mb-4">
-        <label for="keuken" class="block mb-2">Keuken:</label>
-        <input type="text" id="keuken" v-model="keuken" required class="w-full px-4 py-2 border rounded">
-      </div>
-
-      <div class="mb-4">
-        <label for="beschrijving" class="block mb-2">Beschrijving:</label>
-        <textarea id="beschrijving" v-model="beschrijving" required
-                  class="w-full px-4 py-2 border rounded"></textarea>
-      </div>
-
-      <div class="mb-4">
-        <label for="thumbnail" class="block mb-2">Thumbnail:</label>
-        <input type="file" id="thumbnail" @change="handleThumbnailChange" required class="">
-      </div>
-
-      <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded">Create</button>
-    </form>
-  </Modal>
-
 </template>
 
 <script setup lang="ts">
+	import { configure } from "vee-validate";
+	import * as yup from "yup";
+
 	const { $pwa }: any = useNuxtApp();
 	const installed = ref(false);
 	const User = ref();
@@ -175,19 +178,15 @@
 	const activeDelay = ref(false);
 	const title = ref("Account");
 
-  const restaurantActive = ref(false);
-  const restaurantDelay = ref(false);
+	const newName = ref("");
+	const newPhoto = ref(null);
 
-  const newName = ref('');
-  const newPhoto = ref(null);
-
-  const naam = ref('');
-  const plaats = ref('');
-  const prijs = ref('');
-  const keuken = ref('');
-  const beschrijving = ref('');
-  const thumbnail = ref('');
-
+	const naam = ref("");
+	const plaats = ref("");
+	const prijs = ref("");
+	const keuken = ref("");
+	const beschrijving = ref("");
+	const thumbnail: any = ref(null);
 
 	useSeoMeta({
 		title: "EET | Overzicht",
@@ -202,7 +201,7 @@
 		twitterCard: "summary",
 	});
 
-  definePageMeta({
+	definePageMeta({
 		middleware: "auth",
 	});
 
@@ -229,80 +228,75 @@
 	});
 
 	const openInstellingen = () => {
-    title.value = "Instelling";
-    active.value = true;
-    setTimeout(() => {
-      activeDelay.value = true;
-    }, 100);
-  };
+		title.value = "Instelling";
+		active.value = true;
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 100);
+	};
 
-  const openRestaurant = () => {
-    title.value = "Instelling";
-    restaurantActive.value = true;
-    setTimeout(() => {
-      restaurantDelay.value = true;
-    }, 100);
-  };
+	const openRestaurant = () => {
+		title.value = "Restaurant";
+		active.value = true;
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 100);
+	};
 
-  const createRestaurant = async () => {
-    console.log("restaurant created")
-  };
+	const createRestaurant = async (values: any, actions: any) => {
+		console.log("restaurant created");
+	};
 
 	const saveSettings = async () => {
-	try {
-		const response = await fetch('/api/updateUser', {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ name: newName.value }),
+		const { data, error }: any = await useFetch("/api/account", {
+			method: "put",
+			body: { name: newName.value },
 		});
 
-		const responseData = await response.json(); 
-		console.log('Response from server:', responseData); 
-
-		if (response.ok) {
-		console.log('Settings updated successfully!');
-		} else {
-		console.error('Failed to update settings:', response.statusText);
-		}
-	} catch (error) {
-		console.error('An error occurred while updating settings:', error);
-	}
+		if (error.value) console.log(error.value);
+		else navigateTo("/");
 	};
 
-  const deleteAccount = async () => {
+	const deleteAccount = async () => {
+		const { data, error }: any = await useFetch("/api/account", {
+			method: "DELETE",
+		});
 
-    console.log(user.value)
-    try {
-      const response = await fetch('/api/account', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ userId: user.value.sub })
-      });
-
-      if (response.ok) {
-        console.log('User account deleted successfully!');
-      } else {
-        console.error('Failed to delete user account:', response.statusText);
-      }
-    } catch (error) {
-      console.error('An error occurred while deleting user account:', error);
-    }
-  };
-
-
-
+		if (error.value) console.log(error.value);
+		else navigateTo("/");
+	};
 
 	const toggleDetail = (detailName: string) => {
-		if (openDetail.value === detailName) {
-			openDetail.value = "";
-		} else {
-			openDetail.value = detailName;
-		}
+		openDetail.value = openDetail.value === detailName ? "" : detailName;
 	};
+
+	const handleThumbnailChange = (event: any) => {
+		const file = event.target.files[0];
+		thumbnail.value = URL.createObjectURL(file);
+	};
+
+	const Schema = [
+		yup.object().shape({
+			naam: yup.string().optional(),
+			plaats: yup.string().optional(),
+			prijs: yup.string().optional(),
+		}),
+		yup.object().shape({
+			keuken: yup.string().optional(),
+			beschrijving: yup.string().optional(),
+		}),
+		yup.object().shape({
+			thumbnail: yup.mixed().optional(),
+		}),
+		
+	];
+
+	configure({
+		validateOnBlur: true,
+		validateOnChange: true,
+		validateOnInput: true,
+		validateOnModelUpdate: true,
+	});
 </script>
 
 <style scoped></style>

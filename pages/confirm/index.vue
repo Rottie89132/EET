@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 	const { data } = await useFetch("/api/users");
-	if (data.value) navigateTo("/account");
+	//if (data.value) navigateTo("/account");
 	
 </script>
 

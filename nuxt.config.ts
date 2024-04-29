@@ -15,10 +15,6 @@ export default defineNuxtConfig({
     'nuxt-swiper',
     '@vue-email/nuxt'
   ],
-  image: {
-    provider: 'netlify',
-    domains: ['eswamccbhwecjjddnhbn.supabase.co', 'lh3.googleusercontent.com']
-  },
   nitro: {
     experimental: {
       websocket: true,

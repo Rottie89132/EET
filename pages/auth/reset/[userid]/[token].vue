@@ -1,5 +1,5 @@
 <template>
-    <div>
+	<div>
         {{ result }}
     </div>
 </template>
@@ -7,19 +7,16 @@
 <script setup lang="ts">
 
 const result = ref()
-const { id, token } = useRoute().params
-const { data, error} = await useFetch(`/api/restaurants/${id}/reserverigen/verify/${token}`)
-result.value = data.value
+const { userid, token} = useRoute().params
+const { data, error} = await useFetch(`/api/auth/forgot/verify/${userid}/${token}`)
+result.value = data
 
-if(!error.value) navigateTo('/')
+if(!error.value) {}//navigateTo('/')
 else throw showError({
     statusCode: 400,
     statusMessage: "Foutieve aanvraag",
     message: "Deze link is ongeldig of verlopen!",
 })
-
+	
 </script>
 
-<style scoped>
-
-</style>

@@ -1,25 +1,22 @@
-import { serverSupabaseClient, serverSupabaseUser, serverSupabaseServiceRole } from "#supabase/server";
+import { serverSupabaseUser, serverSupabaseServiceRole } from "#supabase/server";
 
-export default defineEventHandler(async (event) => {
-    const user = await serverSupabaseUser(event);
-    const client = serverSupabaseServiceRole(event);
+export default defineEventHandler((event) => {
+    return new Promise(async (resolve, reject) => {
+        const user: any = await serverSupabaseUser(event);
+        const client = serverSupabaseServiceRole(event);
 
         const { data, error } = await client.auth.admin.deleteUser(user.id);
 
-        console.log(error)
-        console.log(data)
+        if (error) return reject({
+            statusCode: 500,
+            statusMessage: "Internal Server Error",
+            message: "Failed to delete user account."
+        });
 
-        if (error) {
-            return {
-                statusCode: 500,
-                statusMessage: "Internal Server Error",
-                message: "Failed to delete user account."
-            };
-        }
-
-        return {
+        return resolve({
             statusCode: 200,
             statusMessage: "OK",
             message: "User account deleted successfully."
-        };
+        });
+    })
 });

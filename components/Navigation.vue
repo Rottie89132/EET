@@ -98,7 +98,6 @@
 	const installed = ref(false);
 	const navVisible = ref(false);
 	
-
 	const { OkStatus } = defineModels<{
 		OkStatus: boolean;
 	}>();
@@ -108,8 +107,6 @@
 		else OkStatus.value = false;
 	});
 
-	
-	
 	if ($pwa?.isPWAInstalled) installed.value = true;
 
 	const popup = () => {
@@ -142,6 +139,7 @@
 	
 	OkStatus.value = error.value ? false : true;
 	if (!error.value) User.value = data.value?.user;
+
 	
 </script>
 

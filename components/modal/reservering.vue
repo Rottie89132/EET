@@ -78,6 +78,7 @@
 	}>();
 
 	const { data: pinBoardData, refresh: pinBoardRefresh } = await useFetch(`/api/restaurants/${ResturantId.value}/reserverigen?live=true`);
+	const { data: reserverigenData, error: reserverigenError }: any = await useFetch(`/api/reserverigen?tab=upcoming`);
 
 	if (!route) {
 		const data: any = await $fetch(`/api/reserverigen/${ReserveringId.value}`);
@@ -148,11 +149,11 @@
 	};
 
 	const notBooked = async (hour: any) => {
-		const {data, error}: any = await useFetch(`/api/reserverigen?tab=upcoming`);
-
-		if(error.value) return true
 		
-		const reservations = data.value.reserveringen;
+
+		if(reserverigenError.value) return true
+		
+		const reservations = reserverigenData.value.reserveringen;
 		const SelectedDate = new Date(date.value).toISOString().split("T")[0];
 
 		return !reservations.some((res: any) => res.datum === SelectedDate && res.tijd.substring(0, 5) === hour);
