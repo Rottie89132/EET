@@ -46,7 +46,7 @@
 							</div>
 						</div>
 
-						<p class="flex items-center gap-2 leading-4 md:-mt-10 mt-1">
+						<p class=" leading-5 md:line-clamp-4 line-clamp-2 md:-mt-10 mt-1 md:max-w-[60vw]">
 							{{ restaurantDetails?.beschrijving || " Geen beschrijving beschikbaar" }}
 						</p>
 						<hr class="my-2 md:mt-6 mt-3" />
@@ -134,19 +134,6 @@
 	const OkStatus = ref(false);
 	const emailSend = ref(false);
 	const isSuccess = ref(false);
-
-	useSeoMeta({
-		title: "EET | Restaurants",
-		description: "",
-		ogTitle: "EET | Restaurants",
-		ogDescription: "",
-		ogImage: "/image/banner.png",
-		ogUrl: "https://eet.com",
-		twitterTitle: "EET | Restaurants",
-		twitterDescription: "",
-		twitterImage: "/image/banner.png",
-		twitterCard: "summary",
-	});
 
 	useHead({
 		htmlAttrs: {
@@ -252,7 +239,7 @@
 	const { data: userData, error: userError }: Record<string, any> = await useFetch("/api/users");
 	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value?.id}/recenties`);
 
-	beoordelingen.value = beoordelingenData.value.recenties;
+	beoordelingen.value = beoordelingenData.value?.recenties || [];
 	OkStatus.value = userError.value ? false : true;
 	user.value = userData.value || userError.value.data;
 
@@ -282,4 +269,21 @@
 			user.value = userData.value || userError.value.data;
 		}
 	});
+
+	useSeoMeta({
+		title: `EET | ${restaurantDetails.value?.naam}`,
+		description: `${restaurantDetails.value?.beschrijving}`,
+		ogTitle: `EET | ${restaurantDetails.value?.naam}`,
+		ogDescription: `${restaurantDetails.value?.beschrijving}`,
+		ogImage: `${restaurantDetails.value?.thumbnail.data.publicUrl}`,
+		ogUrl: "https://eet.com",
+		twitterTitle: `EET | ${restaurantDetails.value?.naam}`,
+		twitterDescription: `${restaurantDetails.value?.beschrijving}`,
+		twitterImage: `${restaurantDetails.value?.thumbnail.data.publicUrl}`,
+		twitterCard: "summary",
+	});
+
+
+
+
 </script>

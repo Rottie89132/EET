@@ -18,7 +18,7 @@
 								<h2 class="font-semibold flex items-center gap-1 text-lg">
 									{{ User?.name || User?.email.split("@")[0] }}
 									<span v-if="User?.email_verified" class="text-sm">
-										<icon name="ic:sharp-verified" size="1.5em" class="text-white text-opacity-80"></icon>
+										<icon name="ic:sharp-verified" size="1.5em" class="text-white text-opacity-80"> </icon>
 									</span>
 								</h2>
 								<p class="text-sm -mt-1 opacity-80">
@@ -61,28 +61,27 @@
 														<div class="flex items-center justify-between gap-2 w-full">
 															<h3 class="font-semibold text-md truncate">{{ item?.naam }}</h3>
 															<div v-if="item?.images && item?.locatie && item?.telefoon && item?.telefoon && item?.Openingstijden" class="flex items-center gap-2 text-right pb-2 overflow-auto">
-																<span class="bg-gray-200 text-gray-500 p-1 flex items-center justify-center gap-1 px-3 text-xs rounded-lg">
-																	<icon name="ic:round-local-post-office" size="1.2em"></icon>
-																	{{ item?.aantal_recenties || 4 }}
-																</span>
 																<span class="bg-[#4e995b] p-1 flex items-center justify-center gap-1 px-3 text-xs text-[#b4e4bc] rounded-lg">
 																	<icon name="ic:sharp-star" size="1.2em"></icon>
 																	{{ item?.beoordeling.toFixed(1) }}
 																</span>
 															</div>
 															<div v-else class="flex items-center gap-2 text-right pb-2 overflow-auto">
-																<span class="bg-rose-200 text-rose-500 p-1 flex items-center justify-center gap-1 px-3 text-xs rounded-lg">
+																<span class="bg-rose-600 text-white p-1 flex items-center justify-center gap-1 px-3 text-xs rounded-lg">
 																	<icon name="ic:round-error" size="1.2em"></icon>
 																	Fout
 																</span>
 															</div>
 														</div>
-														<p class="text-xs opacity-80 text-balance max-w-[85%] line-clamp-2">{{ item?.beschrijving }}</p>
+														<p class="text-xs opacity-80 text-balance max-w-[85%] line-clamp-2">
+															{{ item?.beschrijving }}
+														</p>
 													</div>
 												</div>
 												<div class="flex gap-2 mt-1">
-													<NuxtLink :to="`/restaurants/${item?.id}/dashboard/`" class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-800 rounded-lg">Beheren</NuxtLink>
+													<NuxtLink :to="`/restaurants/${item?.id}/dashboard/`" class="bg-gray-300 p-[0.35rem] px-3 text-xs text-gray-800 rounded-lg"> Beheren</NuxtLink>
 													<button class="bg-gray-200 p-[0.35rem] px-3 text-xs text-gray-700 rounded-lg">Bewerken</button>
+													<button class="bg-rose-600 p-[0.35rem] px-3 text-xs text-white rounded-lg">Verwijderen</button>
 												</div>
 											</div>
 										</div>
@@ -102,7 +101,7 @@
 			<form @submit.prevent="saveSettings">
 				<div>
 					<label for="name" class="block font-medium text-gray-700">Naam</label>
-					<input v-model="newName" type="text" id="name" name="name" class="mt-1 p-2 block w-full border rounded-md" />
+					<input type="text" id="name" name="name" class="mt-1 p-2 block w-full border rounded-md" />
 				</div>
 
 				<div class="mt-4">
@@ -121,43 +120,33 @@
 			<hr class="my-2 mb-2" />
 			<FormWizard @submit="createRestaurant" :validation-schema="Schema">
 				<FormStep>
-					<div class="mb-4">
-						<label for="naam" class="block mb-2">Naam:</label>
-						<input type="text" name="naam" id="naam" v-model="naam" class="w-full px-4 py-2 border rounded" />
-					</div>
-
-					<div class="mb-4">
-						<label for="plaats" class="block mb-2">Plaats:</label>
-						<input type="text" name="plaats" id="plaats" v-model="plaats" class="w-full px-4 py-2 border rounded" />
-					</div>
-
-					<div class="mb-4">
-						<label for="prijs" class="block mb-2">Prijs:</label>
-						<select id="prijs" name="prijs" v-model="prijs" class="w-full px-4 py-2 border rounded">
-							<option value="Laag">€</option>
-							<option value="Gemideld">€€</option>
-							<option value="Hoog">€€€</option>
-						</select>
-					</div>
+					<FieldInput type="text" label="Naam" name="naam" />
+					<FieldInput type="text" label="Keuken" name="keuken" />
+					<FieldInput type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78" />
 				</FormStep>
 				<FormStep>
-					<div class="mb-4">
-						<label for="keuken" class="block mb-2">Keuken:</label>
-						<input type="text" id="keuken" v-model="keuken" class="w-full px-4 py-2 border rounded" />
-					</div>
-
-					<div class="mb-4">
-						<label for="beschrijving" class="block mb-2">Beschrijving:</label>
-						<textarea id="beschrijving" v-model="beschrijving" class="w-full px-4 py-2 border rounded"></textarea>
-					</div>
+					<FieldArea type="text" label="Beschrijving" name="beschrijving" />
+					<FieldSelect type="text" label="Prijs" name="prijs" :options="values" />
 				</FormStep>
 				<FormStep>
-					<NuxtImg v-if="thumbnail" :src="thumbnail" alt="thumbnail" />
-					<div class="mb-4">
-						<label for="thumbnail" class="block mb-2">Thumbnail:</label>
-						<input type="file" id="thumbnail" @change="handleThumbnailChange" class="" />
-					</div>
+					<FieldInput type="text" label="Stad" name="stad" />
+					<FieldInput type="text" label="Locatie" name="locatie" />
 				</FormStep>
+				<FormStep>
+					<FieldOpeningstijden label="Openingstijden" name="openingstijden" v-model:openingTimes="openingTimes" />
+				</FormStep>
+				<FormStep>
+					<FieldInput type="number" label="Tafels" name="tafels" />
+					<FieldInput type="number" label="Capaciteit (Personen)" name="capaciteit" />
+					<FieldInput type="number" label="Duur" name="duur" />
+				</FormStep>
+				<FormStep>
+					<FieldImage label="Thumbnail" name="thumbnail" :multipe="false" :max="1" v-model:preview="thumbnail" v-model:previewArray="thumbnailArray" />
+				</FormStep>
+				<FormStep>
+					<FieldImage label="Afbeeldingen" name="afbeeldingen" :multipe="true" :max="3" v-model:preview="afbeeldingen" v-model:previewArray="afbeeldingenArray" />
+				</FormStep>
+				<FormStep> </FormStep>
 			</FormWizard>
 		</div>
 	</Modal>
@@ -178,15 +167,27 @@
 	const activeDelay = ref(false);
 	const title = ref("Account");
 
-	const newName = ref("");
-	const newPhoto = ref(null);
+	const afbeeldingenArray: any = ref([]);
+	const afbeeldingen: any = ref([]);
 
-	const naam = ref("");
-	const plaats = ref("");
-	const prijs = ref("");
-	const keuken = ref("");
-	const beschrijving = ref("");
-	const thumbnail: any = ref(null);
+	const thumbnailArray: any = ref([]);
+	const thumbnail: any = ref([]);
+
+	const values = [
+		{ value: "Laag", text: "€" },
+		{ value: "Gemideld", text: "€€" },
+		{ value: "Hoog", text: "€€€" },
+	];
+
+	const openingTimes = ref([
+		{ dag: "Maandag", open: undefined, sluit: undefined },
+		{ dag: "Dinsdag", open: undefined, sluit: undefined },
+		{ dag: "Woensdag", open: undefined, sluit: undefined },
+		{ dag: "Donderdag", open: undefined, sluit: undefined },
+		{ dag: "Vrijdag", open: undefined, sluit: undefined },
+		{ dag: "Zaterdag", open: undefined, sluit: undefined },
+		{ dag: "Zondag", open: undefined, sluit: undefined },
+	]);
 
 	useSeoMeta({
 		title: "EET | Overzicht",
@@ -244,17 +245,39 @@
 	};
 
 	const createRestaurant = async (values: any, actions: any) => {
-		console.log("restaurant created");
+		const value = {
+			...values,
+			afbeeldingen: afbeeldingenArray.value,
+		};
+
+		const formData = new FormData();
+
+		for (const key in value) {
+			if (key === "afbeeldingen") {
+				value[key].forEach((file: any, index: number) => {
+					const blob = new Blob([file], { type: file.type });
+					formData.append(`file:afbeeldingen[${index}]`, blob, file.name);
+				});
+			} else if (key === "thumbnail") {
+				const blob = new Blob([value[key]], { type: value[key].type });
+				formData.append(`file:thumbnail`, blob, value[key].name);
+			} else if (key == "openingstijden") {
+				formData.append(key, JSON.stringify(value[key]));
+			} else {
+				formData.append(key, value[key]);
+			}
+		}
+
+		const { data, error }: any = await useFetch("/api/restaurants", { method: "post", body: formData });
 	};
 
 	const saveSettings = async () => {
-		const { data, error }: any = await useFetch("/api/account", {
-			method: "put",
-			body: { name: newName.value },
-		});
-
-		if (error.value) console.log(error.value);
-		else navigateTo("/");
+		// const { data, error }: any = await useFetch("/api/account", {
+		// 	method: "put",
+		// 	body: { name: newName.value },
+		// });
+		// if (error.value) console.log(error.value);
+		// else navigateTo("/");
 	};
 
 	const deleteAccount = async () => {
@@ -270,25 +293,78 @@
 		openDetail.value = openDetail.value === detailName ? "" : detailName;
 	};
 
-	const handleThumbnailChange = (event: any) => {
-		const file = event.target.files[0];
-		thumbnail.value = URL.createObjectURL(file);
+	const isThumbnailDimensionValid = () => {
+		const img = new Image();
+		img.src = thumbnail.value;
+
+		return img.width == 1728 && img.height == 668;
+	};
+
+	const areDimensionsValid = () => {
+		const isValid = ref(true);
+
+		afbeeldingen.value.forEach((value: any) => {
+			const img = new Image();
+			img.src = value;
+
+			if (img.width !== 1728 || img.height !== 668) {
+				isValid.value = false;
+			}
+		});
+
+		return isValid.value;
+	};
+
+	const isFileCountValid = () => {
+		return afbeeldingen.value.length <= 3;
+	};
+
+	const isFileSizeValid = (file: any) => {
+		if (Array.isArray(file)) return file.every((file) => file.size <= 10000000);
+		return file && file.size <= 10000000;
+	};
+
+	const isFileTypeValid = (file: any) => {
+		if (Array.isArray(file)) return file.every((file) => ["image/png", "image/jpeg"].includes(file.type));
+		return file && ["image/png", "image/jpeg"].includes(file.type);
 	};
 
 	const Schema = [
 		yup.object().shape({
-			naam: yup.string().optional(),
-			plaats: yup.string().optional(),
-			prijs: yup.string().optional(),
+			naam: yup.string().required(),
+			keuken: yup.string().required(),
+			telefoon: yup.string().required(),
 		}),
 		yup.object().shape({
-			keuken: yup.string().optional(),
-			beschrijving: yup.string().optional(),
+			beschrijving: yup.string().required(),
+			prijs: yup.string().required(),
 		}),
 		yup.object().shape({
-			thumbnail: yup.mixed().optional(),
+			stad: yup.string().required(),
+			locatie: yup.string().required(),
 		}),
-		
+		yup.object().shape({
+			openingstijden: yup
+				.array()
+				.of(
+					yup.object().shape({
+						open: yup.string().required(" Het invullen van de openingstijd is verplicht."),
+						sluit: yup.string().required(" Het invullen van de sluitingstijd is verplicht."),
+					})
+				)
+				.required("Het invullen van de openingstijden is verplicht."),
+		}),
+		yup.object().shape({
+			tafels: yup.number().min(1).required(),
+			capaciteit: yup.number().min(4).required(),
+			duur: yup.number().min(0.5).required(),
+		}),
+		yup.object().shape({
+			thumbnail: yup.mixed().test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).test("fileAfmeting", "De afmetingen van het bestand moeten precies 1728 x 668 pixels zijn.", isThumbnailDimensionValid).required("Het uploaden van een thumbnail is verplicht."),
+		}),
+		yup.object().shape({
+			afbeeldingen: yup.mixed().test("fileCount", "Het aantal bestanden overschrijdt het maximale aantal van 3.", isFileCountValid).test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).test("fileAfmeting", "De afmetingen van het bestand moeten precies 1728 x 668 pixels zijn.", areDimensionsValid).required("Het uploaden van een thumbnail is verplicht."),
+		}),
 	];
 
 	configure({
@@ -296,6 +372,24 @@
 		validateOnChange: true,
 		validateOnInput: true,
 		validateOnModelUpdate: true,
+	});
+
+	watch(active, (value) => {
+		if (!value) {
+			thumbnail.value = [];
+			thumbnailArray.value = [];
+			afbeeldingen.value = [];
+			afbeeldingenArray.value = [];
+			openingTimes.value = [
+				{ dag: "Maandag", open: undefined, sluit: undefined },
+				{ dag: "Dinsdag", open: undefined, sluit: undefined },
+				{ dag: "Woensdag", open: undefined, sluit: undefined },
+				{ dag: "Donderdag", open: undefined, sluit: undefined },
+				{ dag: "Vrijdag", open: undefined, sluit: undefined },
+				{ dag: "Zaterdag", open: undefined, sluit: undefined },
+				{ dag: "Zondag", open: undefined, sluit: undefined },
+			];
+		}
 	});
 </script>
 

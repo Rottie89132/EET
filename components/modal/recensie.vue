@@ -5,7 +5,7 @@
 				<FieldArea type="text" label="" name="recensie" value="Laat hier je beoordeling achter zodat wij onze service kunnen verbeteren" />
 			</FormStep>
 			<FormStep>
-				<div class="pt-4 flex h-68 md:h-72 items-center w-full justify-center">
+				<div>
 					<FieldSlider name="beoordeling" />
 				</div>
 			</FormStep>

@@ -11,10 +11,10 @@
 
 <script setup lang="ts">
 const probs = defineProps({
-    type: { type: String, default: "text" },
-    label: { type: String, default: "Input" },
-    name: { type: String, default: "Input" },
+    type: { type: String, required: true },
+    label: { type: String, required: true },
+    name: { type: String, required: true },
     value: { type: String, default: "" },
     disabled: { type: Boolean, default: false },
-});
+})
 </script>

@@ -1,6 +1,5 @@
 <template>
     <div class=" select-none">
-        {{ date }}
         <Field tabindex="1" :name="name" class=" sr-only " type="date" v-model="date" disabled />
         <div class="flex bg-gray-100 rounded-lg justify-between items-center mb-2">
             <span @click="previousMonth">

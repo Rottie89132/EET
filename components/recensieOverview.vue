@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="bg-[#f3f4f3] mt-3 rounded-lg md:max-w-[60vw] p-3">
+		<div :class="beoordelingen.length < 1 ? ' mb-24' : ''" class="bg-[#f3f4f3] mt-3 rounded-lg md:max-w-[60vw] p-3">
 			<div class="flex gap-2 justify-between items-center">
 				<div class="flex items-center justify-center gap-4">
 					<div class="w-24 h-24 md:w-32 md:h-32">
@@ -31,7 +31,7 @@
 							<div class="flex items-center mb-1">
 								<div>{{ i }}</div>
 								<div class="w-full bg-gray-200 ml-2 rounded">
-									<div class="h-3 rounded bg-green-700" :style="{ width: `${(beoordelingen.filter((b: any) => b.steren === i).length / beoordelingen.length) * 100}%` }"></div>
+									<div :class="beoordelingen.length > 0 ? 'bg-green-700' : ''" class="h-3 rounded" :style="{ width: `${(beoordelingen.filter((b: any) => b.steren === i).length / beoordelingen.length) * 100}%` }"></div>
 								</div>
 							</div>
 						</div>
@@ -47,13 +47,11 @@
 	const percentage = ref();
 
 	const { beoordelingen, restaurantDetails, OkStatus, openrecensiemodal } = defineModels<{
-		beoordelingen: any;
+		beoordelingen: string[];
 		restaurantDetails: any;
 		OkStatus: any;
 		openrecensiemodal: any;
 	}>();
-
-	
 
 	const toonDetailsHandler = () => {
 		toonDetails.value = !toonDetails.value;

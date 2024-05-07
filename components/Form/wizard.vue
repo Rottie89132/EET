@@ -1,5 +1,5 @@
 <template>
-	<form @submit="onSubmit" >
+	<form @submit="onSubmit">
 		<slot></slot>
 
 		<hr class="mb-4" />
@@ -9,9 +9,7 @@
 				<icon name="material-symbols:keyboard-double-arrow-left" size="1.5em"></icon>
 			</button>
 
-			<div tabindex="0" class="p-2 px-4 font-semibold select-none bg-gray-100 rounded-md focus:outline-none">
-				{{ currentStepIdx + 1 }}/{{ stepCounter }}
-			</div>
+			<div tabindex="0" class="p-2 px-4 font-semibold select-none bg-gray-100 rounded-md focus:outline-none">{{ currentStepIdx + 1 }}/{{ stepCounter }}</div>
 
 			<button tabindex="0" class="w-full text-center p-2 bg-[#4e995b] hover:bg-[#43874e] text-white cursor-pointer rounded-md focus:outline-none">
 				{{ isLastStep ? "Bevestigen" : "Volgende" }}
