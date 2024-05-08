@@ -14,6 +14,7 @@ export default eventHandler(async (event) => {
                 })
             }
 
+            data.menu = client.storage.from(data.bucket).getPublicUrl(data.menu)
             data.thumbnail = client.storage.from(data.bucket).getPublicUrl(data.thumbnail)
             data.bucket = undefined
             data.owner_id = undefined

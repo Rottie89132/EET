@@ -2,7 +2,8 @@
 	<div class=" h-screen">
 		<Navigation v-model:OkStatus="OkStatus"></Navigation>
 		<div :class=" installed ? 'fixed w-screen h-full overflow-auto top-0' : '' ">
-			<div :class="!installed ? 'top-[4.5rem] pt-2' : 'top-0 z-40 pt-24'" class="fixed top-0 w-screen z-20 p-3 bg-white"></div>
+			<div :class="!installed ? 'top-[4.5rem] pt-2' : 'top-0 z-40 pt-24'"
+				class="fixed top-0 w-screen z-20 p-3 bg-white"></div>
 			<div :class="!installed ? ' mt-[5.5rem]' : ' mt-[7rem]'" class="px-6">
 				<div class="rounded-lg overflow-hidden">
 					<ClientOnly>
@@ -10,39 +11,49 @@
 					</ClientOnly>
 				</div>
 				<div class="md:hidden mb-4">
-					<div :class="restaurantDetails?.images ? '-mt-8 mb-6 pl-3' : ' -mb-4 '" class="flex space-x-2 z-10 relative items-center">
-						<div class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
+					<div :class="restaurantDetails?.images ? '-mt-8 mb-6 pl-3' : ' -mb-4 '"
+						class="flex space-x-2 z-10 relative items-center">
+						<div
+							class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
 							{{ restaurantDetails?.plaats }}
 						</div>
-						<div class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
+						<div
+							class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
 							{{ restaurantDetails?.keuken }}
 						</div>
-						<div class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
+						<div
+							class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
 							{{ restaurantDetails?.prijs }}
 						</div>
 					</div>
 				</div>
 				<section>
-					<div :class="!installed ? ' top-[4em] md:top-[4.7em] ' : ' top-[6.5em] '" class="z-20 bg-white sticky pb-[0.10rem]">
+					<div :class="!installed ? ' top-[4em] md:top-[4.7em] ' : ' top-[6.5em] '"
+						class="z-20 bg-white sticky pb-[0.10rem]">
 						<div class="flex justify-between items-center">
 							<h2 class="text-2xl font-semibold mt-2 -mb-1">
 								{{ restaurantDetails?.naam }}
 							</h2>
 							<div class="flex gap-1 items-center mt-2">
-								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails?.beoordeling.toFixed(1) }}/5</p>
+								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails?.beoordeling?.toFixed(1)
+									}}/5</p>
 								<icon class="w-6 h-6 text-[#4e995b]" name="f7:bubble-right" />
 								<p class="text-gray-600 text-base mb-1">{{ beoordelingen?.length }}</p>
 							</div>
 						</div>
 
 						<div class="flex gap-2 items-center justify-between md:justify-end my-2">
-							<button @click="openbookingmodal" class="flex text-sm md:hidden text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
+							<button @click="openbookingmodal"
+								class="flex text-sm md:hidden text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
 							<div class="flex gap-2 items-center">
-								<div class="flex text-sm items-center justify-center text-black bg-gray-100 p-1 px-4 rounded-lg">Menu</div>
-								<div :class="!isRestaurantOpen() ? ' bg-red-200 text-red-600' : ' text-black bg-gray-100'" class="flex items-center justify-center p-1 px-4 text-sm rounded-lg">
+								<NuxtLink target="_blank" :href="restaurantDetails.menu.data.publicUrl"
+									class="flex text-sm items-center justify-center text-black bg-gray-100 p-1 px-4 rounded-lg">Menu</NuxtLink>
+								<div :class="!isRestaurantOpen() ? ' bg-red-200 text-red-600' : ' text-black bg-gray-100'"
+									class="flex items-center justify-center p-1 px-4 text-sm rounded-lg">
 									{{ isRestaurantOpen() ? "Geopend" : "Gesloten" }}
 								</div>
-								<button @click="openbookingmodal" class="text-sm hidden md:flex text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
+								<button @click="openbookingmodal"
+									class="text-sm hidden md:flex text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
 							</div>
 						</div>
 
@@ -64,19 +75,23 @@
 							<div class="mt-2">
 								<h2 class="text-lg font-semibold md:text-right">Telefoon</h2>
 								<p class="text-blue-600 text-sm md:text-base underline leading-4 md:text-right">
-									<a :href="`tel:${restaurantDetails?.telefoon}`">{{ restaurantDetails?.telefoon || "Onbekend" }}</a>
+									<a :href="`tel:${restaurantDetails?.telefoon}`">{{ restaurantDetails?.telefoon ||
+										"Onbekend" }}</a>
 								</p>
 							</div>
 						</div>
 						<div class="mt-2">
 							<h2 class="text-lg font-semibold">Openingstijden</h2>
 							<div class="text-gray-600">
-								<div v-if="restaurantDetails?.Openingstijden" v-for="(item, index) in restaurantDetails?.Openingstijden" :key="index" class="flex justify-between" :class="{ 'font-bold': item.dag === huidigeDag }">
+								<div v-if="restaurantDetails?.Openingstijden"
+									v-for="(item, index) in restaurantDetails?.Openingstijden" :key="index"
+									class="flex justify-between" :class="{ 'font-bold': item.dag === huidigeDag }">
 									<p class="text-sm md:text-base">{{ item.dag }}</p>
 									<p class="text-sm md:text-base">{{ item.tijd }}</p>
 								</div>
 								<div v-else>
-									<p class="text-gray-600 leading-4 text-sm md:text-base">Er is geen informatie beschikbaar over de openingstijden van dit restaurant.</p>
+									<p class="text-gray-600 leading-4 text-sm md:text-base">Er is geen informatie
+										beschikbaar over de openingstijden van dit restaurant.</p>
 								</div>
 							</div>
 						</div>
@@ -84,7 +99,8 @@
 					<hr class="my-2 mt-3 md:max-w-[60vw]" />
 				</section>
 				<section>
-					<div :class="!installed ? ' top-[4em] md:top-[4.7em] ' : ' top-[6.5em] '" class="z-20 bg-white sticky pb-[0.10rem]">
+					<div :class="!installed ? ' top-[4em] md:top-[4.7em] ' : ' top-[6.5em] '"
+						class="z-20 bg-white sticky pb-[0.10rem]">
 						<h2 class="text-2xl font-semibold mt-2 -mb-1">Recensies</h2>
 						<RecensieOverview :restaurantDetails :OkStatus :beoordelingen :openrecensiemodal />
 						<hr class="my-2 mt-3" />
@@ -101,8 +117,7 @@
 		<div v-if="title != 'Reserveren'">
 			<p class="-mt-3 text-gray-600">
 				Plaats hier een recensie over
-				<span class="font-bold">{{ restaurantDetails?.naam }}</span
-				>.
+				<span class="font-bold">{{ restaurantDetails?.naam }}</span>.
 			</p>
 			<hr class="my-2 mb-2" />
 			<ModalRecensie :isSuccess.value :onSubmit="handleRecentie" />
@@ -110,11 +125,11 @@
 		<div v-else>
 			<p class="-mt-3 text-gray-600">
 				Reserveer een tafel bij
-				<span class="font-bold">{{ restaurantDetails?.naam }}</span
-				>.
+				<span class="font-bold">{{ restaurantDetails?.naam }}</span>.
 			</p>
 			<hr class="my-2 mb-2" />
-			<ModalReservering :emailSend :ResturantId="useRoute().params.id" :restaurantDetails :onSubmit="handleReservering" :OkStatus :user />
+			<ModalReservering :emailSend :ResturantId="useRoute().params.id" :restaurantDetails
+				:onSubmit="handleReservering" :OkStatus :user />
 		</div>
 	</Modal>
 </template>

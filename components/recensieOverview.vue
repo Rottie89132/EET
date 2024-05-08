@@ -7,7 +7,7 @@
 						<svg class="w-full h-full" viewBox="0 0 100 100">
 							<circle class="text-gray-200 stroke-current" stroke-width="5" cx="50" cy="50" r="40" fill="transparent"></circle>
 							<circle class="text-[#4e995b] progress-ring__circle stroke-current" stroke-width="5" stroke-linecap="round" cx="50" cy="50" r="40" fill="transparent" :stroke-dashoffset="strokeDashOffset" :stroke-dasharray="strokeDashArray"></circle>
-							<text x="50" y="50" font-family="Verdana" font-size="16" text-anchor="middle" alignment-baseline="middle">{{ restaurantDetails?.beoordeling.toFixed(1) }}/5</text>
+							<text x="50" y="50" font-family="Verdana" font-size="16" text-anchor="middle" alignment-baseline="middle">{{ restaurantDetails?.beoordeling?.toFixed(1) }}/5</text>
 						</svg>
 					</div>
 					<div class="">
