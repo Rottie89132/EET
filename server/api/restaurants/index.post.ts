@@ -66,61 +66,61 @@ export default eventHandler(async (event) => {
             };
         });
 
-        // const { data: insertedData, error: insertError } = await client.from('restaurants_table').insert({
-        //     naam, 
-        //     keuken, 
-        //     telefoon, 
-        //     beschrijving, 
-        //     prijs, 
-        //     plaats: stad, 
-        //     locatie,
-        //     aantaltafels: tafels,
-        //     capaciteit, 
-        //     duur,
-        //     Openingstijden: openingstijdenFormated,
-        //     thumbnail: `${naam}/${naam}${files[0].filename.slice(files[0].filename.lastIndexOf('.'))}`,
-        //     menu: `${naam}/${naam}-Menukaart${menu[0].filename.slice(menu[0].filename.lastIndexOf('.'))}`,
-        //     images: formattedImages,
-        // }).select()
+        const { data: insertedData, error: insertError } = await client.from('restaurants_table').insert({
+            naam, 
+            keuken, 
+            telefoon, 
+            beschrijving, 
+            prijs, 
+            plaats: stad, 
+            locatie,
+            aantaltafels: tafels,
+            capaciteit, 
+            duur,
+            Openingstijden: openingstijdenFormated,
+            thumbnail: `${naam}/${naam}${files[0].filename.slice(files[0].filename.lastIndexOf('.'))}`,
+            menu: `${naam}/${naam}-Menukaart${menu[0].filename.slice(menu[0].filename.lastIndexOf('.'))}`,
+            images: formattedImages,
+        }).select()
 
-        // if (insertError) return reject({
-        //     statusCode: 500,
-        //     statusMessage: "Internal Server Error",
-        //     message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
-        // })
+        if (insertError) return reject({
+            statusCode: 500,
+            statusMessage: "Internal Server Error",
+            message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
+        })
 
-        // files.forEach(async (file: any, index: number) => {
+        files.forEach(async (file: any, index: number) => {
 
-        //     if (file.name.includes('afbeeldingen')) {
-        //         const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}-Food${index}${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data)
-        //         if (storageError) return reject({
-        //             statusCode: 500,
-        //             statusMessage: "Internal Server Error",
-        //             message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
-        //         })
+            if (file.name.includes('afbeeldingen')) {
+                const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}-Food${index}${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data)
+                if (storageError) return reject({
+                    statusCode: 500,
+                    statusMessage: "Internal Server Error",
+                    message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
+                })
                 
-        //     } 
+            } 
 
-        //     else if (file.name.includes('menu')) {
-        //         const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}-Menukaart${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data, {
-        //             contentType: 'application/pdf'
-        //         })
-        //         if (storageError) return reject({
-        //             statusCode: 500,
-        //             statusMessage: "Internal Server Error",
-        //             message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
-        //         })
-        //     }
+            else if (file.name.includes('menu')) {
+                const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}-Menukaart${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data, {
+                    contentType: 'application/pdf'
+                })
+                if (storageError) return reject({
+                    statusCode: 500,
+                    statusMessage: "Internal Server Error",
+                    message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
+                })
+            }
 
-        //     else {
-        //         const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data)
-        //         if (storageError) return reject({
-        //             statusCode: 500,
-        //             statusMessage: "Internal Server Error",
-        //             message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
-        //         })
-        //     }
-        // })
+            else {
+                const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data)
+                if (storageError) return reject({
+                    statusCode: 500,
+                    statusMessage: "Internal Server Error",
+                    message: "Er is een fout opgetreden bij het verwerken van de aanvraag"
+                })
+            }
+        })
 
         return resolve({
             statusCode: 200,
