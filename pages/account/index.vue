@@ -43,7 +43,8 @@
 						<div class="flex gap-2 mt-3"></div>
 					</div>
 				</div>
-				<div class="grid px-6 grid-cols-1 xl:grid-cols-1 gap-2 pb-6 overflow-auto">
+				<div :class="!installed ? 'mb-16' : ''"
+					class="grid px-6 grid-cols-1 xl:grid-cols-1 gap-2 pb-6 overflow-auto">
 					<div class="bg-slate-50 p-4 rounded-xl mt-2 outline outline-2 outline-gray-100">
 						<div class="flex items-center w-full justify-between">
 							<div class="w-full">
