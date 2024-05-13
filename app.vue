@@ -15,7 +15,6 @@
 	const nuxtApp = useNuxtApp();
 	const { $pwa } = useNuxtApp();
 	
-    const router = useRouter();
     const installed = ref(false);
 	const OkStatus = ref(false);
     const User = ref();

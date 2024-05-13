@@ -252,12 +252,10 @@
             fatal: true,
         })
 
-	//const { data: userData, error: userError }: Record<string, any> = await useFetch("/api/users");
+	
 	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value?.id}/recenties`);
-
 	beoordelingen.value = beoordelingenData.value?.recenties || [];
-	//OkStatus.value = userError.value ? false : true;
-	//user.value = userData.value || userError.value.data;
+	
 
 	const openbookingmodal = () => {
 		title.value = "Reserveren";

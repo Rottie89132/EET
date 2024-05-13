@@ -13,7 +13,8 @@ export default defineNuxtConfig({
     "@formkit/auto-animate",
     "@vee-validate/nuxt",
     'nuxt-swiper',
-    '@vue-email/nuxt'
+    '@vue-email/nuxt',
+    'nuxt-scheduler'
   ],
   nitro: {
     experimental: {
