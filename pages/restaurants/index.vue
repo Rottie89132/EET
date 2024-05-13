@@ -1,6 +1,5 @@
 <template>
 	<div class="h-screen">
-		<Navigation v-model:OkStatus="OkStatus"></Navigation>>
 		<div :class=" installed ? 'fixed w-screen h-full overflow-auto top-0' : '' ">
 			<div class="mt-24">
 				<div :class="!installed ? 'top-[4rem] sticky -mt-14' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'" class="w-full z-10 px-6 bg-white">

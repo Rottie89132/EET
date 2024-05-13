@@ -1,6 +1,5 @@
 <template>
 	<div class=" h-screen">
-		<Navigation v-model:OkStatus="OkStatus"></Navigation>
 		<div :class=" installed ? 'fixed w-screen h-full overflow-auto top-0' : '' ">
 			<div :class="!installed ? 'top-[4.5rem] pt-2' : 'top-0 z-40 pt-24'"
 				class="fixed top-0 w-screen z-20 p-3 bg-white"></div>
@@ -47,7 +46,8 @@
 								class="flex text-sm md:hidden text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
 							<div class="flex gap-2 items-center">
 								<NuxtLink target="_blank" :href="restaurantDetails.menu.data.publicUrl"
-									class="flex text-sm items-center justify-center text-black bg-gray-100 p-1 px-4 rounded-lg">Menu</NuxtLink>
+									class="flex text-sm items-center justify-center text-black bg-gray-100 p-1 px-4 rounded-lg">
+									Menu</NuxtLink>
 								<div :class="!isRestaurantOpen() ? ' bg-red-200 text-red-600' : ' text-black bg-gray-100'"
 									class="flex items-center justify-center p-1 px-4 text-sm rounded-lg">
 									{{ isRestaurantOpen() ? "Geopend" : "Gesloten" }}
@@ -144,9 +144,10 @@
 	const active = ref(false);
 	const activeDelay = ref(false);
 	const beoordelingen: any = ref([]);
-	const user = ref();
+	
+	const user: any = ref(inject('User'));
+	const OkStatus: any = ref(inject('OkStatus'));
 
-	const OkStatus = ref(false);
 	const emailSend = ref(false);
 	const isSuccess = ref(false);
 
@@ -251,12 +252,12 @@
             fatal: true,
         })
 
-	const { data: userData, error: userError }: Record<string, any> = await useFetch("/api/users");
+	//const { data: userData, error: userError }: Record<string, any> = await useFetch("/api/users");
 	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value?.id}/recenties`);
 
 	beoordelingen.value = beoordelingenData.value?.recenties || [];
-	OkStatus.value = userError.value ? false : true;
-	user.value = userData.value || userError.value.data;
+	//OkStatus.value = userError.value ? false : true;
+	//user.value = userData.value || userError.value.data;
 
 	const openbookingmodal = () => {
 		title.value = "Reserveren";

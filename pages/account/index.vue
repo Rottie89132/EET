@@ -1,7 +1,5 @@
 <template>
 	<div class="h-screen">
-		<VitePwaManifest />
-		<Navigation v-model:OkStatus="OkStatus"></Navigation>
 		<div :class="!installed ? ' mt-20' : 'mt-14'" class="overflow-hidden">
 			<div :class="!installed ? 'top-[4rem] fixed' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'"
 				class="w-full z-10 px-6 bg-white">
@@ -192,10 +190,9 @@
 
 	const { $pwa }: any = useNuxtApp();
 	const installed = ref(false);
-	const User = ref();
+	const User: any = ref();
 	const items: any = ref([]);
 	const openDetail = ref();
-	const OkStatus = ref(false);
 
 	const active = ref(false);
 	const activeDelay = ref(false);

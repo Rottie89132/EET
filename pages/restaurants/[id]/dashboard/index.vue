@@ -1,6 +1,5 @@
 <template>
 	<div :class="!installed ? '' : 'h-screen'">
-		<Navigation v-model:OkStatus="OkStatus"></Navigation>
 		<div :class="!installed ? 'top-[4rem] sticky -mt-6' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'" class="w-full z-20 px-6 bg-white">
 			<div :class="!installed ? ' top-[4rem] ' : ' top-[3.5rem]  '" class="z-10 bg-white fixed w-full pb-[0.10rem]">
 				<h1 class="xl:text-3xl text-xl font-bold pt-5">Reserveringen</h1>
@@ -102,7 +101,6 @@
 	});
 
 	const { $pwa } = useNuxtApp();
-	const OkStatus = ref(false);
 	const client = useSupabaseClient();
 	const restaurantId = useRoute().params.id;
 	const loading = ref(false);

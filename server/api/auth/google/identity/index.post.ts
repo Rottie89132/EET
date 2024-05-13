@@ -13,7 +13,7 @@ export default defineEventHandler((event) => {
         const { user, session }: any = data;
 
         setCookie(event, "sb-access-token", session.access_token, {
-            maxAge: session.expires_in,
+            maxAge: 60 * 60 * 24,
             httpOnly: true,
         });
 

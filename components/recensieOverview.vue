@@ -15,11 +15,19 @@
 							{{ percentage > 0 && percentage < 10 ? "Zeer slecht" : percentage >= 10 && percentage < 20 ? "Slecht" : percentage >= 20 && percentage < 30 ? "Matig" : percentage >= 30 && percentage < 40 ? "Redelijk" : percentage >= 40 && percentage < 50 ? "Gemiddeld" : percentage >= 50 && percentage < 60 ? "Voldoende" : percentage >= 60 && percentage < 70 ? "Goed" : percentage >= 70 && percentage < 80 ? "Zeer goed" : percentage >= 80 && percentage < 90 ? "Uitstekend" : percentage >= 90 && percentage <= 100 ? "Perfect" : " Nog geen beoordelingen" }}
 						</p>
 						<p class="text-gray-400 text-sm -mt-1">Gebaseerd op {{ beoordelingen?.length }} recensies</p>
-						<div class="flex gap-2 -mt-1">
-							<button v-if="OkStatus" @click="openrecensiemodal" class="flex items-center text-sm justify-center text-white p-[0.15rem] px-4 bg-[#4e995b] rounded-lg mt-2">Beoordeel</button>
-							<button v-else class="flex opacity-50 cursor-not-allowed items-center text-sm justify-center text-white p-[0.15rem] px-4 bg-[#4e995b] rounded-lg mt-2">Beoordeel</button>
-							<button @click="toonDetailsHandler" class="flex items-center text-sm justify-center text-[#4e995b] p-[0.15rem] px-4 border-2 border-[#4e995b] rounded-lg mt-2">{{ toonDetails ? "Minder" : "Meer" }}</button>
-						</div>
+						<ClientOnly>
+							<div class="flex gap-2 -mt-1">
+								<button v-if="OkStatus" @click="openrecensiemodal" class="flex items-center text-sm justify-center text-white p-[0.15rem] px-4 bg-[#4e995b] rounded-lg mt-2">Beoordeel</button>
+								<button v-else class="flex opacity-50 cursor-not-allowed items-center text-sm justify-center text-white p-[0.15rem] px-4 bg-[#4e995b] rounded-lg mt-2">Beoordeel</button>
+								<button @click="toonDetailsHandler" class="flex items-center text-sm justify-center text-[#4e995b] p-[0.15rem] px-4 border-2 border-[#4e995b] rounded-lg mt-2">{{ toonDetails ? "Minder" : "Meer" }}</button>
+							</div>
+							<template #fallback>
+								<div class="flex gap-2 -mt-1">
+									<button class="flex opacity-50 cursor-not-allowed items-center text-sm justify-center text-white p-[0.15rem] px-4 bg-[#4e995b] rounded-lg mt-2">Beoordeel</button>
+									<button @click="toonDetailsHandler" class="flex items-center text-sm justify-center text-[#4e995b] p-[0.15rem] px-4 border-2 border-[#4e995b] rounded-lg mt-2">{{ toonDetails ? "Minder" : "Meer" }}</button>
+								</div>
+							</template>
+						</ClientOnly>
 					</div>
 				</div>
 			</div>

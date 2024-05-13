@@ -1,11 +1,9 @@
 <template>
-	<div>
+	<div class=" bg-white h-screen w-screen z-50 absolute top-0">
 	</div>
 </template>
 
 <script setup lang="ts">
-	const { data } = await useFetch("/api/users");
-	//if (data.value) navigateTo("/account");
 	
 </script>
 

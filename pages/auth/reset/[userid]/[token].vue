@@ -9,7 +9,7 @@
 const result = ref()
 const { userid, token} = useRoute().params
 const { data, error} = await useFetch(`/api/auth/forgot/verify/${userid}/${token}`)
-result.value = data
+result.value = data.value || error.value
 
 if(!error.value) {}//navigateTo('/')
 else throw showError({

@@ -1,7 +1,5 @@
 <template>
 	<div class="h-screen">
-		<VitePwaManifest />
-		<Navigation v-model:OkStatus="OkStatus"></Navigation>
 		<div :class="!installed ? ' mt-20 -mb-12' : 'mt-14'" class="flex items-center overflow-hidden px-6">
 			<div class="rounded-xl flex bg-[#4e995b] mt-6 mb-12 xl:p-10 sm:p-8 p-6">
 				<div>
