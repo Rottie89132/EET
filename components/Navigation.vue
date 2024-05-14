@@ -124,11 +124,10 @@
 	const logout = async () => {
 		const { error }: Record<string, any> = await useFetch("/api/auth/logout", { method: "delete" });
 		if (!error.value) User.value = null;
-		
-		const allowedRoutes = ["/restaurants/f94cfac9-5ff1-4723-9ce2-6ec734cb7dab", "/restaurants", "/home"];
-		if (!allowedRoutes.includes(router.currentRoute.value.path)) {
+
+		if(router.currentRoute.value.path == "/account" || router.currentRoute.value.path == "/reserveringen" || router.currentRoute.value.path.includes("/dashboard")) {
 			navigateTo("/home");
-		}
+		} 
 	};
 
 	const toglenav = () => {
@@ -142,10 +141,18 @@
 		}, 100);
 	};
 
-	const { data, error }: Record<string, any> = await useFetch("/api/users");
-	OkStatus.value = error.value ? false : true;
-	DataUser.value = data.value || error.value.data;
-	if (!error.value) User.value = data.value?.user;
+	const loaduser = async () => {
+		const { data, error }: Record<string, any> = await useFetch("/api/users");
+		OkStatus.value = error.value ? false : true;
+		DataUser.value = data.value || error.value.data;
+		if (!error.value) User.value = data.value?.user;
+	};
+
+	watch(router.currentRoute, async (value) => {
+		await loaduser();
+	});
+
+	await loaduser();
 
 </script>
 
