@@ -114,11 +114,6 @@
 		DataUser: any;
 	}>();
 
-	watch(User, (value) => {
-		if (value) OkStatus.value = true;
-		else OkStatus.value = false;
-	});
-
 	if ($pwa?.isPWAInstalled) installed.value = true;
 
 	const logout = async () => {
@@ -143,13 +138,19 @@
 
 	const loaduser = async () => {
 		const { data, error }: Record<string, any> = await useFetch("/api/users");
+		
 		OkStatus.value = error.value ? false : true;
 		DataUser.value = data.value || error.value.data;
-		if (!error.value) User.value = data.value?.user;
+		User.value = data.value?.user || null;
 	};
 
 	watch(router.currentRoute, async (value) => {
 		await loaduser();
+	});
+
+	watch(User, (value) => {
+		if (value) OkStatus.value = true;
+		else OkStatus.value = false;
 	});
 
 	await loaduser();
