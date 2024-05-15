@@ -8,9 +8,9 @@ export default defineEventHandler((event) => {
         const { data, error } = await client.auth.admin.deleteUser(user.id);
 
         if (error) return reject({
-            statusCode: 500,
+            statusCode: error.code,
             statusMessage: "Internal Server Error",
-            message: "Failed to delete user account."
+            message: error.message
         });
 
         return resolve({

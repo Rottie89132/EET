@@ -145,6 +145,9 @@
 	const activeDelay = ref(false);
 	const beoordelingen: any = ref([]);
 	
+	const displayLoading = ref(false);
+	provide("displayLoading", displayLoading);
+	
 	const user: any = ref(inject('User'));
 	const OkStatus: any = ref(inject('OkStatus'));
 
@@ -178,10 +181,13 @@
 	};
 
 	const handleRecentie = async (values: any, actions: any) => {
-		const { data, error } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/recenties`, {
+		displayLoading.value = true;
+		const { pending, data, error } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/recenties`, {
 			method: "POST",
 			body: values,
 		});
+
+		displayLoading.value = pending.value;
 
 		if (error.value) {
 			actions.setErrors({
@@ -199,10 +205,13 @@
 	};
 
 	const handleReservering = async (values: any, actions: any) => {
-		const { error } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/reserverigen`, {
+		displayLoading.value = true;
+		const { error, pending } = await useFetch(`/api/restaurants/${restaurantDetails.value.id}/reserverigen`, {
 			method: "POST",
 			body: values,
 		});
+
+		displayLoading.value = pending.value;
 
 		if (error.value) {
 			actions.setErrors({
@@ -256,7 +265,6 @@
 	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value?.id}/recenties`);
 	beoordelingen.value = beoordelingenData.value?.recenties || [];
 	
-
 	const openbookingmodal = () => {
 		title.value = "Reserveren";
 		active.value = true;

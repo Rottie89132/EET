@@ -10,7 +10,12 @@
 	<div v-else-if="action == 'Annuleren'">
 		<p class="-mt-2 text-gray-600 leading-5">Weet u zeker dat u deze reservering wilt annuleren?</p>
 		<div class="mt-4 flex items-center gap-4">
-			<button @click="Annuleren" class="bg-[#de4747] text-white p-1 px-4 rounded-lg">Doorgaan</button>
+			<button @click="Annuleren" class="bg-[#de4747] text-white p-1 px-4 rounded-lg">
+				<span v-if="displayLoading" class="">
+					<icon class="animate-spin" name="pajamas:repeat" size="1rem"> </icon>
+				</span>
+				<span v-else> Doorgaan </span>
+			</button>
 			<button @click="back" class="bg-gray-200 p-1 px-4 rounded-lg">Toch maar niet</button>
 		</div>
 	</div>
@@ -19,7 +24,8 @@
 		<div class="mt-3 mb-4 flex items-center gap-4">
 			<button @click="back" class="bg-gray-200 p-1 px-4 rounded-lg">Toch maar niet</button>
 		</div>
-		<ModalReservering :ReserveringId="deleteId" :emailSend :ResturantId :restaurantDetails :onSubmit="handleReservering" :OkStatus :user />
+		<ModalReservering :ReserveringId="deleteId" :emailSend :ResturantId :restaurantDetails
+			:onSubmit="handleReservering" :OkStatus :user />
 	</div>
 </template>
 
@@ -29,6 +35,9 @@
 	const OkStatus = ref(false);
 	const emailSend = ref(false);
 	const user = ref();
+
+	const displayLoading = ref(false);
+	provide("displayLoading", displayLoading);
 
 	const { action, ResturantId, activeTab, deleteId, switchModal, updateModal, closeModal, updateList } = defineProps<{
 		action: string;
@@ -58,9 +67,10 @@
 	};
 
 	const Annuleren = async () => {
-		
+		displayLoading.value = true;
 		await $fetch(`/api/reserverigen/${deleteId}`, {method: "DELETE",});
 		const data : any = await $fetch(`/api/reserverigen?status=${activeTab}`);
+		displayLoading.value = false;
 		updateList(data.reserveringen);
 		closeModal()
 		updateModal("")
@@ -72,11 +82,13 @@
 	};
 
 	const handleReservering = async (data: any) => {
-
+		displayLoading.value = true;
 		await $fetch(`/api/reserverigen/${deleteId}`, {
 			method: "patch",
 			body: data,
 		});
+
+		displayLoading.value = false;
 
 		const updateData : any = await $fetch(`/api/reserverigen?status=${activeTab}`);
 		updateList(updateData.reserveringen);

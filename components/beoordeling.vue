@@ -23,7 +23,7 @@
 					<span class="font-bold">{{ beoordeling.steren }}/5</span>
 				</div>
 			</div>
-			<p class="text-gray-400 leading-4 whitespace-pre-wrap mt-1 mb-2 text-pretty text-sm">
+			<p class="text-gray-400 md:max-w-[60vw] leading-4 whitespace-pre-wrap mt-1 mb-2 text-pretty text-sm">
 				{{ beoordeling.beoordeling }}
 			</p>
 			<hr class="" />

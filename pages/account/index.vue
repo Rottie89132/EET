@@ -99,7 +99,7 @@
 														Beheren</NuxtLink>
 													<button
 														class="bg-gray-200 p-[0.35rem] px-3 text-xs text-gray-700 rounded-lg">Bewerken</button>
-													<button
+													<button @click="toonDeleteModal(item)"
 														class="bg-rose-600 p-[0.35rem] px-3 text-xs text-white rounded-lg">Verwijderen</button>
 												</div>
 											</div>
@@ -114,8 +114,31 @@
 		</div>
 	</div>
 	<Modal :title v-model:active="active" v-model:activeDelay="activeDelay">
-		<div v-if="title == 'Instelling'">
-			<p class="-mt-3 text-gray-600">Wijzig hier uw instellingen</p>
+		<div v-if="title == 'Verwijderen'">
+			<p class="-mt-2 text-gray-600">
+				Weet u zeker dat u het restaurant <span class="font-semibold">{{ nameRestaurant }}</span> wilt
+				verwijderen?
+			</p>
+			<p class="text-red-600 text-sm leading-4 mt-4">
+				Alle gegevens van het restaurant worden verwijderd en kunnen niet worden hersteld, zelfs de
+				reserveringen en recenties!
+			</p>
+			<hr class="my-2 mb-2" />
+			<div class="flex gap-2 w-full items-center">
+				<button class="bg-[#de4747] text-white p-1 px-4 rounded-lg" @click="deleteResturant(deleteId)">
+					<span v-if="displayLoading" class="">
+						<icon class="animate-spin" name="pajamas:repeat" size="1.3rem"> </icon>
+					</span>
+					<span v-else> Ja verwijderen </span>
+				</button>
+				<button @click="closeModal" class="bg-gray-200 p-1 px-4 rounded-lg">
+					Nee toch niet
+				</button>
+			</div>
+
+		</div>
+		<div v-else-if="title == 'Instelling'">
+			<p class="-mt-2 text-gray-600">Wijzig hier uw instellingen</p>
 			<hr class="my-2 mb-2" />
 			<form @submit.prevent="saveSettings">
 				<div>
@@ -130,56 +153,38 @@
 				</div>
 
 				<div class="mt-6 flex gap-2 items-center">
-					<div class="bg-[#de4747] text-white p-1 px-4 rounded-lg" @click="deleteAccount">Verwijder account
+					<div class="bg-[#de4747] text-white p-1 px-4 rounded-lg" @click="deleteAccount">
+						<span v-if="displayLoading" class="">
+							<icon class="animate-spin" name="pajamas:repeat" size="1rem"> </icon>
+						</span>
+						<span v-else> Verwijder account </span>
 					</div>
-					<button class="bg-gray-200 p-1 px-4 rounded-lg" type="submit">Opslaan</button>
+					<button class="bg-gray-200 p-1 px-4 rounded-lg" type="submit">
+						<span v-if="displayLoading" class="">
+							<icon class="animate-spin" name="pajamas:repeat" size="1rem"> </icon>
+						</span>
+						<span v-else>Opslaan</span>
+					</button>
 				</div>
+
+				<div v-if="result" class="flex gap-2 mt-6 mb-2">
+					<hr class="my-3" />
+					<p :class="result.statusCode != 200 ? 'text-red-600' : 'text-green-800'"
+						class="text-sm leading-4 -ml-1">
+						{{ result.message }}
+					</p>
+				</div>
+
 			</form>
 		</div>
 		<div v-else-if="title == 'Restaurant'">
-			<p class="-mt-3 text-gray-600">Voeg hier een restaurant toe</p>
+			<p class="-mt-2 text-gray-600">Voeg hier een restaurant toe</p>
 			<hr class="my-2 mb-2" />
-			<FormWizard @submit="createRestaurant" :validation-schema="Schema">
-				<FormStep>
-					<FieldInput type="text" label="Naam" name="naam" />
-					<FieldInput type="text" label="Keuken" name="keuken" />
-					<FieldInput type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78" />
-				</FormStep>
-				<FormStep>
-					<FieldArea type="text" label="Beschrijving" name="beschrijving" />
-					<FieldSelect type="text" label="Prijs" name="prijs" :options="values" />
-				</FormStep>
-				<FormStep>
-					<FieldInput type="text" label="Stad" name="stad" />
-					<FieldInput type="text" label="Locatie" name="locatie" />
-				</FormStep>
-				<FormStep>
-					<FieldOpeningstijden label="Openingstijden" name="openingstijden"
-						v-model:openingTimes="openingTimes" />
-				</FormStep>
-				<FormStep>
-					<FieldInput type="number" label="Tafels" name="tafels" />
-					<FieldInput type="number" label="Capaciteit (Personen)" name="capaciteit" />
-					<FieldInput type="number" label="Duur" name="duur" />
-				</FormStep>
-				<FormStep>
-					<FieldImage label="Thumbnail" name="thumbnail" :multipe="false" :max="1" v-model:preview="thumbnail"
-						v-model:previewArray="thumbnailArray" />
-				</FormStep>
-				<FormStep>
-					<FieldImage label="Afbeeldingen" name="afbeeldingen" :multipe="true" :max="3"
-						v-model:preview="afbeeldingen" v-model:previewArray="afbeeldingenArray" />
-				</FormStep>
-				<FormStep>
-					<FieldPdf label="Menu" name="menu" v-model:preview="menu" />
-					<div v-if="result" class="flex gap-2 mt-6 mb-2">
-						<hr class=" my-3">
-						<p :class="result.statusCode != 200 ? 'text-red-600' : 'text-green-800'"
-							class="text-sm leading-4 -ml-1">
-							{{ result.message }}</p>
-					</div>
-				</FormStep>
-			</FormWizard>
+			<ModalAanmaken :options="values" v-model:afbeeldingen="afbeeldingen" :Schema
+				v-model:openingTimes="openingTimes" v-model:thumbnail="thumbnail"
+				v-model:thumbnailArray="thumbnailArray" v-model:afbeeldingenArray="afbeeldingenArray"
+				v-model:menu="menu" :result :onSubmit="createRestaurant">
+			</ModalAanmaken>
 		</div>
 	</Modal>
 </template>
@@ -198,7 +203,9 @@
 	const activeDelay = ref(false);
 	const title = ref("Account");
 
+	const displayLoading = ref(false);
 	const result: Record<string, any> = ref("");
+	provide("displayLoading", displayLoading);
 
 	const afbeeldingenArray: any = ref([]);
 	const afbeeldingen: any = ref([]);
@@ -206,6 +213,8 @@
 	const thumbnailArray: any = ref([]);
 	const thumbnail: any = ref([]);
 
+	const nameRestaurant: any = ref("");
+	const deleteId: any = ref("");
 	const menu: any = ref("");
 
 	const values = [
@@ -272,6 +281,13 @@
 		}, 100);
 	};
 
+	const closeModal = () => {
+		activeDelay.value = false;
+		setTimeout(() => {
+			active.value = false;
+		}, 100);
+	};
+
 	const openRestaurant = () => {
 		title.value = "Restaurant";
 		active.value = true;
@@ -281,6 +297,7 @@
 	};
 
 	const createRestaurant = async (values: any, actions: any) => {
+		displayLoading.value = true;
 		const value = {
 			...values,
 		};
@@ -293,52 +310,87 @@
 					const blob = new Blob([file], { type: file.type });
 					formData.append(`file:afbeeldingen[${index}]`, blob, file.name);
 				});
-			}
-			else if (key === "thumbnail") {
+			} else if (key === "thumbnail") {
 				const blob = new Blob([value[key]], { type: value[key]?.type });
 				formData.append(`file:thumbnail`, blob, value[key]?.name);
-			}
-			else if (key === "menu") {
+			} else if (key === "menu") {
 				const blob = new Blob([value[key]], { type: value[key]?.type });
 				formData.append(`file:menu`, blob, value[key]?.name);
-			}
-			else if (key == "openingstijden") {
+			} else if (key == "openingstijden") {
 				formData.append(key, JSON.stringify(value[key]));
-			}
-			else {
+			} else {
 				formData.append(key, value[key]);
 			}
 		}
 
-		const { data, error }: any = await useFetch("/api/restaurants", { method: "post", body: formData });
-		
-		if (error.value) result.value = error.value.data;
-		else {
+		const { pending, data, error }: any = await useFetch("/api/restaurants", { method: "post", body: formData });
+
+		displayLoading.value = pending.value;
+		if (!error.value) {
 			result.value = data.value;
+			const { data: resturannt }: Record<string, any> = await useFetch("/api/restaurants", { params: { searchOwner: true } });
+			items.value = resturannt.value.restaurants;
 			setTimeout(() => {
-				active.value = false;
-				activeDelay.value = false;
-			}, 10000);
+				closeModal()
+			}, 4000);
 		}
-		
 	};
 
-	const saveSettings = async (value: any) => {
-		const { data, error }: any = await useFetch("/api/account", {
+	const saveSettings = async (value: object) => {
+		displayLoading.value = true;
+		const { data, error, pending }: any = await useFetch("/api/account", {
 			method: "put",
 			body: value,
 		});
-		if (error.value) console.log(error.value);
-		else navigateTo("/");
+
+		displayLoading.value = pending.value;
+		if (!error.value) {
+			result.value = data.value;
+			const { data: userData }: Record<string, any> = await useFetch("/api/users");
+			User.value = userData.value.user;
+			setTimeout(() => {
+				closeModal()
+			}, 4000);
+		}
 	};
 
-	const deleteAccount = async () => {
-		const { data, error }: any = await useFetch("/api/account", {
+	const toonDeleteModal = (item: any) => {
+		nameRestaurant.value = item.naam;
+		deleteId.value = item.id;
+		title.value = "Verwijderen";
+		active.value = true;
+		setTimeout(() => {
+			activeDelay.value = true;
+		}, 100);
+	};
+
+	const deleteResturant = async (id: string) => {
+		displayLoading.value = true;
+		const { data, error, pending }: any = await useFetch(`/api/restaurants/${id}`, {
 			method: "DELETE",
 		});
 
-		if (error.value) console.log(error.value);
-		else navigateTo("/");
+		displayLoading.value = pending.value
+		
+		if (!error.value) {
+			result.value = data.value;
+			const { data: restaurants }: Record<string, any> = await useFetch("/api/restaurants", { params: { searchOwner: true } });
+			setTimeout(() => {
+				items.value = restaurants.value.restaurants;
+				closeModal()
+			}, 4000);
+			
+		}
+	};
+
+	const deleteAccount = async () => {
+		displayLoading.value = true;
+		const { pending, data, error }: any = await useFetch("/api/account", {
+			method: "DELETE",
+		});
+
+		displayLoading.value = pending.value;
+		if (!error.value) navigateTo("/");
 	};
 
 	const toggleDetail = (detailName: string) => {
@@ -414,54 +466,42 @@
 
 	const Schema = [
 		yup.object().shape({
-			naam: yup.string().required( "Het invullen van de naam is verplicht."),
-			keuken: yup.string().required( "Het invullen van de keuken is verplicht."),
-			telefoon: yup.string().matches(phoneRegExp, "Telefoonnummer moet geldig zijn").required( "Het invullen van de telefoonnummer is verplicht."),
+			// naam: yup.string().required("Het invullen van de naam is verplicht."),
+			// keuken: yup.string().required("Het invullen van de keuken is verplicht."),
+			// telefoon: yup.string().matches(phoneRegExp, "Telefoonnummer moet geldig zijn").required("Het invullen van de telefoonnummer is verplicht."),
 		}),
 		yup.object().shape({
-			beschrijving: yup.string().required( "Het invullen van de beschrijving is verplicht."),
-			prijs: yup.string().required( "Het invullen van de prijs is verplicht."),
+			// beschrijving: yup.string().required("Het invullen van de beschrijving is verplicht."),
+			// prijs: yup.string().required("Het invullen van de prijs is verplicht."),
 		}),
 		yup.object().shape({
-			stad: yup.string().required( "Het invullen van de stad is verplicht."),
-			locatie: yup.string().required( "Het invullen van de locatie is verplicht."),
+			// stad: yup.string().required("Het invullen van de stad is verplicht."),
+			// locatie: yup.string().required("Het invullen van de locatie is verplicht."),
 		}),
 		yup.object().shape({
-			openingstijden: yup.array().of(
-				yup.object().shape({
-				open: yup.string().required(" Het invullen van de openingstijd is verplicht."),
-				sluit: yup.string().required(" Het invullen van de sluitingstijd is verplicht."),
-			})
-			).required("Het invullen van de openingstijden is verplicht."),
+			// openingstijden: yup
+			// 	.array()
+			// 	.of(
+			// 		yup.object().shape({
+			// 			open: yup.string().required(" Het invullen van de openingstijd is verplicht."),
+			// 			sluit: yup.string().required(" Het invullen van de sluitingstijd is verplicht."),
+			// 		})
+			// 	)
+			// 	.required("Het invullen van de openingstijden is verplicht."),
 		}),
 		yup.object().shape({
-			tafels: yup.number().min(1, "Het aantal tafels moet minimaal 1 zijn").required(" Het invullen van het aantal tafels is verplicht."),
-			capaciteit: yup.number().min(4, "Het aantal gasten moet minimaal 4 zijn").required( "Het invullen van de capaciteit is verplicht."),
-			duur: yup.number().min(1, "Het aantal uren moet minimaal 1 zijn").required( "Het invullen van de duur is verplicht."),
+			// tafels: yup.number().min(1, "Het aantal tafels moet minimaal 1 zijn").required(" Het invullen van het aantal tafels is verplicht."),
+			// capaciteit: yup.number().min(4, "Het aantal gasten moet minimaal 4 zijn").required("Het invullen van de capaciteit is verplicht."),
+			// duur: yup.number().min(1, "Het aantal uren moet minimaal 1 zijn").required("Het invullen van de duur is verplicht."),
 		}),
 		yup.object().shape({
-			thumbnail: yup.mixed()
-			.test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid)
-			.test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid)
-			.test("fileAfmeting", "De afmetingen van het bestand moeten precies 1728 x 668 pixels zijn.", isThumbnailDimensionValid)
-			.required("Het uploaden van een thumbnail is verplicht."),
+			//thumbnail: yup.mixed().test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).test("fileAfmeting", "De afmetingen van het bestand moeten precies 1728 x 668 pixels zijn.", isThumbnailDimensionValid).required("Het uploaden van een thumbnail is verplicht."),
 		}),
 		yup.object().shape({
-			afbeeldingen: yup.array().of(
-				yup.mixed()).min(3).max(3)
-				.test("minCount", "Het aantal bestanden moet minimaal 3 zijn.", isAtleasttreeFile)
-				.test("fileCount", "Het aantal bestanden overschrijdt het maximale aantal van 3.", isFileCountValid)
-				.test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid)
-				.test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid)
-				.test("fileAfmeting", "De afmetingen van de bestanden moeten precies 1728 x 668 pixels zijn.", areDimensionsValid)
-				.required("Het uploaden van minimaal 3 afbeeldingen is verplicht."
-			).required("Het uploaden van minimaal 3 afbeeldingen is verplicht."),
+			//afbeeldingen: yup.array().of(yup.mixed()).min(3).max(3).test("minCount", "Het aantal bestanden moet minimaal 3 zijn.", isAtleasttreeFile).test("fileCount", "Het aantal bestanden overschrijdt het maximale aantal van 3.", isFileCountValid).test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).test("fileAfmeting", "De afmetingen van de bestanden moeten precies 1728 x 668 pixels zijn.", areDimensionsValid).required("Het uploaden van minimaal 3 afbeeldingen is verplicht.").required("Het uploaden van minimaal 3 afbeeldingen is verplicht."),
 		}),
 		yup.object().shape({
-			menu: yup.mixed()
-			.test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid)
-			.test("fileType", "Alleen pdf-bestandstypen zijn toegestaan.", isFilePdf)
-			.required("Het uploaden van een menukaart is verplicht."),
+			//menu: yup.mixed().test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen pdf-bestandstypen zijn toegestaan.", isFilePdf).required("Het uploaden van een menukaart is verplicht."),
 		}),
 	];
 

@@ -5,14 +5,20 @@
 		<hr class="mb-4" />
 
 		<div class="flex gap-2">
-			<button tabindex="0" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-md focus:outline-none" v-if="hasPrevious" type="button" @click="goToPrev">
+			<button tabindex="0" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-md focus:outline-none"
+				v-if="hasPrevious" type="button" @click="goToPrev">
 				<icon name="material-symbols:keyboard-double-arrow-left" size="1.5em"></icon>
 			</button>
 
-			<div tabindex="0" class="p-2 px-4 font-semibold select-none bg-gray-100 rounded-md focus:outline-none">{{ currentStepIdx + 1 }}/{{ stepCounter }}</div>
-
-			<button tabindex="0" class="w-full text-center p-2 bg-[#4e995b] hover:bg-[#43874e] text-white cursor-pointer rounded-md focus:outline-none">
-				{{ isLastStep ? "Bevestigen" : "Volgende" }}
+			<div tabindex="0" class="p-2 px-4 font-semibold select-none bg-gray-100 rounded-md focus:outline-none">{{
+				currentStepIdx + 1 }}/{{ stepCounter }}</div>
+	
+			<button tabindex="0"
+				class="w-full text-center p-2 bg-[#4e995b] hover:bg-[#43874e] text-white cursor-pointer rounded-md focus:outline-none">
+				<span v-if="displayLoading && isLastStep" class="">
+					<icon class="animate-spin" name="pajamas:repeat" size="1.3rem"> </icon>
+				</span>
+				<span v-else> {{ isLastStep ? "Bevestigen" : "Volgende" }} </span>
 			</button>
 		</div>
 	</form>
@@ -30,6 +36,7 @@
 
 	const emit = defineEmits(["submit"]);
 	const currentStepIdx = ref(0);
+	const displayLoading = ref(inject("displayLoading"));
 
 	const stepCounter = ref(0);
 	provide("STEP_COUNTER", stepCounter);

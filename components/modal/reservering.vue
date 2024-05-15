@@ -33,17 +33,21 @@
 					<div :class="OkStatus && user?.user?.name ? ' sr-only' : ''">
 						<FieldInput type="text" label="Naam" name="naam" v-model="naam" />
 					</div>
-					<FieldInput type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78" v-model="telefoon" />
+					<FieldInput type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78"
+						v-model="telefoon" />
 				</FormStep>
 				<FormStep>
-					<p class="text-gray-600 -mt-2 mb-2">Voordat je de reservering definitief maakt, controleer of de gegevens kloppen.</p>
+					<p class="text-gray-600 -mt-2 mb-2">Voordat je de reservering definitief maakt, controleer of de
+						gegevens kloppen.</p>
 					<FieldInput :disabled="true" type="email" label="Email" name="email" v-model="email" />
 					<FieldInput :disabled="true" type="text" label="Naam" name="naam" v-model="naam" />
-					<FieldInput :disabled="true" type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78" v-model="telefoon" />
+					<FieldInput :disabled="true" type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78"
+						v-model="telefoon" />
 				</FormStep>
 			</div>
 
-			<p v-if="emailSend" class="text-green-800 text-sm leading-4 mb-5">reserverigen is gelukt! check je email voor de bevestiging.</p>
+			<p v-if="emailSend" class="text-green-800 text-sm leading-4 mb-5">reserverigen is gelukt! check je email
+				voor de bevestiging.</p>
 		</FormWizard>
 	</div>
 </template>
