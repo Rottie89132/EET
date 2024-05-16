@@ -8,11 +8,11 @@
 					@blur="handleBlur" />
 				<div class="flex items-center gap-1 justify-center">
 					<icon name="fa6-regular:file-pdf" size="1.1rem" />
-					<p class="">Menu uploaden</p>
+					<p class="">Menu</p>
 				</div>
 			</div>
 			<div v-if="preview"
-				class="border-gray-300 border relative cursor-pointer p-2 px-3 truncate w-fit rounded-lg">
+				class="border-gray-300 border relative cursor-pointer p-2 px-3 truncate w-fit text-sm rounded-lg">
 				<p>{{ preview }}</p>
 			</div>
 		</div>
@@ -22,12 +22,20 @@
 </template>
 
 <script setup lang="ts">
-	const { name, label, preview } = defineModels<{
+	const { name, label, preview, bewerken } = defineModels<{
 		label: string;
 		name: string;
-		preview: string;
+		preview: string | null;
+		bewerken: boolean;
 	}>();
 
+	if (bewerken){
+		const { value }: any = useField<string>(name);
+		value.value = preview.value
+		preview.value = value.value
+	}
+	
+	
 	const fileSelected = (handleChange: (event: Event) => void, event: Event) => {
 		const files: any = (event.target as HTMLInputElement).files;
 		preview.value = files[0].name;

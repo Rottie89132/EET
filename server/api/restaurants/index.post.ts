@@ -14,6 +14,7 @@ export default eventHandler( (event) => {
 
             const data = await readMultipartFormData(event);
             const readableData = await useReadable(data);
+            const thumbnail: string[] | any = []
             const images: string[] = []
             const menu: string[] | any = []
 
@@ -22,6 +23,8 @@ export default eventHandler( (event) => {
                 statusMessage: "Foutieve aanvraag",
                 message: "Geen gegevens gevonden in het verzoek"
             })
+
+            console.log(readableData)
 
             const {
                 naam, keuken, telefoon, beschrijving, prijs, stad, locatie,
@@ -52,6 +55,10 @@ export default eventHandler( (event) => {
                     message: "Het verzoek heeft een media type dat de server of bron niet ondersteunt"
                 })
 
+                if (file.name.includes('thumbnail')) {
+                    thumbnail.push(file)
+                }
+
                 if (file.name.includes('afbeeldingen')) {
                     images.push(file)
                 }
@@ -79,8 +86,8 @@ export default eventHandler( (event) => {
                 capaciteit,
                 duur,
                 Openingstijden: openingstijdenFormated,
-                thumbnail: `${naam}/${naam}${files[0].filename.slice(files[0].filename.lastIndexOf('.'))}`,
-                menu: `${naam}/${naam}-Menukaart${menu[0].filename.slice(menu[0].filename.lastIndexOf('.'))}`,
+                thumbnail: `${naam}/${naam}${thumbnail[0].filename.slice(thumbnail[0].filename.lastIndexOf('.'))}`,
+                menu: `${naam}/${naam}-Menu${menu[0].filename.slice(menu[0].filename.lastIndexOf('.'))}`,
                 images: formattedImages,
             }).select()
 
@@ -103,7 +110,7 @@ export default eventHandler( (event) => {
                 }
 
                 else if (file.name.includes('menu')) {
-                    const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}-Menukaart${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data, {
+                    const { error: storageError } = await client.storage.from('restaurants').upload(`${naam}/${naam}-Menu${file.filename.slice(file.filename.lastIndexOf('.'))}`, file.data, {
                         contentType: 'application/pdf'
                     })
                     if (storageError) return reject({

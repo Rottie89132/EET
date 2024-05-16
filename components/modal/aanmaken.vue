@@ -30,7 +30,7 @@
                 v-model:previewArray="afbeeldingenArray" />
         </FormStep>
         <FormStep>
-            <FieldPdf label="Menu" name="menu" v-model:preview="menu" />
+            <FieldPdf label="Menu" name="menu" v-model:preview="menu" :bewerken="false" />
             <div v-if="result" class="flex gap-2 mt-6 mb-2">
                 <hr class="my-3" />
                 <p :class="result.statusCode != 200 ? 'text-red-600' : 'text-green-800'"

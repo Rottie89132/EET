@@ -1,19 +1,25 @@
-import { serverSupabaseClient, serverSupabaseServiceRole } from "#supabase/server";
+import { serverSupabaseClient, serverSupabaseServiceRole, serverSupabaseUser } from "#supabase/server";
 
 export default eventHandler((event) => {
 	return new Promise((resolve, reject) => {
 		setTimeout(async () => {
 			const client = await serverSupabaseClient(event);
+			const user = await serverSupabaseUser(event);
             const server = serverSupabaseServiceRole(event);
 			const id = getRouterParams(event).id;
 
-			const { data, error }: Record<string, any> = await client.from("restaurants_table").select("*").eq("id", id).single();
-			if (error)
-				return reject({
-					statusCode: error.code,
-					statusMessage: "Internal Server Error",
-					message: error.message,
-				});
+			if (!user) return reject({
+				statusCode: 401,
+				statusMessage: "Unauthorized",
+				message: "Unauthorized",
+			});
+
+			const { data, error }: Record<string, any> = await client.from("restaurants_table").select("*").eq("id", id).eq('owner_id', user.id).single();
+			if(error) return reject({
+				statusCode: 403,
+				statusMessage: "Forbidden",
+				message: "Je hebt geen toegang tot deze bron"
+			})
 
             await server.storage.from("restaurants").remove([data.menu]);
             await server.storage.from("restaurants").remove([data.thumbnail]);
@@ -21,7 +27,7 @@ export default eventHandler((event) => {
                 await server.storage.from("restaurants").remove([image.Path]);
 			});
 
-			await client.from("restaurants_table").delete().eq("id", id).single();
+			await client.from("restaurants_table").delete().eq("id", id).eq('owner_id', user.id).single();
 
 			return resolve({
 				statusCode: 200,

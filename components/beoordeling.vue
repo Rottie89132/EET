@@ -26,7 +26,7 @@
 			<p class="text-gray-400 md:max-w-[60vw] leading-4 whitespace-pre-wrap mt-1 mb-2 text-pretty text-sm">
 				{{ beoordeling.beoordeling }}
 			</p>
-			<hr class="" />
+			<hr class=" mb-2 mt-4" />
 		</div>
 		<div v-else :class="!installed ? '' : 'mb-20'"></div>
 	</div>

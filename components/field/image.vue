@@ -1,5 +1,5 @@
 <template>
-	<field :name="name" v-slot="{ errorMessage, handleChange, handleBlur }">
+	<field :name="name" v-slot="{ errorMessage, handleChange, handleBlur, field }">
 		<label class="text-base font-bold text-neutral-900" for="file">{{ label }}</label>
 		<div :class="errorMessage ? ' border-[#B92538] focus:border-[#B92538] ' : isDraggingOver ? ' border-black' : ' border-gray-300'" class="w-full flex items-center justify-center relative border-2 border-dashed rounded-lg p-2 mb-3 mt-2 min-h-36" @dragover.prevent="dragOver" @dragleave.prevent="dragLeave" @drop="fileDropped(handleChange, $event)" ref="dropzone">
 			<input accept="image/png, image/jpeg" :multiple="multipe" type="file" aria-label="file" autocomplete="current-file" ref="fileInput" class="absolute inset-0 w-full h-full opacity-0 z-50" @change="fileSelected(handleChange, $event)" @blur="handleBlur" />
@@ -27,10 +27,13 @@
 		label: string;
 		multipe: boolean;
 		name: string;
-		preview: string[];
+		preview: string[] | any;
 		previewArray: object[];
 	}>();
 
+	const { value }: any = useField<string>(name);
+	value.value = preview.value
+	
 	const dropzone = ref(null);
 	const fileInput = ref(null);
 	const isDraggingOver = ref(false);

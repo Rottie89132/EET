@@ -3,7 +3,7 @@
 		<div :class=" installed ? 'fixed w-screen h-full overflow-auto top-0' : '' ">
 			<div :class="!installed ? 'top-[4.5rem] pt-2' : 'top-0 z-40 pt-24'"
 				class="fixed top-0 w-screen z-20 p-3 bg-white"></div>
-			<div :class="!installed ? ' mt-[5.5rem]' : ' mt-[7rem]'" class="px-6">
+			<div :class="!installed ? ' mt-[5.9rem]' : ' mt-[7rem]'" class="px-6">
 				<div class="rounded-lg overflow-hidden">
 					<ClientOnly>
 						<swipe :images="restaurantDetails?.images"></swipe>
@@ -99,7 +99,7 @@
 					<hr class="my-2 mt-3 md:max-w-[60vw]" />
 				</section>
 				<section>
-					<div :class="!installed ? ' top-[4em] md:top-[4.7em] ' : ' top-[6.5em] '"
+					<div :class="!installed ? ' top-[4.2em] md:top-[4.7em] ' : ' top-[6.5em] '"
 						class="z-20 bg-white sticky pb-[0.10rem]">
 						<h2 class="text-2xl font-semibold mt-2 -mb-1">Recensies</h2>
 						<RecensieOverview :restaurantDetails :OkStatus :beoordelingen :openrecensiemodal />
