@@ -24,8 +24,6 @@ export default eventHandler( (event) => {
                 message: "Geen gegevens gevonden in het verzoek"
             })
 
-            console.log(readableData)
-
             const {
                 naam, keuken, telefoon, beschrijving, prijs, stad, locatie,
                 openingstijden, tafels, capaciteit, duur, files

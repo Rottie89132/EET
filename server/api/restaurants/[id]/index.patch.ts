@@ -113,7 +113,6 @@ export default eventHandler(async (event) => {
                         statusMessage: "Internal Server Error",
                         message: storageError.message
                     })
-
                 }
 
                 else {
