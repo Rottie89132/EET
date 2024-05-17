@@ -19,7 +19,7 @@
 					</div>
 					<div v-else class="flex gap-4 items-center">
 						<NuxtLink class="opacity-80" to="/restaurants?pagina=1"> Restaurants </NuxtLink>
-						<button @click="handleModal" class="bg-[#4e995b] p-2 px-4 text-white rounded-lg">Aanmelden</button>
+						<button @click="handleModal" class="bg-[#4e995b] p-2 px-4 text-white rounded-lg">Inloggen</button>
 					</div>
 				</div>
 				<hr class="-pb-1 -mb-2 mt-4" />
@@ -31,7 +31,7 @@
 						<p class="text-2xl font-bold">EET</p>
 					</NuxtLink>
 					<div v-if="!User" class="flex gap-4 items-center">
-						<button @click="handleModal" class="bg-[#4e995b] p-2 px-4 text-white rounded-lg">Aanmelden</button>
+						<button @click="handleModal" class="bg-[#4e995b] p-2 px-4 text-white rounded-lg">Inloggen</button>
 						<icon class="w-8 h-8" name="ic:sharp-menu" size="1.5rem" @click="toglenav" />
 					</div>
 					<div v-else class="flex gap-4 items-center">
@@ -87,7 +87,7 @@
 			</div>
 		</footer>
 		<div v-if="installed && !User" class="z-30 fixed right-6 top-14 rounded-md bg-[#3f7f4a] p-2 px-4 text-white">
-			<button @click="handleModal" class="">Aanmelden</button>
+			<button @click="handleModal" class="">Inloggen</button>
 		</div>
 		<div v-if="installed && User" class="fixed right-6 top-14 z-40">
 			<NuxtLink to="/account">
@@ -155,7 +155,6 @@
 	});
 
 	await loaduser();
-
 </script>
 
 <style scoped>

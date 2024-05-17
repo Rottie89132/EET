@@ -321,69 +321,69 @@
 		}
 	};
 
-	const ImageDimension = async (value: any) => {
-		if (Array.isArray(value)) {
-			const dimensions = [];
-			for (const file of value) {
-				const dimension = await getImageDimension(file);
-				dimensions.push(dimension);
-			}
-			return dimensions;
-		} else {
-			return await getImageDimension(value);
-		}
-	};
+	// const ImageDimension = async (value: any) => {
+	// 	if (Array.isArray(value)) {
+	// 		const dimensions = [];
+	// 		for (const file of value) {
+	// 			const dimension = await getImageDimension(file);
+	// 			dimensions.push(dimension);
+	// 		}
+	// 		return dimensions;
+	// 	} else {
+	// 		return await getImageDimension(value);
+	// 	}
+	// };
 
-	const getImageDimension = (urlOrFile: any) => {
-		return new Promise((resolve, reject) => {
-			const processFile = (file: Blob) => {
-				const reader = new FileReader();
-				reader.readAsDataURL(file);
+	// const getImageDimension = (urlOrFile: any) => {
+	// 	return new Promise((resolve, reject) => {
+	// 		const processFile = (file: Blob) => {
+	// 			const reader = new FileReader();
+	// 			reader.readAsDataURL(file);
 
-				reader.onload = () => {
-					const img = new Image();
-					img.onload = () => resolve(`${img.width} X ${img.height}`);
-					img.src = reader.result as string;
-				};
-			};
+	// 			reader.onload = () => {
+	// 				const img = new Image();
+	// 				img.onload = () => resolve(`${img.width} X ${img.height}`);
+	// 				img.src = reader.result as string;
+	// 			};
+	// 		};
 
-			if (typeof urlOrFile === "string") {
-				fetch(urlOrFile)
-					.then((response) => response.blob())
-					.then(processFile)
-					.catch(reject);
-			} else {
-				processFile(urlOrFile);
-			}
-		});
-	};
+	// 		if (typeof urlOrFile === "string") {
+	// 			fetch(urlOrFile)
+	// 				.then((response) => response.blob())
+	// 				.then(processFile)
+	// 				.catch(reject);
+	// 		} else {
+	// 			processFile(urlOrFile);
+	// 		}
+	// 	});
+	// };
 
-	const isThumbnailDimensionValid = async (value: any) => {
-		try {
-			new URL(value);
-			return true;
-		} catch (_) {
-			const data = await ImageDimension(value);
-			if (data !== "1728 X 668") return false;
-			return true;
-		}
-	};
+	// const isThumbnailDimensionValid = async (value: any) => {
+	// 	try {
+	// 		new URL(value);
+	// 		return true;
+	// 	} catch (_) {
+	// 		const data = await ImageDimension(value);
+	// 		if (data !== "1728 X 668") return false;
+	// 		return true;
+	// 	}
+	// };
 
-	const areDimensionsValid = async (value: any) => {
-		try {
-			new URL(value);
-			return true;
-		} catch (_) {
-			const Errors: any = ref([]);
-			const data: any = await ImageDimension(value);
+	// const areDimensionsValid = async (value: any) => {
+	// 	try {
+	// 		new URL(value);
+	// 		return true;
+	// 	} catch (_) {
+	// 		const Errors: any = ref([]);
+	// 		const data: any = await ImageDimension(value);
 
-			data.forEach((value: any) => {
-				if (value !== "1728 X 668") Errors.value.push(false);
-			});
+	// 		data.forEach((value: any) => {
+	// 			if (value !== "1728 X 668") Errors.value.push(false);
+	// 		});
 
-			return Errors.value.length < 1;
-		}
-	};
+	// 		return Errors.value.length < 1;
+	// 	}
+	// };
 
 	const isAtleasttreeFile = (value: any) => {
 		return value.length == 3;
@@ -462,10 +462,10 @@
 			duur: yup.number().min(1, "Het aantal uren moet minimaal 1 zijn").required("Het invullen van de duur is verplicht."),
 		}),
 		yup.object().shape({
-			thumbnail: yup.mixed().test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).test("fileAfmeting", "De afmetingen van het bestand moeten precies 1728 x 668 pixels zijn.", isThumbnailDimensionValid).required("Het uploaden van een thumbnail is verplicht."),
+			thumbnail: yup.mixed().test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).required("Het uploaden van een thumbnail is verplicht."),
 		}),
 		yup.object().shape({
-			afbeeldingen: yup.array().of(yup.mixed()).min(3).max(3).test("minCount", "Het aantal bestanden moet minimaal 3 zijn.", isAtleasttreeFile).test("fileCount", "Het aantal bestanden overschrijdt het maximale aantal van 3.", isFileCountValid).test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).test("fileAfmeting", "De afmetingen van de bestanden moeten precies 1728 x 668 pixels zijn.", areDimensionsValid).required("Het uploaden van minimaal 3 afbeeldingen is verplicht.").required("Het uploaden van minimaal 3 afbeeldingen is verplicht."),
+			afbeeldingen: yup.array().of(yup.mixed()).min(3).max(3).test("minCount", "Het aantal bestanden moet minimaal 3 zijn.", isAtleasttreeFile).test("fileCount", "Het aantal bestanden overschrijdt het maximale aantal van 3.", isFileCountValid).test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen PNG- en JPEG-bestandstypen zijn toegestaan.", isFileTypeValid).required("Het uploaden van minimaal 3 afbeeldingen is verplicht.").required("Het uploaden van minimaal 3 afbeeldingen is verplicht."),
 		}),
 		yup.object().shape({
 			menu: yup.mixed().test("fileSize", "Het bestand overschrijdt de maximale grootte van 10MB.", isFileSizeValid).test("fileType", "Alleen pdf-bestandstypen zijn toegestaan.", isFilePdf).required("Het uploaden van een menukaart is verplicht."),

@@ -7,6 +7,9 @@
 			<p class="text-lg max-w-[80%] -mt-4 opacity-65 leading-5 text-balance text-center">
 				Je account is aangemaakt. Je kunt nu inloggen en reserveren.
 			</p>
+			<NuxtLink to="/home/" class="bg-[#4e995b] p-1 px-8 text-white rounded-lg">
+				Naar home
+			</NuxtLink>
 		</div>
 	</div>
 </template>

@@ -5,6 +5,7 @@ export default defineEventHandler((event) => {
         const client = await serverSupabaseClient(event);
         const server = serverSupabaseServiceRole(event);
         const user = await serverSupabaseUser(event);
+        const image: string[] = []
 
         if (!user) return {
             statusCode: 401,
@@ -26,7 +27,14 @@ export default defineEventHandler((event) => {
         if (files.length >= 1) {
 
             files.forEach(async (file: any) => {
+                if (["image/png", "image/jpeg"].includes(file.type)){
+                    image.push(file)
+                }
+            })
+        }
 
+        if (image.length >= 1) {
+            image.forEach(async (file: any) => {
                 if (file.data.length > 10000000) return reject({
                     statusCode: 413,
                     statusMessage: "Payload Te Groot",
@@ -38,10 +46,9 @@ export default defineEventHandler((event) => {
                     statusMessage: "Niet-ondersteund Media Type",
                     message: "Het verzoek heeft een media type dat de server of bron niet ondersteunt"
                 })
-
             })
 
-            if (user.user_metadata.avatar_url) {
+            if (!user.user_metadata.avatar_url) {
                 const { error } = await server.storage.from("avatars").upload(`${user.id}/avatar${files[0].filename.slice(files[0].filename.lastIndexOf('.'))}`, files[0].data)
 
                 if (error) return reject({
@@ -49,7 +56,7 @@ export default defineEventHandler((event) => {
                     statusMessage: "Interne Serverfout",
                     message: "Er is een fout opgetreden bij het verwerken van het verzoek"
                 })
-            } 
+            }
             else {
                 const { error } = await server.storage.from("avatars").update(`${user.id}/avatar${files[0].filename.slice(files[0].filename.lastIndexOf('.'))}`, files[0].data, {
                     upsert: true
@@ -61,9 +68,10 @@ export default defineEventHandler((event) => {
                     message: "Er is een fout opgetreden bij het verwerken van het verzoek"
                 })
             }
+
         }
 
-        if (files.length === 1 && naam != "undefined") {
+        if (image.length === 1 && naam != "undefined") {
             const { data } = server.storage.from('avatars').getPublicUrl(`${user.id}/avatar${files[0].filename.slice(files[0].filename.lastIndexOf('.'))}`)
             const { error } = await client.auth.updateUser({
                 data: {
@@ -78,7 +86,7 @@ export default defineEventHandler((event) => {
                 message: error.message
             })
 
-        } else if (files.length === 1 && naam == "undefined") {
+        } else if (image.length === 1 && naam == "undefined") {
             const { data } = server.storage.from('avatars').getPublicUrl(`${user.id}/avatar${files[0].filename.slice(files[0].filename.lastIndexOf('.'))}`)
             const { error } = await client.auth.updateUser({
                 data: {
@@ -93,7 +101,7 @@ export default defineEventHandler((event) => {
             })
 
 
-        } else if (files.length < 0 && naam != "undefined") {
+        } else if (image.length < 1 && naam != "undefined") {
             const { error } = await client.auth.updateUser({
                 data: {
                     name: naam,

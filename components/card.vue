@@ -1,7 +1,7 @@
 <template>
     <div v-if="!loading" class="shadow-md bg-slate-50 rounded-xl">
         <div class="rounded-md h-fit flex-shrink-0">
-            <NuxtImg draggable="false" class="w-full h-full object-cover rounded-t-lg"
+            <NuxtImg draggable="false" class="w-full h-[10rem] object-cover rounded-t-lg"
                 :src="afbeelding ? afbeelding : '/image/placeholder-eten.jpg'" @error="handleImageError"
                 alt="Restaurant 2" />
         </div>

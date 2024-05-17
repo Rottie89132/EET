@@ -33,7 +33,7 @@
 								<h2 class="text-xl font-bold">{{ restaurant.naam }}</h2>
 								<p class="text-sm opacity-85 mb-2 -mt-1">Bedankt voor de reservering.</p>
 								<NuxtImg :src="restaurant.thumbnail.data.publicUrl" alt="Restaurant Image"
-									class="rounded-md mt-2" />
+									class="rounded-md mt-2 w-full h-[10rem] object-cover" />
 								<div class="flex items-center justify-start gap-2 mt-3 mb-3 text-white text-sm">
 									<p class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-[#4e995b]">
 										<icon name="material-symbols:calendar-month-outline-rounded" size="1.1em" />

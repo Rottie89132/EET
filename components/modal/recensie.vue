@@ -28,12 +28,12 @@
 	const wordCount = (value: any) => {
 		if (!value) return false;
 		const wordCount = value.trim().split(/\s+/).length;
-		return wordCount > 10;
+		return wordCount > 2;
 	};
 
 	const validationSchema = [
 		yup.object({
-			recensie: yup.string().required("Recensie is verplicht").label("Recensie").min(25, "Recensie moet minimaal 25 tekens bevatten").max(2500, "Recensie mag maximaal 2500 tekens bevatten").test("word-count", "Recensie moet meer dan 10 woorden bevatten", wordCount),
+			recensie: yup.string().required("Recensie is verplicht").label("Recensie").min(10, "Recensie moet minimaal 10 tekens bevatten").max(2500, "Recensie mag maximaal 2500 tekens bevatten").test("word-count", "Recensie moet meer dan 2 woorden bevatten", wordCount),
 		}),
 		yup.object({
 			beoordeling: yup.number().required("beoordeling is verplicht").label("beoordeling"),

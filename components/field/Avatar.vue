@@ -11,7 +11,7 @@
 						<span>om te uploaden</span>
 					</label>
 				</h3>
-				<p class="mt-1 text-xs text-gray-500">PNG, JPG tot 10MB (1 x) (800 X 800)</p>
+				<p class="mt-1 text-xs text-gray-500">PNG, JPG tot 10MB (1 x)</p>
 			</div>
 			<div class="flex-col flex gap-2">
 				<NuxtImg class="rounded-lg" v-for="(thumb, index) in preview" :key="index" :src="thumb" v-if="preview && preview.length" />
@@ -58,9 +58,6 @@
 		handleChange(event);
 	};
 
-	const IMAGE_WIDTH = 800;
-	const IMAGE_HEIGHT = 800;
-
 	const clearPreviews = () => {
 		preview.value = [];
 		previewArray.value = [];
@@ -77,11 +74,7 @@
 		reader.onload = () => {
 			const img = new Image();
 			img.onload = () => {
-				if (img.width !== IMAGE_WIDTH || img.height !== IMAGE_HEIGHT) {
-					clearPreviews();
-					return;
-				}
-
+				
 				if (preview.value.length >= 1) {
 					preview.value.shift();
 					previewArray.value.shift();
