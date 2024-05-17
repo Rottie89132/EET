@@ -1,8 +1,13 @@
 <template>
 	<field :name="name" v-slot="{ errorMessage, handleChange, handleBlur, field }">
 		<label class="text-base font-bold text-neutral-900" for="file">{{ label }}</label>
-		<div :class="errorMessage ? ' border-[#B92538] focus:border-[#B92538] ' : isDraggingOver ? ' border-black' : ' border-gray-300'" class="w-full flex items-center justify-center relative border-2 border-dashed rounded-lg p-2 mb-3 mt-2 min-h-36" @dragover.prevent="dragOver" @dragleave.prevent="dragLeave" @drop="fileDropped(handleChange, $event)" ref="dropzone">
-			<input accept="image/png, image/jpeg" type="file" aria-label="file" autocomplete="current-file" ref="fileInput" class="absolute inset-0 w-full h-full opacity-0 z-50" @change="fileSelected(handleChange, $event)" @blur="handleBlur" />
+		<div :class="errorMessage ? ' border-[#B92538] focus:border-[#B92538] ' : isDraggingOver ? ' border-black' : ' border-gray-300'"
+			class="w-full flex items-center justify-center relative border-2 border-dashed rounded-lg p-2 mb-3 mt-2 min-h-36"
+			@dragover.prevent="dragOver" @dragleave.prevent="dragLeave" @drop="fileDropped(handleChange, $event)"
+			ref="dropzone">
+			<input accept="image/png, image/jpeg" type="file" aria-label="file" autocomplete="current-file"
+				ref="fileInput" class="absolute inset-0 w-full h-full opacity-0 z-50"
+				@change="fileSelected(handleChange, $event)" @blur="handleBlur" />
 			<div v-if="preview.length < 1" class="text-center">
 				<h3 class="mt-2 text-sm font-medium text-gray-900">
 					<label for="fileInput" class="relative cursor-pointer text-gray-500">
@@ -14,7 +19,8 @@
 				<p class="mt-1 text-xs text-gray-500">PNG, JPG tot 10MB (1 x)</p>
 			</div>
 			<div class="flex-col flex gap-2">
-				<NuxtImg class="rounded-lg" v-for="(thumb, index) in preview" :key="index" :src="thumb" v-if="preview && preview.length" />
+				<NuxtImg class="rounded-lg w-[19rem] h-[19rem] object-cover" v-for="(thumb, index) in preview" :key="index"
+					:src="thumb" v-if="preview && preview.length" />
 			</div>
 		</div>
 		<ErrorMessage class="mb-2 -mt-1 text-xs text-[#B92538] block" :name="name"></ErrorMessage>

@@ -16,7 +16,7 @@ export default defineEventHandler((event) => {
         return resolve({
             statusCode: 200,
             statusMessage: "OK",
-            message: "User account deleted successfully."
+            message: "Account is verwijderd."
         });
     })
 });

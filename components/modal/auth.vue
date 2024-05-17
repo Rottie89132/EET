@@ -101,7 +101,6 @@
 	import * as yup from "yup";
 
 	const { $pwa }: any = useNuxtApp();
-	const supabase = useSupabaseClient();
 
 	const modal = ref(null);
 	const modalDelay = ref(null);
@@ -161,7 +160,7 @@
 		});
 
 		displayLoading.value = pending.value;
-
+		if (error.value) bericht.value = error.value.data.message;
 		if (!error.value) {
 			User.value = data.value?.user.user_metadata;
 			closeModal();
@@ -183,7 +182,7 @@
 			method: "post",
 			body: response,
 		});
-
+		if (error.value) bericht.value = error.value.data.message;
 		if (!error.value) {
 			setTimeout(() => {
 				closeModal();
@@ -204,7 +203,7 @@
 		});
 
 		displayLoading.value = pending.value;
-
+		if (error.value) bericht.value = error.value.data.message;
 		if (!error.value) {
 			setTimeout(() => {
 				bericht.value = "Controleer je email voor een bevestigingslink.";
@@ -223,7 +222,7 @@
 		});
 
 		displayLoading.value = pending.value;
-
+		if (error.value) bericht.value = error.value.data.message;
 		if (!error.value) {
 			bericht.value = "Controleer je email voor een reset link.";
 			setTimeout(() => {

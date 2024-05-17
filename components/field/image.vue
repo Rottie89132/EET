@@ -14,7 +14,7 @@
 				<p class="mt-1 text-xs text-gray-500">PNG, JPG tot 10MB ({{ max }}x)</p>
 			</div>
 			<div class="flex-col flex gap-2">
-				<NuxtImg class="rounded-lg" v-for="(thumb, index) in preview" :key="index" :src="thumb" v-if="preview && preview.length" />
+				<NuxtImg class="rounded-lg w-[100vh] h-[10rem] border-2 object-cover" v-for="(thumb, index) in preview" :key="index" :src="thumb" v-if="preview && preview.length" />
 			</div>
 		</div>
 		<ErrorMessage class="mb-2 -mt-1 text-xs text-[#B92538] block" :name="name"></ErrorMessage>
@@ -32,8 +32,8 @@
 	}>();
 
 	const { value }: any = useField<string>(name);
-	value.value = preview.value
-	
+	value.value = preview.value;
+
 	const dropzone = ref(null);
 	const fileInput = ref(null);
 	const isDraggingOver = ref(false);
@@ -75,7 +75,6 @@
 		reader.onload = () => {
 			const img = new Image();
 			img.onload = () => {
-				
 				if (preview.value.length >= max.value) {
 					preview.value.shift();
 					previewArray.value.shift();
