@@ -23,7 +23,7 @@
 						<div class="flex items-center justify-between">
 							<div>
 								<h2 class="font-semibold flex items-center gap-1 text-lg">
-									{{ User?.name || User?.email.split("@")[0] }}
+									{{ User?.name || User?.email?.split("@")[0] || "Gebruiker" }}
 									<span v-if="User?.email_verified" class="text-sm">
 										<icon name="ic:sharp-verified" size="1.5em" class="text-white text-opacity-80">
 										</icon>
@@ -131,18 +131,12 @@
 		<div v-if="title == 'Instelling'">
 			<p class="-mt-2 text-gray-600">Wijzig hier uw instellingen</p>
 			<hr class="my-2 mb-2" />
-			<form @submit.prevent="saveSettings">
-				<div>
-					<label for="name" class="block font-medium text-gray-700">Naam</label>
-					<input type="text" id="name" name="name" class="mt-1 p-2 block w-full border rounded-md" />
-				</div>
-
-				<div class="mt-4">
-					<label for="photo" class="block font-medium text-gray-700">Foto</label>
-					<input type="file" id="photo" name="photo" accept="image/*"
-						class="mt-1 p-2 block w-full border rounded-md" />
-				</div>
-
+			<Form @submit="handleRequest" :validation-schema="schema" v-slot="{ meta }">
+				<FieldInput type="text" name="naam" label="Naam" />
+				
+				<FieldAvatar label="Avatar" name="avatar" v-model:preview="Avatar"
+                v-model:previewArray="AvatarArray" />
+				
 				<div class="mt-6 flex gap-2 items-center">
 					<div class="bg-[#de4747] text-white p-1 px-4 rounded-lg" @click="deleteAccount">
 						<span v-if="displayLoading" class="">
@@ -165,7 +159,7 @@
 						{{ result.message }}
 					</p>
 				</div>
-			</form>
+			</Form>
 		</div>
 	</Modal>
 </template>
@@ -183,6 +177,9 @@
 	const active = ref(false);
 	const activeDelay = ref(false);
 	const title = ref("Account");
+
+	const Avatar = ref([]);
+	const AvatarArray = ref([]);
 
 	const displayLoading = ref(false);
 	const result: Record<string, any> = ref("");
@@ -216,6 +213,12 @@
 				href: "/image/Logo.svg",
 			},
 		],
+	});
+
+	let schema: any;
+	schema = yup.object().shape({
+		naam: yup.string(),
+		avatar: yup.mixed()
 	});
 
 	const { data: user }: Record<string, any> = await useFetch("/api/users");
@@ -254,18 +257,35 @@
 		}, 100);
 	};
 
-	const saveSettings = async (value: object) => {
+
+	const handleRequest = async (values: any, actions: any) => {
 		displayLoading.value = true;
-		const { data, error, pending }: any = await useFetch("/api/account", {
+
+		const value = {
+			...values,
+		};
+
+		const formData = new FormData();
+
+		for (const key in value) {
+			if (key === "avatar") {
+				const blob = new Blob([value[key]], { type: value[key]?.type });
+				formData.append(`file:avatar`, blob, value[key]?.name);
+			} else {
+				formData.append(key, value[key]);
+			}
+		}
+
+		const { pending, data, error }: any = await useFetch("/api/account", {
 			method: "put",
-			body: value,
+			body: formData,
 		});
 
+		
 		displayLoading.value = pending.value;
+		if (error.value) result.value = error.value.data;
 		if (!error.value) {
 			result.value = data.value;
-			const { data: userData }: Record<string, any> = await useFetch("/api/users");
-			User.value = userData.value.user;
 			setTimeout(() => {
 				closeModal();
 			}, 4000);
@@ -281,4 +301,19 @@
 		displayLoading.value = pending.value;
 		if (!error.value) navigateTo("/");
 	};
+
+	configure({
+		validateOnBlur: true,
+		validateOnChange: true,
+		validateOnInput: true,
+		validateOnModelUpdate: true,
+	});
+
+	watch(active, (value) => {
+		if (!value) {
+			result.value = "";
+			Avatar.value = [];
+			AvatarArray.value = [];
+		}
+	});
 </script>

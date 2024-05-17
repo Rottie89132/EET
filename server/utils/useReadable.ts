@@ -6,7 +6,7 @@ export default async (data: any) => {
                 item.data = JSON.parse(jsonString);
             } catch (error) {
                 console.error('Invalid JSON:', item.data);
-                item.data = []; // or some default value
+                item.data = [];
             }
         } else if (!item.name.includes('file') && Buffer.isBuffer(item.data)) {
             return { ...item, data: item.data.toString('utf8') };
