@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+
+	import { Tailwind, Html, Head, Preview, Button, Body, Hr } from '@vue-email/components';
+
 	defineProps({
 		url: { type: String, default: "/" },
 		name: { type: String, default: "Gebruiker" },
@@ -10,14 +13,16 @@
 </script>
 
 <template>
-	<ETailwind>
-		<EHtml>
-			<EHead />
-			<EPreview>Beste {{ name }}, bedankt voor het reserveren bij EET. Klik op de onderstaande knop om je reservering te bevestigen. </EPreview>
-			<EBody class="">
+	<Tailwind>
+		<Html>
+			<Head>
+				<title>Reservering</title>
+			</Head>
+			<Preview>Beste {{ name }}, bedankt voor het reserveren bij EET. Klik op de onderstaande knop om je reservering te bevestigen. </Preview>
+			<Body class="">
 				<div class="w-full max-w-md  rounded py-6 pr-6">
 					<p class="text-gray-500 text-sm mb-4">Beste {{ name }}, bedankt voor het reserveren bij EET. Klik op de onderstaande knop om je reservering te bevestigen.</p>
-					<EHr />
+					<Hr />
 					<div class="-mt-2">
 						<p class="-mb-2 text-gray-700">
 							<strong>Restaurant:</strong> <span class="font-normal">{{ restaurant }}</span>
@@ -32,14 +37,14 @@
 							<strong>Aantal personen:</strong> <span class="font-normal">{{ personen }}</span>
 						</p>
 					</div>
-					<EHr />
-					<EButton :href="url" class="text-white text-center bg-[#4e995b] font-bold text-sm rounded-md no-underline w-full py-2"> Bevestig reservering </EButton>
+					<Hr />
+					<Button :href="url" class="text-white text-center bg-[#4e995b] font-bold text-sm rounded-md no-underline w-full py-2"> Bevestig reservering </Button>
 					<p class="text-gray-500 text-sm mt-5">
 						<span class="font-black">Deze link is 30 minuten geldig.</span>
 						Als u geen reservering heeft gemaakt, kunt u deze e-mail negeren.
 					</p>
 				</div>
-			</EBody>
-		</EHtml>
-	</ETailwind>
+			</Body>
+		</Html>
+	</Tailwind>
 </template>

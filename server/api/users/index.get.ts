@@ -8,7 +8,8 @@ interface Session {
 export default defineEventHandler((event) => {
     return new Promise(async (resolve, reject) => {
         const client = await serverSupabaseClient(event)
-        const user = await serverSupabaseUser(event)
+        const { data, error }: Record<string, any> = await client.auth.getUser();
+        const { user }: any = data
 
         const accessToken = getCookie(event, "sb-access-token")
         const refreshToken = getCookie(event, "sb-refresh-token")
@@ -18,7 +19,7 @@ export default defineEventHandler((event) => {
             access_token: accessToken as string
         }
 
-        if (!user) {
+        if (error) {
             const { data, error } = await client.auth.refreshSession(currentSession)
             const { session, user }: any = data
 

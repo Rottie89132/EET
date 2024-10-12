@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+import vue from '@vitejs/plugin-vue'
+
 export default defineNuxtConfig({
   devtools: { enabled: false },
+  
   modules: [
     "@nuxtjs/supabase",
     "@nuxtjs/tailwindcss",
@@ -13,9 +17,9 @@ export default defineNuxtConfig({
     "@formkit/auto-animate",
     "@vee-validate/nuxt",
     'nuxt-swiper',
-    '@vue-email/nuxt',
     'nuxt-scheduler'
   ],
+
   nitro: {
     experimental: {
       websocket: true,
@@ -23,13 +27,15 @@ export default defineNuxtConfig({
     imports: {
       dirs: ["./server/utils"]
     },
+    rollupConfig: {
+      plugins: [vue()]
+    },
   },
-  vueEmail: {
-    playground: true
-  },
+
   veeValidate: {
-    autoImports: true,
+    autoImports: false,
   },
+
   pwa: {
     strategies: "injectManifest",
     registerType: 'autoUpdate',
@@ -77,6 +83,7 @@ export default defineNuxtConfig({
       suppressWarnings: true,
     },
   },
+
   supabase: {
     redirectOptions: {
       login: '/login',
@@ -94,6 +101,7 @@ export default defineNuxtConfig({
       },
     }
   },
+
   runtimeConfig: {
     Sender: process.env.SmtpSender,
     Server: process.env.SmtpServer,
@@ -101,9 +109,11 @@ export default defineNuxtConfig({
     Password: process.env.SmtpPass,
     RedirectUrl: process.env.siteUrl,
   },
+
   googleSignIn: {
     clientId: process.env.googleClientId,
   },
+
   app: {
     head: {
       meta: [
@@ -117,4 +127,6 @@ export default defineNuxtConfig({
       viewport: 'viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
     }
   },
+
+  compatibilityDate: "2024-10-12",
 })

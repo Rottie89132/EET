@@ -4,7 +4,8 @@ export default defineEventHandler((event) => {
     return new Promise(async (resolve, reject) => {
         const client = await serverSupabaseClient(event);
         const server = serverSupabaseServiceRole(event);
-        const user = await serverSupabaseUser(event);
+        const { data: userdata }: Record<string, any> = await client.auth.getUser();
+        const { user }: any = userdata
         const image: string[] = []
 
         if (!user) return {

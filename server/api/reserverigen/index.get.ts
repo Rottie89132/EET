@@ -24,7 +24,8 @@ const procesdata = async (data: any, client: any) => {
 export default eventHandler(async (event) => {
     return new Promise(async (resolve, reject) => {
         const client = await serverSupabaseClient(event)
-        const user: any = await serverSupabaseUser(event)
+        const { data: userdata }: Record<string, any> = await client.auth.getUser();
+        const { user }: any = userdata
         const status = getQuery(event).status
 
         if (!user) return reject({

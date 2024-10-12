@@ -4,7 +4,9 @@ export default eventHandler(async (event) => {
     return new Promise(async (resolve, reject) => {
         const client: any = await serverSupabaseClient(event)
         const server: any = serverSupabaseServiceRole(event)
-        const user: any = await serverSupabaseUser(event)
+        const { data: userdata }: Record<string, any> = await client.auth.getUser();
+        const { user }: any = userdata
+        
         const id = getRouterParams(event).id
 
         if (!user) return reject({

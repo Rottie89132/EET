@@ -3,8 +3,9 @@ import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
 export default eventHandler( (event) => {
     return new Promise( (resolve, reject) => {
         setTimeout(async () => {
-            const user: any = await serverSupabaseUser(event)
             const client: any = await serverSupabaseClient(event)
+            const { data: userdata, error }: Record<string, any> = await client.auth.getUser();
+            const { user }: any = userdata
 
             if (!user) return reject({
                 statusCode: 401,

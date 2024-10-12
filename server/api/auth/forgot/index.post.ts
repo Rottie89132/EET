@@ -1,5 +1,6 @@
 import { serverSupabaseServiceRole } from "#supabase/server";
-import { useCompiler } from '#vue-email'
+import UseEmail from '~~/components/emails/ResetPassword.vue'
+import { render } from '@vue-email/render'
 const { RedirectUrl } = useRuntimeConfig();
 
 export default defineEventHandler((event) => {
@@ -40,10 +41,8 @@ export default defineEventHandler((event) => {
                 await useStorage("ResetPasswordByUserId").removeItem(SessionId)
             }, 30 * 60 * 1000);
 
-            const template = await useCompiler('ResetPassword.vue', {
-                props: {
-                    url: `${RedirectUrl}/auth/reset/${user.id}/${SessionId}`,
-                }
+            const template = await render(UseEmail, {
+                url: `${RedirectUrl}/auth/reset/${user.id}/${SessionId}`,
             }).catch((error) => {
                 return reject({
                     statusCode: 500,

@@ -29,7 +29,7 @@ export default async (options: any) => {
         from: Sender,
         to: recepient,
         subject: subject,
-        html: body.html,
+        html: body,
     }
 
     transporter.sendMail(mailOptions, (error: any, info: any) => {

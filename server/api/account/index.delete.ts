@@ -1,11 +1,13 @@
-import { serverSupabaseUser, serverSupabaseServiceRole } from "#supabase/server";
+import { serverSupabaseUser, serverSupabaseServiceRole, serverSupabaseClient } from "#supabase/server";
 
 export default defineEventHandler((event) => {
     return new Promise(async (resolve, reject) => {
-        const user: any = await serverSupabaseUser(event);
-        const client = serverSupabaseServiceRole(event);
+        const client = await serverSupabaseClient(event);
+        const server = serverSupabaseServiceRole(event);
+        const { data: userdata }: Record<string, any> = await client.auth.getUser();
+        const { user }: any = userdata
 
-        const { data, error } = await client.auth.admin.deleteUser(user.id);
+        const { data, error } = await server.auth.admin.deleteUser(user.id);
 
         if (error) return reject({
             statusCode: error.code,

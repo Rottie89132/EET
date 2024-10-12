@@ -28,7 +28,8 @@ export default eventHandler((event) => {
     return new Promise((resolve, reject) => {
         setTimeout(async () => {
             const client = await serverSupabaseClient(event)
-            const userclient: any = await serverSupabaseUser(event)
+            const { data: userdata, error }: Record<string, any> = await client.auth.getUser();
+            const { user: userclient }: any = userdata
             const { pagina, stad, keuken, searchOwner }: any = getQuery(event)
 
             if (pagina) {

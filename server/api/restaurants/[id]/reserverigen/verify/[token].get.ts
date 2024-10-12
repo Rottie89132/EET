@@ -6,7 +6,7 @@ export default eventHandler(async (event) => {
         const { id, token } = getRouterParams(event)
 
         const data: Record<string, any> | null = await useStorage("VerifyRequired").getItem(token)
-
+        
         if (!data) return reject({
             statusCode: 400,
             statusMessage: "Foutieve aanvraag",

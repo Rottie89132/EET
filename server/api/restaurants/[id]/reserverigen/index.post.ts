@@ -1,11 +1,14 @@
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server'
-import { useCompiler } from '#vue-email'
+import UseEmail from '~~/components/emails/Reservering.vue'
+import { render } from '@vue-email/render'
+
 const { RedirectUrl } = useRuntimeConfig()
 
 export default eventHandler(async (event) => {
     return new Promise(async (resolve, reject) => {
         const client = await serverSupabaseClient(event)
-        const user: any = await serverSupabaseUser(event)
+        const { data: userdata }: Record<string, any> = await client.auth.getUser();
+        const { user }: any = userdata
         const id = getRouterParams(event).id
 
         const request = await readBody(event)
@@ -49,15 +52,13 @@ export default eventHandler(async (event) => {
                 await useStorage("VerifyRequired").removeItem(SessionId)
             }, 30 * 60 * 1000);
 
-            const template = await useCompiler('Reservering.vue', {
-                props: {
-                    url: `${RedirectUrl}/restaurants/${id}/reserveringen/verify/${SessionId}`,
-                    restaurant: data.naam,
-                    name: request.naam,
-                    datum: request.datum,
-                    tijd: request.tijd,
-                    personen: request.aantalPersonen,
-                }
+            const template = await render(UseEmail, {
+                url: `${RedirectUrl}/restaurants/${id}/reserveringen/verify/${SessionId}`,
+                restaurant: data.naam,
+                name: request.naam,
+                datum: request.datum,
+                tijd: request.tijd,
+                personen: request.aantalPersonen,
             }).catch((error) => {
                 return reject({
                     statusCode: 500,
