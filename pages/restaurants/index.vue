@@ -2,11 +2,11 @@
 	<div class="h-screen">
 		<div :class=" installed ? 'fixed w-screen h-full overflow-auto top-0' : '' ">
 			<div class="mt-24">
-				<div :class="!installed ? 'top-[4rem] sticky -mt-14' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'" class="w-full z-10 px-6 bg-white">
+				<div :class="!installed ? 'top-[4rem] sticky -mt-14' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'" class="z-10 w-full px-6 bg-white">
 					<div class="mb-4">
-						<h3 class="xl:text-3xl text-xl font-bold pt-5">Restaurants</h3>
-						<p class="xl:text-sm text-xs z-0 opacity-80 mb-2">Hier zijn de restaurants die wij bieden voor jou!</p>
-						<div class="flex mb-1 mt-2 justify-between">
+						<h3 class="pt-5 text-xl font-bold xl:text-3xl">Restaurants</h3>
+						<p class="z-0 mb-2 text-xs xl:text-sm opacity-80">Hier zijn de restaurants die wij bieden voor jou!</p>
+						<div class="flex justify-between mt-2 mb-1">
 							<div>
 								<form @submit.prevent="handleSearch">
 									<input v-model="navstad" class="placeholder:text-sm p-1 pl-3 border-2 xl:w-[10em] w-[9rem] appearance-none outline-none rounded-md" placeholder="zoeken op stad" />
@@ -36,9 +36,9 @@
 					<hr class="pb-2" />
 				</div>
 				<div :class="!installed ? 'pb-6 mt-6' : ' mt-[6.2rem] sm:mt-[4.4rem] overflow-auto w-full h-[72vh] sm:h-[78vh] md:h-[78vh] fixed'">
-					<div class="grid h-fit pt-2 gap-4 px-6 sm:grid-cols-2 md:grid-cols-3 :grid-cols-3 grid-rows-1">
+					<div class="grid grid-rows-1 gap-4 px-6 pt-2 h-fit sm:grid-cols-2 md:grid-cols-3 :grid-cols-3">
 						<div :class="!installed ? '' : 'last:mb-[4.4rem] last:sm:mb-10  last:md:mb-[8em] '" v-for="restaurant in items">
-							<Card :loading="loading" :naam="restaurant.naam" :plaats="restaurant.plaats" :afbeelding="restaurant.thumbnail.data.publicUrl" :keuken="restaurant.keuken" :id="`${restaurant.id}`" :prijs="restaurant.prijs" :rating="restaurant.beoordeling" :beschrijving="restaurant.beschrijving"> </Card>
+							<Card :loading="loading" :naam="restaurant.naam" :plaats="restaurant.plaats" :afbeelding="restaurant.thumbnail.data.publicUrl" :keuken="restaurant.keuken" :id="`${restaurant.id}`" :prijs="restaurant.prijs" :rating="restaurant.beoordeling" :beschrijving="restaurant.beschrijving" :images="restaurant.images"/>
 						</div>
 					</div>
 				</div>

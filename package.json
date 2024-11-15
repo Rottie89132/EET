@@ -28,14 +28,14 @@
   "devDependencies": {
     "@formkit/auto-animate": "^0.8.1",
     "@nuxt/image": "^1.4.0",
-    "@nuxtjs/supabase": "^1.2.2",
+    "@nuxtjs/supabase": "^1.4.2",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@types/nodemailer": "^6.4.14",
     "@vee-validate/nuxt": "^4.12.6",
     "@vite-pwa/nuxt": "^0.6.0",
     "@vue-macros/nuxt": "^1.9.21",
     "@vueuse/nuxt": "^10.9.0",
-    "nuxt": "^3.13.2",
+    "nuxt": "^3.14.159",
     "nuxt-icon": "^0.6.9",
     "nuxt-scheduler": "^0.1.9"
   }

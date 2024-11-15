@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<FormWizard @submit="onSubmit" :validation-schema="reserveringSchema">
-			<div class="flex items-center justify-start gap-2 text-white text-sm">
+			<div class="flex items-center justify-start gap-2 text-sm text-white">
 				<p v-if="date" class="p-1 px-2 gap-1 flex items-center justify-center rounded-md bg-[#4e995b]">
 					<icon name="material-symbols:calendar-month-outline-rounded" size="1.1em" />
 					{{ date?.split("-").reverse().join("-") }}
@@ -37,7 +37,7 @@
 						v-model="telefoon" />
 				</FormStep>
 				<FormStep>
-					<p class="text-gray-600 -mt-2 mb-2">Voordat je de reservering definitief maakt, controleer of de
+					<p class="mb-2 -mt-2 text-gray-600">Voordat je de reservering definitief maakt, controleer of de
 						gegevens kloppen.</p>
 					<FieldInput :disabled="true" type="email" label="Email" name="email" v-model="email" />
 					<FieldInput :disabled="true" type="text" label="Naam" name="naam" v-model="naam" />
@@ -46,7 +46,7 @@
 				</FormStep>
 			</div>
 
-			<p v-if="emailSend" class="text-green-800 text-sm leading-4 mb-5">reserverigen is gelukt! check je email
+			<p v-if="emailSend" class="mb-5 text-sm leading-4 text-green-800">reserverigen is gelukt! check je email
 				voor de bevestiging.</p>
 		</FormWizard>
 	</div>
@@ -77,8 +77,8 @@
 		OkStatus: any;
 		user: any;
 		emailSend: boolean;
-		ResturantId: string;
-		ReserveringId?: string;
+		ResturantId: string | string[];
+		ReserveringId?: string | string[];
 	}>();
 
 	const { data: pinBoardData, refresh: pinBoardRefresh } = await useFetch(`/api/restaurants/${ResturantId.value}/reserverigen?live=true`);

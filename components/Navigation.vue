@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<nav v-if="!$pwa?.isPWAInstalled" class="z-30 px-6 bg-white w-full fixed top-0 p-4">
+		<nav v-if="!$pwa?.isPWAInstalled" class="fixed top-0 z-30 w-full p-4 px-6 bg-white">
 			<div class="hidden md:inline">
-				<div class="flex justify-between items-center">
+				<div class="flex items-center justify-between">
 					<NuxtLink to="/home" class="flex gap-4">
 						<NuxtImg draggable="false" class="w-7" src="/image/Logo.svg" alt="Logo" />
 						<p class="text-2xl">EET</p>
 					</NuxtLink>
 
-					<div v-if="User" class="flex gap-4 items-center">
+					<div v-if="User" class="flex items-center gap-4">
 						<NuxtLink class="opacity-60" to="/restaurants?pagina=1"> Restaurants </NuxtLink>
 						<NuxtLink class="opacity-60" to="/reserveringen"> Reserveringen </NuxtLink>
 						<NuxtLink class="opacity-60" to="/account/restaurants"> Overzicht </NuxtLink>
@@ -17,24 +17,24 @@
 						</NuxtLink>
 						<button class="bg-[#4e995b] p-2 px-4 text-white rounded-lg" @click="logout">Uitloggen</button>
 					</div>
-					<div v-else class="flex gap-4 items-center">
+					<div v-else class="flex items-center gap-4">
 						<NuxtLink class="opacity-80" to="/restaurants?pagina=1"> Restaurants </NuxtLink>
 						<button @click="handleModal" class="bg-[#4e995b] p-2 px-4 text-white rounded-lg">Inloggen</button>
 					</div>
 				</div>
-				<hr class="-pb-1 -mb-2 mt-4" />
+				<hr class="mt-4 -mb-2 -pb-1" />
 			</div>
-			<div class="md:hidden z-20">
-				<div class="flex justify-between items-center">
+			<div class="z-20 md:hidden">
+				<div class="flex items-center justify-between">
 					<NuxtLink to="/home" class="flex gap-4">
 						<NuxtImg draggable=" false" class="w-7" src="/image/Logo.svg" alt="Logo" />
 						<p class="text-2xl font-bold">EET</p>
 					</NuxtLink>
-					<div v-if="!User" class="flex gap-4 items-center">
+					<div v-if="!User" class="flex items-center gap-4">
 						<button @click="handleModal" class="bg-[#4e995b] p-2 px-4 text-white rounded-lg">Inloggen</button>
 						<icon class="w-8 h-8" name="ic:sharp-menu" size="1.5rem" @click="toglenav" />
 					</div>
-					<div v-else class="flex gap-4 items-center">
+					<div v-else class="flex items-center gap-4">
 						<NuxtLink to="/account">
 							<NuxtImg draggable="false" class="w-8 h-8 rounded-full" :src="User.avatar_url ? User.avatar_url : '/image/placeholder.jpg'" alt="Profile picture" />
 						</NuxtLink>
@@ -47,15 +47,15 @@
 					<Transition name="animate">
 						<div v-if="navVisible" class="fixed top-[4rem] left-0 w-screen bg-white px-6 py-2">
 							<div class="flex items-center gap-2">
-								<NuxtLink class="button-data p-2 px-4 flex gap-2 bg-gray-200 rounded-md" to="/restaurants?pagina=1">
+								<NuxtLink class="flex gap-2 p-2 px-4 bg-gray-200 rounded-md button-data" to="/restaurants?pagina=1">
 									<icon class="" name="ic:sharp-restaurant" size="1em" />
 									<span class="text-xs"> Restaurants </span>
 								</NuxtLink>
-								<NuxtLink class="button-data p-2 px-4 flex gap-2 bg-gray-200 rounded-md" v-if="User" to="/reserveringen">
+								<NuxtLink class="flex gap-2 p-2 px-4 bg-gray-200 rounded-md button-data" v-if="User" to="/reserveringen">
 									<icon class="" name="ic:sharp-event" size="1em" />
 									<span class="text-xs"> Reservering </span>
 								</NuxtLink>
-								<NuxtLink class="button-data p-2 px-3 flex gap-2 bg-gray-200 rounded-md" v-if="User" to="/account/restaurants">
+								<NuxtLink class="flex gap-2 p-2 px-3 bg-gray-200 rounded-md button-data" v-if="User" to="/account/restaurants">
 									<icon class="" name="ic:sharp-edit-location-alt" size="1em" />
 									<span class="text-xs"> Overzicht </span>
 								</NuxtLink>
@@ -65,34 +65,41 @@
 				</div>
 			</div>
 		</nav>
-		<footer v-else class="z-30 fixed w-full bottom-0 bg-white">
-			<hr class="-pb-1 -mb-2 mt-4" />
-			<div class="flex justify-evenly items-center p-6 px-8">
-				<NuxtLink to="/home" class="opacity-50 flex flex-col justify-center items-center">
+		<footer v-else class="fixed bottom-0 z-30 w-full bg-white">
+			<hr class="mt-4 -mb-2 -pb-1" />
+			<div class="flex items-center p-6 px-8 justify-evenly">
+				<NuxtLink to="/home" class="flex flex-col items-center justify-center opacity-50">
 					<icon class="w-8 h-8" name="ic:sharp-home" size="1.5rem" />
 					<span class="text-xs">Home</span>
 				</NuxtLink>
-				<NuxtLink to="/restaurants?pagina=1" class="opacity-50 flex flex-col justify-center items-center">
+				<NuxtLink to="/restaurants?pagina=1" class="flex flex-col items-center justify-center opacity-50">
 					<icon class="w-8 h-8" name="ic:sharp-restaurant" size="1.5rem" />
 					<span class="text-xs">Eten</span>
 				</NuxtLink>
-				<NuxtLink v-if="User" to="/reserveringen" class="opacity-50 flex flex-col justify-center items-center">
+				<NuxtLink v-if="User" to="/reserveringen" class="flex flex-col items-center justify-center opacity-50">
 					<icon class="w-8 h-8" name="ic:sharp-event" size="1.5rem" />
 					<span class="text-xs"> Reservering </span>
 				</NuxtLink>
-				<NuxtLink v-if="User" to="/account/restaurants" class="opacity-50 flex flex-col justify-center items-center">
+				<NuxtLink v-if="User" to="/account/restaurants" class="flex flex-col items-center justify-center opacity-50">
 					<icon class="w-8 h-8" name="ic:sharp-edit-location-alt" size="1.5rem" />
 					<span class="text-xs"> Overzicht </span>
 				</NuxtLink>
 			</div>
 		</footer>
-		<div v-if="installed && !User" class="z-30 fixed right-6 top-14 rounded-md bg-[#3f7f4a] p-2 px-4 text-white">
-			<button @click="handleModal" class="">Inloggen</button>
-		</div>
-		<div v-if="installed && User" class="fixed right-6 top-14 z-40">
-			<NuxtLink to="/account">
-				<NuxtImg draggable="false" class="w-12 h-12 rounded-full border-2 border-gray-50" :src="User.avatar_url ? User.avatar_url : '/image/placeholder.jpg'" alt="Profile picture" />
-			</NuxtLink>
+		<div v-if="installed" :class="showWithDelay ? 'justify-between': ' justify-end'" class="fixed z-30 flex items-center w-full p-2 px-6 text-black top-12">
+			<div v-if="showWithDelay" class="flex items-center justify-center p-1 text-black bg-gray-100 rounded-lg h-9 w-9">
+				<button @click="router.back()" class="">
+					<icon name="material-symbols:arrow-back-ios-new-rounded" size="1.5em" />
+				</button>
+			</div>
+			<div v-if="!User" class="rounded-lg bg-[#3f7f4a] p-2 px-4 text-white">
+				<button @click="handleModal" class="">Inloggen</button>
+			</div>
+			<div v-if="User" class="z-40 ">
+				<NuxtLink to="/account">
+					<NuxtImg draggable="false" class="w-12 h-12 border-2 rounded-full border-gray-50" :src="User.avatar_url ? User.avatar_url : '/image/placeholder.jpg'" alt="Profile picture" />
+				</NuxtLink>
+			</div>
 		</div>
 
 		<ModalAuth v-model:User="User" v-model:active="active" v-model:activeDelay="activeDelay" />
@@ -108,6 +115,20 @@
 	const activeDelay = ref(false);
 	const installed = ref(false);
 	const navVisible = ref(false);
+	const showWithDelay = ref(false);
+	
+	const IsRestaurants = computed(() => router.currentRoute.value.path.includes('/restaurants/'));
+
+	watch(IsRestaurants, (value) => {
+		if (value) setTimeout(() => showWithDelay.value = true, 500);
+		else setTimeout(() => showWithDelay.value = false, 200);
+	});
+	
+	
+	
+
+
+
 
 	const { OkStatus, DataUser } = defineModels<{
 		OkStatus: boolean;
@@ -155,6 +176,7 @@
 	});
 
 	await loaduser();
+
 </script>
 
 <style scoped>

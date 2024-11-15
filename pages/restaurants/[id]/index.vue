@@ -1,97 +1,81 @@
 <template>
-	<div class=" h-screen">
-		<div :class=" installed ? 'fixed w-screen h-full overflow-auto top-0' : '' ">
-			<div :class="!installed ? 'top-[4.5rem] pt-2' : 'top-0 z-40 pt-24'"
-				class="fixed top-0 w-screen z-20 p-3 bg-white"></div>
+	<div class="h-screen">
+		<div :class="installed ? 'fixed w-screen h-full overflow-auto top-0' : ''">
+			<div :class="!installed ? 'top-[4.5rem] pt-2' : 'top-0 z-40 pt-24'" class="fixed top-0 z-20 w-screen p-3 bg-white"></div>
 			<div :class="!installed ? ' mt-[5.9rem]' : ' mt-[7rem]'" class="px-6">
-				<div class="rounded-lg overflow-hidden">
+				<div class="overflow-hidden rounded-lg">
 					<ClientOnly>
 						<swipe :images="restaurantDetails?.images"></swipe>
 					</ClientOnly>
 				</div>
-				<div class="md:hidden mb-4">
-					<div :class="restaurantDetails?.images ? '-mt-8 mb-6 pl-3' : ' -mb-4 '"
-						class="flex space-x-2 z-10 relative items-center">
-						<div
-							class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
+				<div class="mb-4 md:hidden">
+					<div :class="restaurantDetails?.images ? '-mt-8 mb-6 pl-3' : ' -mb-4 '" class="relative z-10 flex items-center space-x-2">
+						<div class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
 							{{ restaurantDetails?.plaats }}
 						</div>
-						<div
-							class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
+						<div class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
 							{{ restaurantDetails?.keuken }}
 						</div>
-						<div
-							class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
+						<div class="inline-flex bg-gray-100 items-center rounded-lg whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent">
 							{{ restaurantDetails?.prijs }}
 						</div>
 					</div>
 				</div>
 				<section>
-					<div :class="!installed ? ' top-[4em] md:top-[4.7em] ' : ' top-[6.5em] '"
-						class="z-20 bg-white sticky pb-[0.10rem]">
-						<div class="flex justify-between items-center">
-							<h2 class="text-2xl font-semibold mt-2 -mb-1">
+					<div :class="!installed ? ' top-[4em] md:top-[4.7em] ' : ' top-[6.5em] '" class="z-20 bg-white sticky pb-[0.10rem]">
+						<div class="flex items-center justify-between">
+							<h2 class="mt-2 -mb-1 text-2xl font-semibold">
 								{{ restaurantDetails?.naam }}
 							</h2>
-							<div class="flex gap-1 items-center mt-2">
-								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails?.beoordeling?.toFixed(1)
-									}}/5</p>
+							<div class="flex items-center gap-1 mt-2">
+								<p class="text-[#4e995b] font-bold mb-1">{{ restaurantDetails?.beoordeling?.toFixed(1) }}/5</p>
 								<icon class="w-6 h-6 text-[#4e995b]" name="f7:bubble-right" />
-								<p class="text-gray-600 text-base mb-1">{{ beoordelingen?.length }}</p>
+								<p class="mb-1 text-base text-gray-600">{{ beoordelingen?.length }}</p>
 							</div>
 						</div>
 
-						<div class="flex gap-2 items-center justify-between md:justify-end my-2">
-							<button @click="openbookingmodal"
-								class="flex text-sm md:hidden text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
-							<div class="flex gap-2 items-center">
-								<NuxtLink target="_blank" :href="restaurantDetails.menu.data.publicUrl"
-									class="flex text-sm items-center justify-center text-black bg-gray-100 p-1 px-4 rounded-lg">
-									Menu</NuxtLink>
-								<div :class="!isRestaurantOpen() ? ' bg-red-200 text-red-600' : ' text-black bg-gray-100'"
-									class="flex items-center justify-center p-1 px-4 text-sm rounded-lg">
+						<div class="flex items-center justify-between gap-2 my-2 md:justify-end">
+							<button @click="openbookingmodal" class="flex text-sm md:hidden text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
+							<div class="flex items-center gap-2">
+								<NuxtLink target="_blank" :href="restaurantDetails.menu.data.publicUrl" class="flex items-center justify-center p-1 px-4 text-sm text-black bg-gray-100 rounded-lg"> Menu</NuxtLink>
+								<div :class="!isRestaurantOpen() ? ' bg-red-200 text-red-600' : ' text-black bg-gray-100'" class="flex items-center justify-center p-1 px-4 text-sm rounded-lg">
 									{{ isRestaurantOpen() ? "Geopend" : "Gesloten" }}
 								</div>
-								<button @click="openbookingmodal"
-									class="text-sm hidden md:flex text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
+								<button @click="openbookingmodal" class="text-sm hidden md:flex text-white items-center justify-center p-1 px-4 bg-[#4e995b] rounded-lg">Reserveren</button>
 							</div>
 						</div>
 
-						<p class=" leading-5 md:line-clamp-4 line-clamp-2 md:-mt-10 mt-1 md:max-w-[60vw]">
+						<p class="leading-5 md:line-clamp-4 line-clamp-2 md:-mt-10 mt-1 md:max-w-[60vw]">
 							{{ restaurantDetails?.beschrijving || " Geen beschrijving beschikbaar" }}
 						</p>
-						<hr class="my-2 md:mt-6 mt-3" />
+						<hr class="my-2 mt-3 md:mt-6" />
 					</div>
 					<div class="md:max-w-[60vw]">
-						<div class="md:flex items-center justify-between">
+						<div class="items-center justify-between md:flex">
 							<div>
-								<div class="flex justify-between items-center">
+								<div class="flex items-center justify-between">
 									<h2 class="text-lg font-semibold">Locatie</h2>
 								</div>
-								<p class="text-gray-600 text-sm md:text-base text-balance leading-4">
+								<p class="text-sm leading-4 text-gray-600 md:text-base text-balance">
 									{{ restaurantDetails?.locatie || "Onbekend" }}
 								</p>
 							</div>
 							<div class="mt-2">
 								<h2 class="text-lg font-semibold md:text-right">Telefoon</h2>
-								<p class="text-blue-600 text-sm md:text-base underline leading-4 md:text-right">
-									<a :href="`tel:${restaurantDetails?.telefoon}`">{{ restaurantDetails?.telefoon ||
-										"Onbekend" }}</a>
+								<p class="text-sm leading-4 text-blue-600 underline md:text-base md:text-right">
+									<a :href="`tel:${restaurantDetails?.telefoon}`">{{ restaurantDetails?.telefoon || "Onbekend" }}</a>
 								</p>
 							</div>
 						</div>
 						<div class="mt-2">
 							<h2 class="text-lg font-semibold">Openingstijden</h2>
 							<div class="text-gray-600">
-								<div v-if="restaurantDetails?.Openingstijden"
-									v-for="(item, index) in restaurantDetails?.Openingstijden" :key="index"
-									class="flex justify-between" :class="{ 'font-bold': item.dag === huidigeDag }">
+								<div v-if="restaurantDetails?.Openingstijden" v-for="(item, index) in restaurantDetails?.Openingstijden" :key="index" class="flex justify-between" :class="{ 'font-bold': item.dag === huidigeDag }">
 									<p class="text-sm md:text-base">{{ item.dag }}</p>
 									<p class="text-sm md:text-base">{{ item.tijd }}</p>
 								</div>
 								<div v-else>
-									<p class="text-gray-600 leading-4 text-sm md:text-base">Er is geen informatie
-										beschikbaar over de openingstijden van dit restaurant.</p>
+									<p class="text-sm leading-4 text-gray-600 md:text-base">Er is geen informatie beschikbaar over de openingstijden van dit restaurant.</p>
 								</div>
 							</div>
 						</div>
@@ -99,13 +83,12 @@
 					<hr class="my-2 mt-3 md:max-w-[60vw]" />
 				</section>
 				<section>
-					<div :class="!installed ? ' top-[4.2em] md:top-[4.7em] ' : ' top-[6.5em] '"
-						class="z-20 bg-white sticky pb-[0.10rem]">
-						<h2 class="text-2xl font-semibold mt-2 -mb-1">Recensies</h2>
+					<div :class="!installed ? ' top-[4.2em] md:top-[4.7em] ' : ' top-[6.5em] '" class="z-20 bg-white sticky pb-[0.10rem]">
+						<h2 class="mt-2 -mb-1 text-2xl font-semibold">Recensies</h2>
 						<RecensieOverview :restaurantDetails :OkStatus :beoordelingen :openrecensiemodal />
-						<hr class="my-2 mt-3" />
+					<hr class="my-2 mt-3" />
 					</div>
-					<div class="mt-1 z-10 grid grid-cols-1 gap-2 rounded-lg">
+					<div class="z-10 grid grid-cols-1 gap-2 mt-1 rounded-lg">
 						<beoordeling :beoordelingen :installed />
 					</div>
 				</section>
@@ -117,7 +100,8 @@
 		<div v-if="title != 'Reserveren'">
 			<p class="-mt-3 text-gray-600">
 				Plaats hier een recensie over
-				<span class="font-bold">{{ restaurantDetails?.naam }}</span>.
+				<span class="font-bold">{{ restaurantDetails?.naam }}</span
+				>.
 			</p>
 			<hr class="my-2 mb-2" />
 			<ModalRecensie :isSuccess.value :onSubmit="handleRecentie" />
@@ -125,11 +109,11 @@
 		<div v-else>
 			<p class="-mt-3 text-gray-600">
 				Reserveer een tafel bij
-				<span class="font-bold">{{ restaurantDetails?.naam }}</span>.
+				<span class="font-bold">{{ restaurantDetails?.naam }}</span
+				>.
 			</p>
 			<hr class="my-2 mb-2" />
-			<ModalReservering :emailSend :ResturantId="useRoute().params.id" :restaurantDetails
-				:onSubmit="handleReservering" :OkStatus :user />
+			<ModalReservering :emailSend :ResturantId="id" :restaurantDetails :onSubmit="handleReservering" :OkStatus :user />
 		</div>
 	</Modal>
 </template>
@@ -144,12 +128,12 @@
 	const active = ref(false);
 	const activeDelay = ref(false);
 	const beoordelingen: any = ref([]);
-	
+
 	const displayLoading = ref(false);
 	provide("displayLoading", displayLoading);
-	
-	const user: any = ref(inject('User'));
-	const OkStatus: any = ref(inject('OkStatus'));
+
+	const user: any = ref(inject("User"));
+	const OkStatus: any = ref(inject("OkStatus"));
 
 	const emailSend = ref(false);
 	const isSuccess = ref(false);
@@ -254,17 +238,17 @@
 
 	const { data, error }: Record<string, any> = await useFetch(`/api/restaurants/${id}`);
 	if (!error.value) restaurantDetails.value = data.value.restaurant;
-	if (error.value) throw createError({
-            statusCode: 404,
+	if (error.value)
+		throw createError({
+			statusCode: 404,
 			message: "Restaurant niet gevonden",
 			statusMessage: "Restaurant niet gevonden",
-            fatal: true,
-        })
+			fatal: true,
+		});
 
-	
 	const { data: beoordelingenData }: Record<string, any> = await useFetch(`/api/restaurants/${restaurantDetails.value?.id}/recenties`);
 	beoordelingen.value = beoordelingenData.value?.recenties || [];
-	
+
 	const openbookingmodal = () => {
 		title.value = "Reserveren";
 		active.value = true;
@@ -304,8 +288,4 @@
 		twitterImage: `${restaurantDetails.value?.thumbnail.data.publicUrl}`,
 		twitterCard: "summary",
 	});
-
-
-
-
 </script>

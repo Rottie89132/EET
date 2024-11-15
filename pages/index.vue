@@ -1,6 +1,6 @@
 <template>
-	<div :class="!installed ? 'absolute' : ' fixed'" class="bg-white h-screen w-screen flex items-center justify-center z-30 top-0">
-		<div v-if="installed" class="flex flex-col gap-6 z-20 items-center justify-center">
+	<div :class="!installed ? 'absolute' : ' fixed'" class="top-0 z-30 flex items-center justify-center w-screen h-screen bg-white">
+		<div v-if="installed" class="z-20 flex flex-col items-center justify-center gap-6">
 			<NuxtImg class="w-36" src="/image/Logo.svg" alt="EET" />
 			<p class="text-6xl font-semibold">EET</p>
 			<p class="text-lg max-w-[80%] -mt-4 opacity-65 leading-5 text-balance text-center">
@@ -42,13 +42,12 @@
 
 	onMounted(() => {
 		if ($pwa?.isPWAInstalled) installed.value = true;
-		if (!installed.value) {
+		if (!installed.value) navigateTo("/home")
+	
+		else setTimeout(() => {
 			navigateTo("/home")
-		} else {
-			setTimeout(() => {
-				navigateTo("/home")
-			}, 500);
-		}
+		}, 500);
+		
 	});
 </script>
 
