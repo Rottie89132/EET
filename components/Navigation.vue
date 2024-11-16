@@ -7,7 +7,7 @@
 						<NuxtImg draggable="false" class="w-7" src="/image/Logo.svg" alt="Logo" />
 						<p class="text-2xl">EET</p>
 					</NuxtLink>
-
+					
 					<div v-if="User" class="flex items-center gap-4">
 						<NuxtLink class="opacity-60" to="/restaurants?pagina=1"> Restaurants </NuxtLink>
 						<NuxtLink class="opacity-60" to="/reserveringen"> Reserveringen </NuxtLink>
@@ -117,7 +117,10 @@
 	const navVisible = ref(false);
 	const showWithDelay = ref(false);
 	
-	const IsRestaurants = computed(() => router.currentRoute.value.path.includes('/restaurants/'));
+	const IsRestaurants = computed(() => {
+		const path = router.currentRoute.value.path;
+		return path.includes('/restaurants/') && !path.includes('/dashboard');
+	});
 
 	watch(IsRestaurants, (value) => {
 		if (value) setTimeout(() => showWithDelay.value = true, 500);
@@ -125,11 +128,6 @@
 	});
 	
 	
-	
-
-
-
-
 	const { OkStatus, DataUser } = defineModels<{
 		OkStatus: boolean;
 		DataUser: any;

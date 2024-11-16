@@ -1,18 +1,18 @@
 <template>
 	<field :name="name" v-slot="{ handleChange, handleBlur, field, meta }">
 		<label class="text-base font-bold text-neutral-900" for="file">{{ label }}</label>
-		<div class="flex gap-2 items-center text-sm w-full mb-3 mt-2 h-10">
-			<div class="bg-green-700 relative cursor-pointer p-2 px-3 w-fit text-white rounded-lg">
+		<div class="flex items-center w-full h-10 gap-2 mt-2 mb-3 text-sm">
+			<div class="relative p-2 px-3 text-white bg-green-700 rounded-lg cursor-pointer w-fit">
 				<input accept="application/pdf" type="file" aria-label="file" autocomplete="current-file"
-					class="absolute inset-0 w-full h-full opacity-0 z-50" @change="fileSelected(handleChange, $event)"
+					class="absolute inset-0 z-50 w-full h-full opacity-0" @change="fileSelected(handleChange, $event)"
 					@blur="handleBlur" />
-				<div class="flex items-center gap-1 justify-center">
+				<div class="flex items-center justify-center gap-1">
 					<icon name="fa6-regular:file-pdf" size="1.1rem" />
 					<p class="">Menu</p>
 				</div>
 			</div>
 			<div v-if="preview"
-				class="border-gray-300 border relative cursor-pointer p-2 px-3 truncate w-fit text-sm rounded-lg">
+				class="relative p-2 px-3 text-sm truncate border border-gray-300 rounded-lg cursor-pointer w-fit">
 				<p>{{ preview }}</p>
 			</div>
 		</div>
@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+	import { useField } from "vee-validate";
 	const { name, label, preview, bewerken } = defineModels<{
 		label: string;
 		name: string;

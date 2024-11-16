@@ -2,7 +2,7 @@
 	<div class="select-none">
 		<Field :name="name" tabindex="1" class="sr-only" type="time" v-model="time" />
 		<div class="grid grid-cols-4 gap-2 mt-2 mb-4">
-			<button v-for="hour in hours" :key="hour" :disabled="notAvailable(hour)" tabindex="0" @keydown.enter="notAvailable(hour) ? '' : selectedHour(hour)" @click="notAvailable(hour) ? '' : selectedHour(hour)" :class="notAvailable(hour) ? 'bg-gray-100 border-gray-100 text-gray-400 line-through cursor-not-allowed' : time === hour ? 'bg-[#4e995b] hover:bg-[#42834d] border-[#4e995b] text-white' : 'hover:bg-gray-200 border-gray-300'" class="flex items-center justify-center p-2 border transition-all delay-100 ease-in rounded-md">{{ hour }}</button>
+			<button v-for="hour in hours" :key="hour" :disabled="notAvailable(hour)" tabindex="0" @keydown.enter="notAvailable(hour) ? '' : selectedHour(hour)" @click="notAvailable(hour) ? '' : selectedHour(hour)" :class="notAvailable(hour) ? 'bg-gray-100 border-gray-100 text-gray-400 line-through cursor-not-allowed' : time === hour ? 'bg-[#4e995b] hover:bg-[#42834d] border-[#4e995b] text-white' : 'hover:bg-gray-200 border-gray-300'" class="flex items-center justify-center p-2 transition-all ease-in delay-100 border rounded-md">{{ hour }}</button>
 		</div>
 		<ErrorMessage class="mb-2 -mt-2 text-xs text-[#B92538] block" :name="name" />
 	</div>
