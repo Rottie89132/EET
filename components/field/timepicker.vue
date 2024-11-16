@@ -46,8 +46,10 @@
 		const endHour = parseInt(times[1].split(":")[0]);
 		const hourRange = Array.from({ length: (endHour - startHour) * 2 }, (empty, i) => {
 			const hour = startHour + Math.floor(i / 2);
+			const prefix = hour < 10 ? "0" : "";
+
 			const minutes = i % 2 === 0 ? "00" : "30";
-			return `${hour}:${minutes}`;
+			return `${prefix}${hour}:${minutes}`;
 		});
 
 		const latestReservationHour = endHour - restaurantDetails.value.duur;

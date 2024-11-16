@@ -1,44 +1,44 @@
 <template>
 	<div class="h-screen">
 		<div :class="!installed ? ' mt-20' : 'mt-14'" class="overflow-hidden">
-			<div :class="!installed ? 'top-[4rem] fixed' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'" class="w-full z-10 px-6 bg-white">
+			<div :class="!installed ? 'top-[4rem] fixed' : 'top-0 pt-14 md:top-0 md:-mt-5 fixed'" class="z-10 w-full px-6 bg-white">
 				<div class="mb-4">
-					<h3 class="xl:text-3xl text-xl font-bold pt-5">Restaurant overzicht</h3>
-					<p class="xl:text-sm text-xs z-0 opacity-80 mb-2">Hier vindt u een overzicht van al uw restaurants.</p>
+					<h3 class="pt-5 text-xl font-bold xl:text-3xl">Restaurant overzicht</h3>
+					<p class="z-0 mb-2 text-xs xl:text-sm opacity-80">Hier vindt u een overzicht van al uw restaurants.</p>
 				</div>
 				<hr class="pb-2" />
 			</div>
 			<div :class="!installed ? ' fixed w-screen h-[90vh] ' : ' fixed w-screen max-h-[72vh]  '" class="mt-[5.5rem] overflow-auto pb-5">
-				<div :class="!installed ? 'mb-16' : ''" class="grid px-6 gap-2 pb-6 overflow-auto">
-					<div class="bg-slate-50 p-4 rounded-xl mt-2 outline outline-2 outline-gray-100">
+				<div :class="!installed ? 'mb-16' : ''" class="grid gap-2 px-6 pb-6 overflow-auto">
+					<div class="p-4 mt-2 bg-slate-50 rounded-xl outline outline-2 outline-gray-100">
 						<div>
 							<span>Restaurants</span>
 							<span class="text-xs opacity-80">({{ items?.length }})</span>
 						</div>
-						<p class="text-sm -my-1 font-normal">
+						<p class="-my-1 text-sm font-normal">
 							<span v-if="items?.length > 0" class="text-xs opacity-80"> Lijst met alle restaurants onder dit account </span>
 							<span v-else class="text-xs opacity-80"> Je hebt geen restaurants onder dit account </span>
 						</p>
 						<button class="bg-gray-300 p-[0.35rem] px-3 text-xs mt-2 text-gray-700 rounded-lg" @click="openRestaurant">Voeg een restaurant toe</button>
-						<div class="flex items-center w-full justify-between">
+						<div class="flex items-center justify-between w-full">
 							<div class="w-full">
-								<div class="font-semibold flex items-center justify-between gap-1 text-lg">
+								<div class="flex items-center justify-between gap-1 text-lg font-semibold">
 									<div class="grid gap-2 mt-3 font-normal">
-										<div v-if="items?.length > 0" v-for="(item, index) in items" class="flex items-center gap-2 bg-slate-50 rounded-lg">
+										<div v-if="items?.length > 0" v-for="(item, index) in items" class="flex items-center gap-2 rounded-lg bg-slate-50">
 											<div class="w-full">
 												<hr class="my-2 mt-1" />
 												<div class="flex justify-between gap-2">
 													<div class="w-full">
-														<div class="flex items-center justify-between gap-2 w-full">
-															<h3 class="font-semibold text-md truncate">{{ item?.naam }}</h3>
-															<div v-if="item?.images && item?.locatie && item?.telefoon && item?.telefoon && item?.Openingstijden" class="flex items-center gap-2 text-right pb-2 overflow-auto">
+														<div class="flex items-center justify-between w-full gap-2">
+															<h3 class="font-semibold truncate text-md">{{ item?.naam }}</h3>
+															<div v-if="item?.images && item?.locatie && item?.telefoon && item?.telefoon && item?.Openingstijden" class="flex items-center gap-2 pb-2 overflow-auto text-right">
 																<span class="bg-[#4e995b] p-1 flex items-center justify-center gap-1 px-3 text-xs text-[#b4e4bc] rounded-lg">
 																	<icon name="ic:sharp-star" size="1.2em"></icon>
 																	{{ item?.beoordeling.toFixed(1) }}
 																</span>
 															</div>
-															<div v-else class="flex items-center gap-2 text-right pb-2 overflow-auto">
-																<span class="bg-rose-600 text-white p-1 flex items-center justify-center gap-1 px-3 text-xs rounded-lg">
+															<div v-else class="flex items-center gap-2 pb-2 overflow-auto text-right">
+																<span class="flex items-center justify-center gap-1 p-1 px-3 text-xs text-white rounded-lg bg-rose-600">
 																	<icon name="ic:round-error" size="1.2em"></icon>
 																	Fout
 																</span>
@@ -70,16 +70,16 @@
 			<p class="-mt-2 text-gray-600">
 				Weet u zeker dat u het restaurant <span class="font-semibold">{{ nameRestaurant }}</span> wilt verwijderen?
 			</p>
-			<p class="text-red-600 text-sm leading-4 mt-4">Alle gegevens van het restaurant worden verwijderd en kunnen niet worden hersteld, zelfs de reserveringen en recenties!</p>
+			<p class="mt-4 text-sm leading-4 text-red-600">Alle gegevens van het restaurant worden verwijderd en kunnen niet worden hersteld, zelfs de reserveringen en recenties!</p>
 			<hr class="my-2 mb-2" />
-			<div class="flex gap-2 w-full items-center">
+			<div class="flex items-center w-full gap-2">
 				<button class="bg-[#de4747] text-white p-1 px-4 rounded-lg" @click="deleteResturant(valueId)">
 					<span v-if="displayLoading" class="">
 						<icon class="animate-spin" name="pajamas:repeat" size="1.3rem"> </icon>
 					</span>
 					<span v-else> Ja verwijderen </span>
 				</button>
-				<button @click="closeModal" class="bg-gray-200 p-1 px-4 rounded-lg">Nee toch niet</button>
+				<button @click="closeModal" class="p-1 px-4 bg-gray-200 rounded-lg">Nee toch niet</button>
 			</div>
 		</div>
 		<div v-else-if="title == 'Restaurant'">
@@ -132,7 +132,7 @@
 		{ value: "Hoog", text: "€€€" },
 	];
 
-	const phoneRegExp = /^[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}$/;
+	const phoneRegExp = /^[0-9]{1}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}$/;
 	const openingTimes = ref([
 		{ dag: "Maandag", open: undefined, sluit: undefined },
 		{ dag: "Dinsdag", open: undefined, sluit: undefined },

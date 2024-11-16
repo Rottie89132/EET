@@ -33,21 +33,17 @@
 					<div :class="OkStatus && user?.user?.name ? ' sr-only' : ''">
 						<FieldInput type="text" label="Naam" name="naam" v-model="naam" />
 					</div>
-					<FieldInput type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78"
-						v-model="telefoon" />
+					<FieldInput type="tel" label="Telefoon" name="telefoon" value="612345678" v-model="telefoon" />
 				</FormStep>
 				<FormStep>
-					<p class="mb-2 -mt-2 text-gray-600">Voordat je de reservering definitief maakt, controleer of de
-						gegevens kloppen.</p>
+					<p class="mb-2 -mt-2 text-gray-600">Voordat je de reservering definitief maakt, controleer of de gegevens kloppen.</p>
 					<FieldInput :disabled="true" type="email" label="Email" name="email" v-model="email" />
 					<FieldInput :disabled="true" type="text" label="Naam" name="naam" v-model="naam" />
-					<FieldInput :disabled="true" type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78"
-						v-model="telefoon" />
+					<FieldInput :disabled="true" type="tel" label="Telefoon" name="telefoon" value="06 12 34 56 78" v-model="telefoon" />
 				</FormStep>
 			</div>
 
-			<p v-if="emailSend" class="mb-5 text-sm leading-4 text-green-800">reserverigen is gelukt! check je email
-				voor de bevestiging.</p>
+			<p v-if="emailSend" class="mb-5 text-sm leading-4 text-green-800">reserverigen is gelukt! check je email voor de bevestiging.</p>
 		</FormWizard>
 	</div>
 </template>
@@ -61,7 +57,7 @@
 
 	const reservations = ref<Date[]>([]);
 	const client = useSupabaseClient();
-	const phoneRegExp = /^[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}$/;
+	const phoneRegExp = /^[0-9]{1}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}$/;
 	const email: any = ref();
 	const naam: any = ref();
 	const telefoon: any = ref();
@@ -133,6 +129,7 @@
 
 		if (!inputDayOpeningHours) return false;
 		const [openingTime, closingTime] = inputDayOpeningHours.tijd.split(" - ").map((time: any) => new Date(`1970-01-01T${time}:00`));
+
 		return inputTime >= openingTime && inputTime <= closingTime;
 	};
 
@@ -153,10 +150,8 @@
 	};
 
 	const notBooked = async (hour: any) => {
-		
+		if (reserverigenError.value) return true;
 
-		if(reserverigenError.value) return true
-		
 		const reservations = reserverigenData.value.reserveringen;
 		const SelectedDate = new Date(date.value).toISOString().split("T")[0];
 
@@ -186,7 +181,6 @@
 		validateOnInput: true,
 		validateOnModelUpdate: true,
 	});
-
 
 	onMounted(() => {
 		realtimeChannel = client.channel("public:reserveringen").on("postgres_changes", { event: "*", schema: "public", table: "reserveringen_table" }, () => pinBoardRefresh());

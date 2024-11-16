@@ -3,7 +3,7 @@
         <FormStep>
             <FieldInput type="text" label="Naam" name="naam" v-model="naam" :disabled="true" />
             <FieldInput type="text" label="Keuken" name="keuken" v-model="keuken" />
-            <FieldInput type="text" label="Telefoon" name="telefoon" value="06 12 34 56 78" v-model="telefoon" />
+            <FieldInput type="tel" label="Telefoon" name="telefoon" value="06 12 34 56 78" v-model="telefoon" />
         </FormStep>
         <FormStep>
             <FieldArea type="text" label="Beschrijving" name="beschrijving" v-model="beschrijving" />
@@ -34,7 +34,7 @@
             <div v-if="result" class="flex gap-2 mt-6 mb-2">
                 <hr class="my-3" />
                 <p :class="result.statusCode != 200 ? 'text-red-600' : 'text-green-800'"
-                    class="text-sm leading-4 -ml-1">
+                    class="-ml-1 text-sm leading-4">
                     {{ result.message }}
                 </p>
             </div>
