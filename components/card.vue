@@ -1,5 +1,5 @@
 <template>
-	<div @mouseover="preloadimages(naam, images)" v-if="!loading" class="shadow-md bg-slate-50 rounded-xl">
+	<div @touchstart="preloadimages(naam, images)" @mouseover="preloadimages(naam, images)" v-if="!loading" class="shadow-md bg-slate-50 rounded-xl">
 		<div class="flex-shrink-0 rounded-md h-fit">
 			<NuxtImg draggable="false" class="w-full h-[10rem] object-cover rounded-t-lg" :src="afbeelding ? afbeelding : '/image/placeholder-eten.jpg'" @error="handleImageError" alt="Restaurant 2" />
 		</div>
