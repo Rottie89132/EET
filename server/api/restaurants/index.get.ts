@@ -36,7 +36,8 @@ export default eventHandler((event) => {
                 if (stad) {
                     const { data, count }: any = await client
                         .from('restaurants_table')
-                        .select('*', { count: 'exact' }).eq('plaats', stad)
+                        .select('*', { count: 'exact' })
+                        .ilike('plaats', `%${stad}%`)
                         .range((pagina - 1) * queryCount, pagina * queryCount - 1);
 
                     const totalPages = Math.ceil(count / queryCount);
@@ -61,6 +62,7 @@ export default eventHandler((event) => {
                 procesData(filteredData, client)
                 return ReturnResult(resolve, reject, filteredData, pagina, totalPages)
             }
+
 
             if (searchOwner) {
                 const { data } = await client
